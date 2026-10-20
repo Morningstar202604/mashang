@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.pyneon.academy.py.RunResult
-import com.pyneon.academy.py.VarInfo
+import com.pyneon.academy.lang.RunResult
+import com.pyneon.academy.lang.VarInfo
 import com.pyneon.academy.ui.effects.BlinkingCursor
 import com.pyneon.academy.ui.theme.DangerRed
 import com.pyneon.academy.ui.theme.NeonCyan

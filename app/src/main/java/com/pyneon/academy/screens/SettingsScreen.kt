@@ -139,7 +139,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                         label = "联系开发者",
                         accent = NeonGreen,
                         leadingIcon = Icons.Outlined.Email,
-                        onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "关于 PY//NOW 的建议") },
+                        onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "关于码上的建议") },
                         modifier = Modifier.weight(1f)
                     )
                     NeonButton(
@@ -151,7 +151,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                     )
                 }
                 InfoRow("开发者邮箱", AppConstants.CONTACT_EMAIL)
-                InfoRow("开源性质", "源码可见·非商业许可（仅供学习）")
+                InfoRow("开源性质", "MIT 开源许可（允许商用，保留许可声明）")
             }
         }
 

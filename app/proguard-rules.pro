@@ -12,3 +12,11 @@
 -keepclasseswithmembers class ** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# ===== Rhino（JavaScript 运行时）=====
+# 解释模式 + 宿主函数经匿名 BaseFunction 子类注入脚本作用域，
+# 混淆会破坏 Rhino 内部的反射与 SecurityController 初始化。
+# keep 范围含 org.mozilla.classfile（ClassFileWriter 等）：解释模式虽不编译
+# 字节码，但 Rhino 部分路径仍引用该包，R8 裁剪会导致运行时 NoClassDefFoundError
+-keep class org.mozilla.** { *; }
+-dontwarn org.mozilla.**

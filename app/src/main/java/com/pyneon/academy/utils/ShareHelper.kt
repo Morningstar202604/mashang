@@ -32,13 +32,13 @@ object ShareHelper {
      */
     fun shareAchievement(context: Context, xp: Int, streak: Int, rank: String) {
         val text = buildString {
-            appendLine("🔥 我在 PY//NOW 的学习成就")
+            appendLine("🔥 我在码上的学习成就")
             appendLine()
             appendLine("⚡ XP: $xp")
             appendLine("🔥 连击: $streak 天")
             appendLine("🏆 段位: $rank")
             appendLine()
-            appendLine("完全离线学 Python，你也来试试！")
+            appendLine("完全离线学编程，你也来试试！")
             appendLine(AppConstants.REPO_URL)
         }
         

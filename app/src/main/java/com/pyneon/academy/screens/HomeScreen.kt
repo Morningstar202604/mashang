@@ -43,7 +43,7 @@ import com.pyneon.academy.data.Ranks
 import com.pyneon.academy.data.Track
 import com.pyneon.academy.data.TrackRepository
 import com.pyneon.academy.data.dailyMissionDone
-import com.pyneon.academy.py.PyBridge
+import com.pyneon.academy.lang.LanguageRegistry
 import com.pyneon.academy.ui.components.NeonButton
 import com.pyneon.academy.ui.effects.GlitchText
 import com.pyneon.academy.ui.effects.NeonCard
@@ -71,7 +71,8 @@ fun HomeScreen(
     val context = LocalContext.current
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
     val lessons = remember { LessonRepository.lessons(context) }
-    val pythonVersion = remember { PyBridge.pythonVersion() }
+    val runtime = remember { LanguageRegistry.current(context) }
+    val pythonVersion = remember { runtime.version }
 
     val continueTarget = remember(progress.completedLessons) {
         lessons.firstOrNull { it.id !in progress.completedLessons }?.id ?: lessons.firstOrNull()?.id
@@ -91,11 +92,11 @@ fun HomeScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                GlitchText("PY//NOW", style = MaterialTheme.typography.headlineMedium, color = NeonCyan)
-                Text("码上 Python · 编程学院 v${AppConstants.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = TextDim)
+                GlitchText("码上", style = MaterialTheme.typography.headlineMedium, color = NeonCyan)
+                Text("码上 · 编程学院 v${AppConstants.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = TextDim)
             }
             Text(
-                "CPython $pythonVersion 就绪",
+                "${runtime.displayName} $pythonVersion 就绪",
                 style = MaterialTheme.typography.labelSmall,
                 color = NeonGreen.copy(alpha = 0.8f)
             )
@@ -198,7 +199,7 @@ fun HomeScreen(
         }
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             NeonButton(
-                label = "Python 终端",
+                label = "终端 REPL",
                 onClick = onOpenTerminal,
                 modifier = Modifier.weight(1f),
                 accent = NeonGreen,

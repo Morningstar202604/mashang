@@ -69,8 +69,9 @@ private const val TAG = "PyNeonCodeEditor"
 
 /**
  * 创建并配置一个 sora CodeEditor 实例（每个 Composable 实例只建一次）。
- * 语法：TextMate Python（assets/syntaxes/python.tmLanguage，plist XML）。
- * 主题：PyNeon Dark（scope → 品牌四色）。
+ * 语法：TextMate，按 [language] 加载 assets/syntaxes/<language>.tmLanguage.json
+ * （python / javascript，plist XML；未内置语法的语言降级为纯文本）。
+ * 主题：PyNeon Dark（scope → 品牌四色，token scope 与各语法文件保持对齐）。
  */
 private fun createEditor(
     context: android.content.Context,
@@ -79,7 +80,7 @@ private fun createEditor(
     val editor = SoraCodeEditor(context)
     try {
         val grammarText = context.assets
-            .open("syntaxes/python.tmLanguage.json")
+            .open("syntaxes/$language.tmLanguage.json")
             .bufferedReader(Charsets.UTF_8)
             .use { it.readText() }
         // .tmLanguage 文件是 plist(XML) 格式，显式声明 ContentType.XML
@@ -175,9 +176,9 @@ private suspend fun awaitCancellationSafe(block: () -> Unit) {
 // ===== 以下为只读示例代码块（PythonCodeField）继续使用的高亮工具，保持不动 =====
 
 /**
- * 简易 Python 语法高亮（正则版）。
+ * 简易语法高亮（正则版），支持 python / javascript。
  * 仅供只读示例代码块 [PythonCodeField] 使用；可编辑编辑器已由 sora-editor 接管。
- * 注意：正则高亮无法覆盖三引号字符串、f-string、嵌套注释等边界场景，
+ * 注意：正则高亮无法覆盖三引号字符串、f-string、正则字面量等边界场景，
  * 只读展示场景下可接受。
  */
 fun buildAnnotatedString(
@@ -186,7 +187,7 @@ fun buildAnnotatedString(
     tokens: com.pyneon.academy.ui.theme.NeonTokens = com.pyneon.academy.ui.theme.DarkTokens
 ): AnnotatedString {
     val builder = AnnotatedString.Builder(code)
-    if (language != "python") return builder.toAnnotatedString()
+    if (language != "python" && language != "javascript") return builder.toAnnotatedString()
 
     val keywordStyle = SpanStyle(color = tokens.primary, fontWeight = FontWeight.Bold)
     val stringStyle = SpanStyle(color = tokens.success)
@@ -195,25 +196,15 @@ fun buildAnnotatedString(
     val functionStyle = SpanStyle(color = tokens.primary, fontWeight = FontWeight.Normal)
     val builtinStyle = SpanStyle(color = tokens.purple)
 
-    val keywords = setOf(
-        "def", "class", "if", "elif", "else", "for", "while", "try", "except", "finally",
-        "with", "as", "import", "from", "return", "yield", "lambda", "pass", "break",
-        "continue", "raise", "assert", "del", "global", "nonlocal", "and", "or", "not",
-        "in", "is", "None", "True", "False", "async", "await", "match", "case"
-    )
-
-    val builtins = setOf(
-        "print", "len", "range", "int", "str", "float", "bool", "list", "dict", "set",
-        "tuple", "open", "input", "round", "abs", "max", "min", "sum", "sorted", "reversed",
-        "enumerate", "zip", "map", "filter", "any", "all", "isinstance", "issubclass",
-        "hasattr", "getattr", "setattr", "type", "super", "object", "Exception", "ValueError",
-        "TypeError", "KeyError", "IndexError", "FileNotFoundError", "ImportError", "AttributeError"
-    )
+    val (keywords, builtins, commentPrefix) = when (language) {
+        "javascript" -> jsHighlightSets()
+        else -> pythonHighlightSets()
+    }
 
     // Regex patterns
     val keywordPattern = "\\b(${keywords.joinToString("|")})\\b".toRegex()
     val stringPattern = """(["'])(?:(?=(\\?))\2.)*?\1""".toRegex()
-    val commentPattern = "#.*".toRegex()
+    val commentPattern = "$commentPrefix.*".toRegex()
     val numberPattern = "\\b\\d+(\\.\\d+)?\\b".toRegex()
     val functionPattern = "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()".toRegex()
     val builtinPattern = "\\b(${builtins.joinToString("|")})\\b".toRegex()
@@ -248,3 +239,36 @@ fun buildAnnotatedString(
 
     return builder.toAnnotatedString()
 }
+
+private fun pythonHighlightSets(): Triple<Set<String>, Set<String>, String> = Triple(
+    setOf(
+        "def", "class", "if", "elif", "else", "for", "while", "try", "except", "finally",
+        "with", "as", "import", "from", "return", "yield", "lambda", "pass", "break",
+        "continue", "raise", "assert", "del", "global", "nonlocal", "and", "or", "not",
+        "in", "is", "None", "True", "False", "async", "await", "match", "case"
+    ),
+    setOf(
+        "print", "len", "range", "int", "str", "float", "bool", "list", "dict", "set",
+        "tuple", "open", "input", "round", "abs", "max", "min", "sum", "sorted", "reversed",
+        "enumerate", "zip", "map", "filter", "any", "all", "isinstance", "issubclass",
+        "hasattr", "getattr", "setattr", "type", "super", "object", "Exception", "ValueError",
+        "TypeError", "KeyError", "IndexError", "FileNotFoundError", "ImportError", "AttributeError"
+    ),
+    "#"
+)
+
+private fun jsHighlightSets(): Triple<Set<String>, Set<String>, String> = Triple(
+    setOf(
+        "var", "let", "const", "function", "class", "return", "if", "else", "for",
+        "while", "do", "switch", "case", "default", "break", "continue", "new",
+        "typeof", "instanceof", "delete", "in", "of", "try", "catch", "finally",
+        "throw", "yield", "async", "await", "this", "super", "extends", "static",
+        "null", "undefined", "true", "false", "NaN", "Infinity"
+    ),
+    setOf(
+        "console", "Math", "JSON", "Object", "Array", "String", "Number", "Boolean",
+        "parseInt", "parseFloat", "isNaN", "isFinite", "Promise", "Symbol", "Date",
+        "toFixed", "slice", "split", "join", "toUpperCase", "toLowerCase", "push", "pop"
+    ),
+    "//"
+)

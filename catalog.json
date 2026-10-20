@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-13",
-  "sha256": "15e3b4931efcf835c585214416b4df74bb6f8135267a9f3d4c19114fec634a22",
+  "updated_at": "2026-10-20",
+  "sha256": "f0aed7388561b02686e2731d843475cdf21946f3e626aa4b6a4e26594b0241d2",
   "packs": [
     {
       "id": "bonus-builtin",
@@ -14,14 +14,21 @@
       "name": "增补包 · DSA 算法基础",
       "version": 1,
       "description": "复杂度直觉 / 双指针 / 哈希表 / 栈与队列 / 递归记忆化：5 讲原创算法入门，每讲含闯关判题。",
-      "sha256": "9a4987a5aca53cb99ad9ea610770b7c0ceb2a9027fdc13f2db84b69ee40e0eed"
+      "sha256": "620c654af92761639dc13eb64c9d9cc904c7d6acc50fde10f0a4f6b6c142c92c"
     },
     {
       "id": "dsa-mastery",
       "name": "增补包 · DSA 算法进阶",
       "version": 1,
       "description": "手写排序 / 二分查找 / 贪心找零 / 链表思维 / 最大子段和：5 讲原创算法进阶，对标竞赛入门。",
-      "sha256": "79de2683cf442b9072ee184a3ccb734da176f6c4842a4b1e867d30e1d9ff221d"
+      "sha256": "66d0d626bec7fa3dc0fc7f31a85590313ce8cc17ea5fe72918195a3638fa4c9b"
+    },
+    {
+      "id": "js-basics",
+      "name": "语言包 · JavaScript 启程",
+      "version": 1,
+      "description": "6 讲 JavaScript 入门：console.log / Math 取整 / 字符串方法 / 分支守卫 / 数组循环 / 对象统计。与 Python 课一一对照，需要「JavaScript 运行时」（本版本已内置）。",
+      "sha256": "4be5cc5499775c19cafda7afcc14231599b6f3db2a3be2af7f31208906ffc6ee"
     }
   ]
 }

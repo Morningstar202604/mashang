@@ -50,7 +50,7 @@ fun WelcomeTutorial(onComplete: () -> Unit) {
     val pages = listOf(
         WelcomePage(
             title = "完全离线学习",
-            description = "内置 CPython 3.13 解释器\n地铁、飞机、偏远地区都能学\n无需网络，随时学习",
+            description = "内置语言运行时\n地铁、飞机、偏远地区都能学\n无需网络，随时学习",
             icon = Icons.Outlined.WifiOff,
             accentColor = NeonCyan
         ),
@@ -67,8 +67,8 @@ fun WelcomeTutorial(onComplete: () -> Unit) {
             accentColor = NeonGreen
         ),
         WelcomePage(
-            title = "四幕系统课程",
-            description = "38 讲由浅入深\n从基础语法到生产实战\n每讲配实战判题\n完成后独立写出可用工具",
+            title = "多语言课程体系",
+            description = "多门语言由浅入深\n从基础语法到生产实战\n每讲配实战判题\n完成后独立写出可用工具",
             icon = Icons.Outlined.CalendarToday,
             accentColor = NeonMagenta
         )
@@ -91,12 +91,12 @@ fun WelcomeTutorial(onComplete: () -> Unit) {
 
             // Title
             Text(
-                "欢迎使用 PY//NOW",
+                "欢迎使用码上",
                 style = MaterialTheme.typography.headlineMedium,
                 color = NeonCyan
             )
             Text(
-                "码上 Python · 编程学院",
+                "码上 · 编程学院",
                 style = MaterialTheme.typography.bodyMedium,
                 color = NeonMagenta,
                 modifier = Modifier.padding(top = 8.dp)

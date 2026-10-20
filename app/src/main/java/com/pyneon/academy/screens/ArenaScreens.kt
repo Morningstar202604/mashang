@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.pyneon.academy.data.Clock
 import com.pyneon.academy.data.LessonRepository
 import com.pyneon.academy.data.ProgressStore
-import com.pyneon.academy.py.PyBridge
-import com.pyneon.academy.py.RunResult
+import com.pyneon.academy.lang.LanguageRegistry
+import com.pyneon.academy.lang.RunResult
 import com.pyneon.academy.ui.components.ConsoleResult
 import com.pyneon.academy.ui.components.NeonButton
 import com.pyneon.academy.ui.components.PythonCodeField
@@ -165,7 +165,8 @@ fun ChallengeDetailScreen(challengeId: String, onBack: () -> Unit) {
                         .fillMaxWidth()
                         .background(SurfaceHigh.copy(alpha = 0.5f))
                         .padding(4.dp),
-                    minHeight = 160
+                    minHeight = 160,
+                    language = challenge.lang
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -178,7 +179,8 @@ fun ChallengeDetailScreen(challengeId: String, onBack: () -> Unit) {
                                 busy = true
                                 result = null
                                 val r = withContext(Dispatchers.Default) {
-                                    PyBridge.checkExercise(editorValue.text, challenge.tests, emptyList())
+                                    LanguageRegistry.get(challenge.lang)
+                                        .checkExercise(editorValue.text, challenge.tests, emptyList())
                                 }
                                 result = r
                                 busy = false

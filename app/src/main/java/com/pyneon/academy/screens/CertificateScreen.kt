@@ -91,8 +91,8 @@ fun CertificateScreen(onBack: () -> Unit) {
                     tint = NeonYellow,
                     modifier = Modifier.size(44.dp)
                 )
-                GlitchText("PY//NOW", style = MaterialTheme.typography.titleLarge, color = NeonCyan)
-                Text("码上 Python · 毕业认证", style = MaterialTheme.typography.titleMedium, color = TextMid)
+                GlitchText("码上", style = MaterialTheme.typography.titleLarge, color = NeonCyan)
+                Text("码上 · 毕业认证", style = MaterialTheme.typography.titleMedium, color = TextMid)
                 Box(Modifier.fillMaxWidth().height(1.dp).background(NeonYellow.copy(alpha = 0.4f)))
                 Spacer(Modifier.height(4.dp))
                 Text("兹证明 接入者「NEO」", style = MaterialTheme.typography.bodyLarge, color = TextMid)
@@ -108,7 +108,7 @@ fun CertificateScreen(onBack: () -> Unit) {
                 }
                 Spacer(Modifier.height(12.dp))
                 Text(dateText, style = MaterialTheme.typography.labelSmall, color = TextDim)
-                Text("CERTIFIED // OFFLINE FIRST // CPython INSIDE", style = MaterialTheme.typography.labelSmall, color = NeonGreen.copy(alpha = 0.7f))
+                Text("CERTIFIED // OFFLINE FIRST // ON-DEVICE RUNTIME", style = MaterialTheme.typography.labelSmall, color = NeonGreen.copy(alpha = 0.7f))
             }
         }
 

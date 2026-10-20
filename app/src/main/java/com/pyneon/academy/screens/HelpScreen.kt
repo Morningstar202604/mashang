@@ -44,7 +44,7 @@ fun HelpScreen(onBack: () -> Unit) {
         HelpSection("快速上手（60 秒）")
         FaqItem("1 · 从哪开始？", "进入「课程」页，从第一幕第一课开始。课程按章节解锁，完成一课才能解锁下一课；通关后按「下一课」直达。")
         FaqItem("2 · 怎么练习？", "每课末尾有「实战演练」：在代码编辑器写代码，点「运行判题」自动批改。答对得 XP 并解锁下一课；答错进错题本。")
-        FaqItem("3 · 代码在哪随手试？", "底部「终端」页是 REPL 终端，像 Python 交互环境一样随时输入、立即运行，适合验证小片段。")
+        FaqItem("3 · 代码在哪随手试？", "底部「终端」页是 REPL 终端，像语言的交互式命令行一样随时输入、立即运行，适合验证小片段。")
         FaqItem("4 · 学完能拿什么？", "通关全部 $totalLessons 讲课程后，「我的」页解锁毕业证书；「挑战」页有 6 个实战闯关拿额外 XP。")
 
         // ===== 常用功能 =====
@@ -57,7 +57,7 @@ fun HelpScreen(onBack: () -> Unit) {
 
         // ===== 常见问题 =====
         HelpSection("常见问题")
-        FaqItem("完全离线吗？", "是。CPython 3.13 解释器内嵌在应用里，38 讲内置课程无网络也能学。联网仅用于内容中心下载额外包。")
+        FaqItem("完全离线吗？", "是。语言运行时就绪内嵌在应用里，${totalLessons} 讲内置课程无网络也能学。联网仅用于内容中心下载额外包。")
         FaqItem("代码报错看不懂怎么办？", "判题结果里点「问教练 · 只提示不代写」，智能教练会解释错误类型、定位疑似行号并给排查步骤，不直接给答案。")
         FaqItem("不小心重置了进度能找回吗？", "先到备份/恢复导出过备份就能导入找回；未备份的重置不可撤销，重置前有二次确认。")
         FaqItem("课程为什么是锁着的？", "课程按章节渐进解锁：必须先通过上一课，才能进入下一课——保证基础扎实再进阶。")
@@ -69,7 +69,7 @@ fun HelpScreen(onBack: () -> Unit) {
         NeonButton(
             label = "联系我们",
             accent = NeonGreen,
-            onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "PY//NOW 使用咨询") },
+            onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "码上 使用咨询") },
             modifier = Modifier.fillMaxWidth()
         )
         NeonButton(

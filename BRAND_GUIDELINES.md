@@ -1,29 +1,32 @@
-# PY//NOW · Brand Guidelines
+# 码上 · Brand Guidelines
 
 ## Project Identity
 
 ### Official Name
-- **English**: PY//NOW (stylized with double slash)
-- **Chinese**: 码上Python (码上 = immediately/on the code)
-- **Japanese**: PY//NOW マシャン Python
+- **English**: Mashang (2026-10 起主品牌；旧称 PY//NOW 已退役)
+- **Chinese**: 码上 (码上 = immediately/on the code)
+- **Japanese**: マシャン
+
+> 品牌重塑说明（2026-10-19）：产品由「码上Python」升级为「码上 / Mashang」多语言编程学习终端，
+> 命名不再绑定单一语言；Python 语言包为首个内置语言，后续按语言包接入 JavaScript 等。
 
 ### Taglines
 
 #### Primary (English)
-> "Code now, master Python instantly. Learn offline, anywhere."
+> "Code now, master any language. Learn offline, anywhere."
 
 #### Secondary Options
-- "Your pocket-sized cyberpunk Python terminal"
-- "Learn Python without limits, without internet"
+- "Your pocket-sized cyberpunk coding terminal"
+- "Learn to code without limits, without internet"
 - "From print() to decorators — fully offline"
 
 #### Chinese
 > "码上，就是马上。"
-> "装进口袋的赛博朋克 Python 学习终端"
+> "装进口袋的赛博朋克编程学习终端"
 
 #### Japanese
-> "今すぐコードを書いて、Pythonをマスターしよう。"
-> "ポケットに入るサイバーパンク風Python学習ターミナル"
+> "今すぐコードを書いて、どの言語もマスターしよう。"
+> "ポケットに入るサイバーパンク風プログラミング学習ターミナル"
 
 ## Visual Identity
 
@@ -148,7 +151,7 @@
 
 #### Twitter/X (280 chars)
 ```
-🚀 PY//NOW v0.3 just dropped!
+🚀 Mashang v0.3 just dropped!
 
 ✓ Embedded CPython 3.13
 ✓ 30 gamified Python lessons
@@ -161,7 +164,7 @@ Download: [link]
 
 #### LinkedIn (Professional)
 ```
-Excited to share PY//NOW v0.3 - an open-source Android app that teaches Python programming completely offline.
+Excited to share Mashang v0.3 - an open-source Android app that teaches Python programming completely offline.
 
 Built with Kotlin, Jetpack Compose, and Chaquopy (embedded CPython 3.13), it features:
 • 30 interactive lessons from basics to decorators
@@ -210,7 +213,7 @@ For brand usage questions:
 - Email: [project maintainer email]
 
 License: MIT - Free to use with attribution
-Trademark: PY//NOW name and logo are project identity markers
+Trademark: Mashang name and logo are project identity markers
 
 ---
 

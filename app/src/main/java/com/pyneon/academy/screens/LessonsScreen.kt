@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +50,15 @@ import com.pyneon.academy.ui.theme.TextMid
 fun LessonsScreen(openLesson: (String) -> Unit) {
     val context = LocalContext.current
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
-    val lessons = remember { LessonRepository.lessons(context) }
+    val allLessons = remember { LessonRepository.lessons(context) }
+    // 语言过滤：null = 全部；选项来自课程数据里实际出现过的语言
+    var langFilter by remember { mutableStateOf<String?>(null) }
+    val lessons = remember(langFilter) {
+        if (langFilter == null) allLessons else allLessons.filter { it.lang == langFilter }
+    }
+    val langOptions = remember(allLessons) {
+        allLessons.map { it.lang }.distinct().map { it to com.pyneon.academy.lang.LanguageIds.displayNameOf(it) }
+    }
 
     Column(
         Modifier
@@ -67,6 +77,14 @@ fun LessonsScreen(openLesson: (String) -> Unit) {
                 color = TextDim,
                 modifier = Modifier.padding(top = 4.dp)
             )
+            if (langOptions.size > 1) {
+                com.pyneon.academy.ui.components.LangChipRow(
+                    options = listOf(null to "全部") + langOptions,
+                    selected = langFilter,
+                    accent = NeonCyan,
+                    modifier = Modifier.padding(top = 8.dp)
+                ) { picked -> langFilter = picked }
+            }
         }
         LazyColumn(
             Modifier

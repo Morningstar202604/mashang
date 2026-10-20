@@ -3,29 +3,36 @@ package com.pyneon.academy.py
 import android.content.Context
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.pyneon.academy.lang.LanguageIds
+import com.pyneon.academy.lang.LanguageRuntime
+import com.pyneon.academy.lang.RunResult
+import com.pyneon.academy.lang.VarInfo
 import org.json.JSONArray
 import org.json.JSONObject
 
-data class VarInfo(val name: String, val type: String, val value: String)
+/**
+ * Python 运行时（Chaquopy 内嵌 CPython）。
+ *
+ * 多语言架构下它是 [LanguageRuntime] 的首个实现：UI 与判题逻辑只依赖接口，
+ * 新增 JavaScript / Java 等语言时新增实现类并注册进 LanguageRegistry 即可，
+ * 本文件之外的调用方无需改动。
+ */
+object PyBridge : LanguageRuntime {
 
-data class RunResult(
-    val ok: Boolean,
-    val stdout: String,
-    val stderr: String,
-    val errorType: String?,
-    val errorMessage: String?,
-    val traceback: String?,
-    val durationMs: Long,
-    val variables: List<VarInfo>,
-    val passed: Boolean?
-)
-
-object PyBridge {
+    override val id: String = LanguageIds.PYTHON
+    override val displayName: String = "Python"
+    override val fileExtension: String = "py"
+    override val grammarScope: String = "source.python"
 
     @Volatile
     private var started = false
 
-    fun ensureStarted(context: Context) {
+    override val version: String
+        get() = pythonVersion()
+
+    override fun isAvailable(): Boolean = started || Python.isStarted()
+
+    override fun ensureStarted(context: Context) {
         if (started) return
         synchronized(this) {
             if (!started && !Python.isStarted()) {
@@ -37,10 +44,10 @@ object PyBridge {
 
     private fun module(name: String) = Python.getInstance().getModule(name)
 
-    fun runCode(
+    override fun runCode(
         code: String,
-        stdinLines: List<String> = emptyList(),
-        timeoutSec: Double = 8.0
+        stdinLines: List<String>,
+        timeoutSec: Double
     ): RunResult {
         val payload = JSONObject().apply {
             put("code", code)
@@ -50,10 +57,10 @@ object PyBridge {
         return parseRun(module("runner").callAttr("run_code_json", payload.toString()).toString())
     }
 
-    fun checkExercise(
+    override fun checkExercise(
         code: String,
         tests: List<String>,
-        stdinLines: List<String> = emptyList()
+        stdinLines: List<String>
     ): RunResult {
         val payload = JSONObject().apply {
             put("code", code)
@@ -72,7 +79,7 @@ object PyBridge {
         }
     }
 
-    fun warmup(): Boolean {
+    override fun warmup(): Boolean {
         return try {
             runCode("pass", emptyList(), 6.0).ok
         } catch (_: Throwable) {
@@ -80,11 +87,11 @@ object PyBridge {
         }
     }
 
-    fun replStart() {
+    override fun replStart() {
         module("repl").callAttr("start")
     }
 
-    fun replPush(line: String): Pair<Boolean, String> {
+    override fun replPush(line: String): Pair<Boolean, String> {
         val obj = JSONObject(module("repl").callAttr("push", line).toString())
         return obj.getBoolean("more") to obj.getString("output")
     }

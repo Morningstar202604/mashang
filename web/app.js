@@ -1,4 +1,4 @@
-/* 码上Python · 电脑端 (web/app.js)
+/* 码上 · 电脑端 (web/app.js)
  * 纯前端 + Pyodide(浏览器内 CPython 3.13)。
  * 引擎直接复用手机端 runner.py：run_code_json / check_exercise_json / repl_exec_json。
  * 因此判题与变量快照逻辑和手机端完全一致。

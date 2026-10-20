@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pyneon.academy.data.Block
-import com.pyneon.academy.py.RunResult
+import com.pyneon.academy.lang.RunResult
 import com.pyneon.academy.ui.components.ConsoleResult
 import com.pyneon.academy.ui.components.NeonButton
 import com.pyneon.academy.ui.components.PythonCodeField
@@ -250,7 +250,7 @@ internal fun Modifier.androidxBackground(color: androidx.compose.ui.graphics.Col
     this.background(color, shape)
 
 @Composable
-internal fun PracticeCard(practice: Block.Practice) {
+internal fun PracticeCard(practice: Block.Practice, lang: String = "python") {
     NeonCard(accent = NeonCyan, filled = true) {
         Text("PRACTICE · 跟做练习", style = MaterialTheme.typography.labelSmall, color = NeonCyan)
         Spacer(Modifier.height(4.dp))
@@ -262,6 +262,7 @@ internal fun PracticeCard(practice: Block.Practice) {
             value = remember(practice.code) { TextFieldValue(practice.code) },
             onValueChange = {},
             readOnly = true,
+            language = lang,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(SurfaceHigh.copy(alpha = 0.45f))
@@ -279,7 +280,7 @@ internal fun PracticeCard(practice: Block.Practice) {
 }
 
 @Composable
-internal fun FillCard(fill: Block.Fill) {
+internal fun FillCard(fill: Block.Fill, lang: String = "python") {
     var input by remember(fill.goal) { mutableStateOf("") }
     var attempts by remember(fill.goal) { mutableStateOf(0) }
     val correct = input.trim() == fill.answer.trim()
@@ -293,6 +294,7 @@ internal fun FillCard(fill: Block.Fill) {
             value = remember(fill.code) { TextFieldValue(fill.code) },
             onValueChange = {},
             readOnly = true,
+            language = lang,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(SurfaceHigh.copy(alpha = 0.45f))
@@ -416,13 +418,15 @@ internal fun CodeExampleCard(
     runnable: Boolean,
     result: RunResult?,
     running: Boolean,
-    onRun: () -> Unit
+    onRun: () -> Unit,
+    lang: String = "python"
 ) {
     NeonCard(accent = NeonCyan) {
         PythonCodeField(
             value = remember(code) { TextFieldValue(code) },
             onValueChange = {},
             readOnly = true,
+            language = lang,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(SurfaceHigh.copy(alpha = 0.45f))

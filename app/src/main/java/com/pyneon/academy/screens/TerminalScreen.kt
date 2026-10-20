@@ -51,7 +51,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.pyneon.academy.data.ProgressStore
-import com.pyneon.academy.py.PyBridge
+import com.pyneon.academy.lang.LanguageRegistry
 import com.pyneon.academy.ui.effects.BlinkingCursor
 import com.pyneon.academy.ui.effects.NeonCard
 import com.pyneon.academy.ui.effects.cyberGrid
@@ -79,14 +79,19 @@ fun TerminalScreen() {
     var historyIndex by remember { mutableStateOf(-1) }
     var busy by remember { mutableStateOf(false) }
     var lastErr by remember { mutableStateOf("") }
+    var currentLang by remember { mutableStateOf(LanguageRegistry.currentId(context)) }
+    val langOptions = remember {
+        LanguageRegistry.all().filter { it.isAvailable() }.map { it.id to it.displayName }
+    }
     val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
-        PyBridge.ensureStarted(context)
-        withContext(Dispatchers.Default) { PyBridge.replStart() }
+        val runtime = LanguageRegistry.current(context)
+        runtime.ensureStarted(context)
+        withContext(Dispatchers.Default) { runtime.replStart() }
         lines.clear()
-        lines.add(TermLine("sys", "码上 Python 终端 v${AppConstants.VERSION_NAME} · CPython ${PyBridge.pythonVersion()}"))
-        lines.add(TermLine("sys", "逐行输入 Python 语句；多行块以空行结束。"))
+        lines.add(TermLine("sys", "码上终端 v${AppConstants.VERSION_NAME} · ${runtime.displayName} ${runtime.version}"))
+        lines.add(TermLine("sys", "逐行输入代码语句；多行块以空行结束。"))
     }
 
     fun terminalCommand(line: String): String {
@@ -97,7 +102,7 @@ fun TerminalScreen() {
                     appendLine("本地命令：")
                     appendLine("/coach   对最近的报错做诊断引导")
                     appendLine("/help    显示本帮助")
-                    appendLine("其余输入都会交给 CPython 3.13 执行")
+                    appendLine("其余输入都会交给当前语言运行时执行")
                 }
             "coach" -> {
                 if (lastErr.isBlank()) {
@@ -128,14 +133,14 @@ fun TerminalScreen() {
         historyIndex = -1
         lines.add(TermLine("in", if (morePending) "… $line" else "> $line"))
         input = TextFieldValue("")
-        // 本地命令：/help /coach，不进入 Python 解释器
+        // 本地命令：/help /coach，不进入语言运行时
         if (line.startsWith("/")) {
             busy = false
             lines.add(TermLine("sys", terminalCommand(line)))
             return
         }
         scope.launch {
-            val result = withContext(Dispatchers.Default) { PyBridge.replPush(line) }
+            val result = withContext(Dispatchers.Default) { LanguageRegistry.current(context).replPush(line) }
             val wasPending = morePending
             morePending = result.first
             if (wasPending && !result.first) {
@@ -199,7 +204,7 @@ fun TerminalScreen() {
                     .size(36.dp)
                     .clickable {
                         scope.launch {
-                            withContext(Dispatchers.Default) { PyBridge.replStart() }
+                            withContext(Dispatchers.Default) { LanguageRegistry.current(context).replStart() }
                             lines.clear()
                             lines.add(TermLine("sys", "会话已重置。"))
                             morePending = false
@@ -209,6 +214,28 @@ fun TerminalScreen() {
             ) {
                 Icon(Icons.Outlined.Refresh, contentDescription = "重置会话", tint = NeonCyan)
             }
+        }
+
+        if (langOptions.size > 1) {
+            com.pyneon.academy.ui.components.LangChipRow(
+                options = langOptions,
+                selected = currentLang,
+                accent = NeonGreen,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            ) { picked ->
+                val id = picked ?: return@LangChipRow
+                if (id == currentLang) return@LangChipRow
+                LanguageRegistry.setCurrent(context, id)
+                currentLang = id
+                scope.launch {
+                    withContext(Dispatchers.Default) { LanguageRegistry.current(context).replStart() }
+                    lines.clear()
+                    val rt = LanguageRegistry.current(context)
+                    lines.add(TermLine("sys", "已切换到 ${rt.displayName} ${rt.version}。"))
+                    morePending = false
+                }
+            }
+            Spacer(Modifier.size(4.dp))
         }
 
         LazyColumn(

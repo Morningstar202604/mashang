@@ -1,22 +1,22 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="PY//NOW · Mashang Python" width="830"/>
+<img src="docs/banner.png" alt="Mashang · 码上" width="830"/>
 
-**Code now, master Python instantly. Learn offline, anywhere.**
+**Code now, master any language. Learn offline, anywhere.**
 
-A cyberpunk-styled Python learning terminal that fits in your pocket: embedded real CPython interpreter, 30-level gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
+A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython first, more via language packs), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
 
 [![CI Build](https://img.shields.io/github/actions/workflow/status/X33834/mashang-python/ci.yml?branch=main&label=CI%20Build)](https://github.com/X33834/mashang-python/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
-[![Lessons](https://img.shields.io/badge/Curriculum-30_Lessons-F7FF00.svg)](#curriculum-30-lessons--4-acts)
+[![Lessons](https://img.shields.io/badge/Curriculum-38_Lessons-F7FF00.svg)](#curriculum-38-lessons--5-acts)
 [![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-Download_Page-FF2D78.svg)](https://aa84776376caeb1e2.app.workbuddy.host)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
-[🎬 Trailer](#-trailer50-seconds) · [⚡ TL;DR](#-tldr30-seconds) · [📊 How it runs](#-how-it-runs-fully-offline) · [📥 Download](#download--install) · [Curriculum](#curriculum-30-lessons--4-acts) · [⭐ Star](../../stargazers)
+[🎬 Trailer](#-trailer50-seconds) · [⚡ TL;DR](#-tldr30-seconds) · [📊 How it runs](#-how-it-runs-fully-offline) · [📥 Download](#download--install) · [Curriculum](#curriculum-38-lessons--5-acts) · [⭐ Star](../../stargazers)
 
 🌐 **Live Site / 在线官网**：[X33834 Pages](https://x33834.github.io/mashang-python/) · [Morningstar202604 Pages](https://morningstar202604.github.io/mashang-python/)
 
@@ -44,13 +44,13 @@ A cyberpunk-styled Python learning terminal that fits in your pocket: embedded r
 | **Will I actually learn to code?** | ✅ **Assert auto-grading** — you don't advance until test cases pass; cures "understood but can't write" |
 | **Ads? Account? Tracking?** | ✅ **Zero ads · zero account · zero data upload**, MIT-licensed — safe to recommend to students |
 | **Anything unique?** | 🔬 **Variable Snapshot panel** (whole namespace visualized after each run) · Six Tiers · Daily Quests · Mistake Book |
-| **How much content?** | 📚 **30 main lessons + 10 algorithm bonus lessons**, from `print` to decorators, plus 6 Arena challenges |
+| **How much content?** | 📚 **38 built-in lessons + 11 language-pack lessons**, from `print` to decorators, plus 6 Arena challenges |
 
 > 🎯 **One-line pitch**: not another blank code editor — a pocket learning terminal that bundles a **CPython interpreter + grading engine + game-like progression**, fully offline.
 
 ## 📊 How It Runs Fully Offline
 
-Others rely on cloud execution and die without a network. **PY//NOW** embeds a complete CPython 3.13 interpreter right into the APK — every line of code runs on this phone. Here is the runtime chain:
+Others rely on cloud execution and die without a network. **Mashang** embeds a complete CPython 3.13 interpreter right into the APK — every line of code runs on this phone. Here is the runtime chain:
 
 ```mermaid
 flowchart TD
@@ -91,8 +91,8 @@ flowchart LR
 
 ```mermaid
 pie title Content Scale (lessons / items)
-    "30 Main Lessons" : 30
-    "10 Algorithm Bonus" : 10
+    "38 Built-in Lessons" : 38
+    "17 Language-Pack Lessons" : 17
     "6 Arena Challenges" : 6
     "47 assert Graders" : 47
 ```
@@ -141,9 +141,9 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 | Teacher / Parent | No ads, no account, zero data upload — safe for students |
 | Developer | Complete Compose + Chaquopy reference implementation, MIT-licensed |
 
-## Why PY//NOW?
+## Why Mashang?
 
-| | Others | PY//NOW |
+| | Others | Mashang |
 |---|---|---|
 | Code Execution | ☁️ Cloud-based, dead without net | 📱 **On-device CPython 3.13** |
 | Teaching Style | Dry documentation | Cyber narrative + life analogies + pop quizzes |
@@ -213,7 +213,7 @@ The tech stack (Chaquopy) only supports Android; iOS would require a different a
 **Q: Can I use the curriculum commercially?**
 Yes. The project is open-sourced under the **MIT License** — free to use, modify, and distribute, including commercial use, as long as the license notice is retained. See [LICENSE](LICENSE) for the full terms.
 
-## 📚 Curriculum (30 Lessons · 4 Acts)
+## 📚 Curriculum (38 Lessons · 5 Acts)
 
 <details open>
 <summary><b>Act I · Foundation Protocol</b> (click to collapse)</summary>
@@ -232,10 +232,28 @@ Yes. The project is open-sourced under the **MIT License** — free to use, modi
 <details>
 <summary><b>Act III · High-Tier Implants</b></summary>
 
-`19 Inheritance & Magic Methods` · `20 Capstone Project · Cyber Bank` · `21 Generator Engines` · `22 Decorator Suits` · `23 Lambda Trio` · `24 Standard Library Combat (Counter/re)` · `25 Time & Random Universe` · `26 Graduation Project · Log Analyzer` · `27 Easter Egg · Built-in Function Tour (Content Hub Exclusive)`
+`19 Inheritance & Magic Methods` · `20 Capstone Project · Cyber Bank` · `21 Generator Engines` · `22 Decorator Suits` · `23 Lambda Trio` · `24 Standard Library Combat (Counter/re)` · `25 Time & Random Universe` · `26 Graduation Project · Log Analyzer`
 
-**Final Act · Beyond the Boundary** — Master Python core here:
-`28 File I/O Protocols` · `29 Custom Exceptions` · `30 Modules & Main Guard (__main__)`
+</details>
+
+<details>
+<summary><b>Act IV · Beyond the Boundary</b></summary>
+
+`27 Resource Steward with` · `28 File I/O Protocols` · `29 Custom Exceptions` · `30 Modules & Main Guard (__main__)`
+
+</details>
+
+<details>
+<summary><b>Act V · Production Combat</b></summary>
+
+`31 Regex Text Mining` · `32 Type Hints & Dataclasses` · `33 Functional Toolbox` · `34 Concurrency: Threads & Processes` · `35 Async Coroutines async/await` · `36 CLI Toolbox` · `37 Debugging & Testing` · `38 Virtual Env & Engineering`
+
+</details>
+
+<details>
+<summary><b>Language Packs · Content Hub (downloadable)</b></summary>
+
+Easter Egg · Built-in Function Tour (1 lesson) · DSA Algorithm Basics (5 lessons: complexity intuition / two pointers / hash tables / stacks & queues / recursion memoization) · DSA Algorithm Mastery (5 lessons: hand-written sorting / binary search / greedy change-making / linked-list thinking / maximum subarray) · Language Pack · JavaScript Kickoff (6 lessons, requires the built-in JS runtime — bundled since this version)
 
 </details>
 
@@ -246,8 +264,9 @@ Plus Arena 6 Major Challenges: Neon Counter / Palindrome Detector / Password Str
 
 ```
 Kotlin + Jetpack Compose (Material3 Cyber Custom Theme)
-        │  JSON Bridge PyBridge
-Chaquopy 17.0.0 ──► CPython 3.13 (runner.py sandbox / repl.py session)
+        │  LanguageRuntime contract (JSON payloads)
+PyBridge(Chaquopy) ──► CPython 3.13 (runner.py sandbox / repl.py session)
+JsBridge(Rhino)    ──► JavaScript (language-pack lessons via Content Hub)
 DataStore Progress │ Navigation Single-Activity Five-Tab │ Custom Syntax Highlighter
 ```
 
@@ -274,7 +293,7 @@ This repository is published under the **MIT License** — free to use, modify, 
 
 - ✅ You may view, study, modify, redistribute, and build commercial products upon it.
 - ✅ No warranty is provided; use at your own risk.
-- ™ "PY//NOW" / "码上Python" names and logos remain reserved trademarks.
+- ™ "Mashang" / "码上" names and logos remain reserved trademarks.
 
 Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0).
 

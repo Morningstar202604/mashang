@@ -62,7 +62,7 @@ import com.pyneon.academy.data.Progress
 import com.pyneon.academy.data.ProgressStore
 import com.pyneon.academy.data.Ranks
 import com.pyneon.academy.data.unlockedAchievements
-import com.pyneon.academy.py.PyBridge
+import com.pyneon.academy.lang.LanguageRegistry
 import com.pyneon.academy.ui.components.NeonButton
 import com.pyneon.academy.ui.effects.GlitchText
 import com.pyneon.academy.ui.effects.NeonCard
@@ -99,7 +99,8 @@ fun ProfileScreen(
     val lessons = remember { LessonRepository.lessons(context) }
     val unlocked = remember(progress, lessons.size) { unlockedAchievements(progress, lessons.size) }
     var confirmReset by remember { mutableStateOf(false) }
-    var pythonVersion by remember { mutableStateOf(PyBridge.pythonVersion()) }
+    val runtime = remember { LanguageRegistry.current(context) }
+    var pythonVersion by remember { mutableStateOf(runtime.version) }
     var currentThemeId by remember { mutableStateOf(ThemePreference.getCurrentThemeId(context)) }
     var customColorInput by remember { mutableStateOf(ThemePreference.getCustomColor(context)) }
     var customError by remember { mutableStateOf<String?>(null) }
@@ -192,7 +193,7 @@ fun ProfileScreen(
 
         SectionHeader("系统信息", accent = NeonGreen)
         NeonCard(accent = NeonGreen) {
-            InfoRow("运行时", "CPython $pythonVersion · Chaquopy 嵌入")
+            InfoRow("运行时", "${runtime.displayName} $pythonVersion · 设备端嵌入")
             InfoRow("版本", "${AppConstants.APP_NAME_CN} v${AppConstants.VERSION_NAME}")
             InfoRow("网络", "离线优先 · 联网仅拉取新课程")
             Spacer(Modifier.height(10.dp))

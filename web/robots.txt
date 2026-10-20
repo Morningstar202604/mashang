@@ -1,4 +1,4 @@
-# 码上Python · 网页端爬虫协议
+# 码上 · 网页端爬虫协议
 #
 # 本文件面向将 web/ 目录部署到任意静态托管（GitHub Pages / Gitee Pages 等）后的
 # 搜索引擎爬虫。站点为纯前端单页应用（index.html + 内联 data.js/engine.js），

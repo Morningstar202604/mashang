@@ -24,9 +24,11 @@ SHA_FIELD = re.compile(r'"sha256"\s*:\s*"[0-9a-f]{64}"')
 
 
 def strip_self_sha(text: str) -> str:
-    """与 ContentCenter.stripSelfSha 完全一致：Kotlin replace(regex) 会替换所有匹配，
-    因此目录中所有 64 位 hex 的 sha256 字段（含 packs 内的）都会被置空。"""
-    return SHA_FIELD.sub('"sha256": ""', text)
+    """与 ContentCenter.stripSelfSha 完全一致：只剥离【第一次出现】的 64 位 hex
+    sha256 字段（即顶层目录签名），packs[].sha256 等子字段保留原值并进入签名
+    覆盖范围——若替换全部 sha256 字段，目录对"篡改各包哈希"将失去校验能力，
+    且 packs[].sha256 会被清空导致内容中心拒绝下载（2026-10-19 回归测试锁定）。"""
+    return SHA_FIELD.sub('"sha256": ""', text, count=1)
 
 
 def main() -> int:

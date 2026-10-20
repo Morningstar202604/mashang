@@ -29,7 +29,7 @@ object Ranks {
 }
 
 enum class Achievement(val title: String, val desc: String) {
-    CODE_RUNNER("执行者", "第一次成功运行 Python 代码"),
+    CODE_RUNNER("执行者", "第一次成功运行代码"),
     FIRST_BLOOD("初次连接", "完成第 1 节课程"),
     NIGHT_OWL("暗夜行者", "在凌晨 0-5 点运行过代码"),
     STREAK_3("三连脉冲", "连续 3 天保持学习连击"),

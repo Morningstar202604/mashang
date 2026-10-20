@@ -27,9 +27,9 @@
     <path d="M245 196 L330 196" fill="none" stroke="#00FF9C" stroke-width="16" stroke-linecap="round"/>
   </g>
 
-  <text x="380" y="150" font-family="Consolas, Menlo, monospace" font-size="84" font-weight="bold" fill="#E6F1FF">码上Python</text>
-  <text x="384" y="212" font-family="Consolas, Menlo, monospace" font-size="34" font-weight="bold" fill="#FF2D78">PY//NOW</text>
-  <text x="580" y="212" font-family="Consolas, Menlo, monospace" font-size="26" fill="#8FA3BF">offline · cyberpunk · assert-judged</text>
+  <text x="380" y="150" font-family="Consolas, Menlo, monospace" font-size="96" font-weight="bold" fill="#E6F1FF">码上</text>
+  <text x="384" y="212" font-family="Consolas, Menlo, monospace" font-size="34" font-weight="bold" fill="#FF2D78">MASHANG</text>
+  <text x="600" y="212" font-family="Consolas, Menlo, monospace" font-size="26" fill="#8FA3BF">offline · cyberpunk · assert-judged</text>
 
   <rect x="0" y="288" width="1200" height="12" fill="#00E5FF" opacity="0.25"/>
 </svg>

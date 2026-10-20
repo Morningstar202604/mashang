@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.pyneon.academy.py.PyBridge
+import com.pyneon.academy.lang.LanguageRegistry
 import com.pyneon.academy.ui.effects.GlitchText
 import com.pyneon.academy.ui.effects.cyberGrid
 import com.pyneon.academy.ui.effects.scanlines
@@ -47,12 +47,12 @@ fun BootScreen(onDone: () -> Unit) {
     
     val bootLines = remember(pyStatus) {
         listOf(
-            "PY//NOW $appVersion .............. OK",
-            "初始化 Python 引擎 ............ OK",
+            "码上 $appVersion .............. OK",
+            "初始化执行引擎 ............ OK",
             when (pyStatus) {
-                "RUN" -> "加载 CPython 3.13 运行时 ..... 校验中"
-                "OK" -> "加载 CPython 3.13 运行时 ..... OK"
-                else -> "加载 CPython 3.13 运行时 ..... FAIL"
+                "RUN" -> "加载语言运行时 ............. 校验中"
+                "OK" -> "加载语言运行时 ............. OK"
+                else -> "加载语言运行时 ............. FAIL"
             },
             "同步课程数据 .................. OK",
             "准备离线学习环境 .............. 完成",
@@ -67,9 +67,10 @@ fun BootScreen(onDone: () -> Unit) {
         delay(170L)
         shown = 2
         delay(170L)
-        PyBridge.ensureStarted(context)
+        val runtime = LanguageRegistry.current(context)
+        runtime.ensureStarted(context)
         val ok = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-            PyBridge.warmup()
+            runtime.warmup()
         }
         pyStatus = if (ok) "OK" else "FAIL"
         shown = 3
@@ -91,9 +92,9 @@ fun BootScreen(onDone: () -> Unit) {
             .padding(28.dp)
     ) {
         Column(Modifier.align(Alignment.Center)) {
-            GlitchText("PY//NOW", style = MaterialTheme.typography.headlineLarge, color = NeonCyan)
+            GlitchText("码上", style = MaterialTheme.typography.headlineLarge, color = NeonCyan)
             Text(
-                "码上 Python · 编程学院",
+                "码上 · 编程学院",
                 style = MaterialTheme.typography.labelMedium,
                 color = NeonMagenta,
                 modifier = Modifier.padding(top = 6.dp)

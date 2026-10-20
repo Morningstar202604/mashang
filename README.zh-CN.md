@@ -1,11 +1,11 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="码上Python · PY//NOW" width="830"/>
+<img src="docs/banner.png" alt="码上 · 码上" width="830"/>
 
 **码上，就是马上。Learn Python instantly — on your phone, fully offline.**
 
 一台装进口袋的赛博朋克 Python 学习终端：内嵌真·CPython 3.13 解释器，
-30 讲闯关课程、assert 自动判题、变量可视化、六段位成长体系。
+38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
 [![CI Build](https://img.shields.io/github/actions/workflow/status/X33834/mashang-python/ci.yml?branch=main&label=CI%20Build)](https://github.com/X33834/mashang-python/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
@@ -17,7 +17,7 @@
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
-[🎬 宣传片](#-宣传片50-秒入坑) · [⚡ 核心亮点](#-核心亮点30-秒速览) · [📊 它怎么离线](#-它怎么做到离线也能跑) · [📥 下载 APK](#-下载安装) · [课程体系](#-课程体系30-讲--四幕) · [⭐ Star](../../stargazers)
+[🎬 宣传片](#-宣传片50-秒入坑) · [⚡ 核心亮点](#-核心亮点30-秒速览) · [📊 它怎么离线](#-它怎么做到离线也能跑) · [📥 下载 APK](#-下载安装) · [课程体系](#-课程体系38-讲--五幕) · [⭐ Star](../../stargazers)
 
 </div>
 
@@ -43,13 +43,13 @@
 | **学完能算「会写」吗？** | ✅ **assert 自动判题** —— 测试用例不过就不放行，专治「看懂了但不会写」 |
 | **有广告 / 要注册吗？** | ✅ **零广告 · 零账号 · 零数据上传**，MIT 开源，教师可放心推给学生 |
 | **独门功能是什么？** | 🔬 **变量快照面板**（运行后整个命名空间可视化）· 六段位成长 · 每日任务 · 错题本间隔复习 |
-| **课程量多大？** | 📚 **30 讲主线 + 10 讲算法增补**，从 `print` 打到装饰器，另附角斗场 6 大挑战 |
+| **课程量多大？** | 📚 **38 讲内置 + 17 讲扩展包**，从 `print` 打到装饰器，另附角斗场 6 大挑战 |
 
 > 🎯 **一句话定位**：不是又一个「空白代码编辑器」，而是一台把 **CPython 解释器 + 判题引擎 + 游戏化成长** 全塞进手机的离线学习终端。
 
 ## 📊 它怎么做到离线也能跑
 
-别人靠云端执行、断网即瘫；**码上 Python** 把完整的 CPython 3.13 直接嵌进 APK，所有代码都在这台手机本地跑——下面这张图就是它的运行链路：
+别人靠云端执行、断网即瘫；**码上** 把完整的 CPython 3.13 直接嵌进 APK，所有代码都在这台手机本地跑——下面这张图就是它的运行链路：
 
 ```mermaid
 flowchart TD
@@ -90,8 +90,8 @@ flowchart LR
 
 ```mermaid
 pie title 内容规模（讲 / 项）
-    "30 讲主线课程" : 30
-    "10 讲算法增补包" : 10
+    "38 讲内置课程" : 38
+    "17 讲扩展包" : 17
     "6 大角斗场挑战" : 6
     "47 道 assert 判题" : 47
 ```
@@ -135,14 +135,14 @@ flowchart LR
 
 | 你是 | 你会得到 |
 |---|---|
-| 零基础学生 / 转行者 | 30 讲中文剧情课，从 print 一路打到装饰器 |
+| 零基础学生 / 转行者 | 38 讲中文剧情课，从 print 一路打到装饰器 |
 | 通勤碎片时间学习者 | 全离线，地铁隧道里也能跑代码 |
 | 教师 / 家长 | 无广告、无账号、零数据上传，可放心推给学生 |
 | 开发者 | Compose + Chaquopy 完整参考实现，MIT 开源 |
 
 ## 为什么是码上？
 
-| | 别人的 | 码上 Python |
+| | 别人的 | 码上 |
 |---|---|---|
 | 代码执行 | ☁️ 云端，断网即瘫 | 📱 **本机 CPython 3.13** |
 | 教学风格 | 干瘪文档 | 赛博剧情 + 生活化比喻 + 随堂一问 |
@@ -212,7 +212,7 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 **Q: 课程内容可以商用吗？**
 可以。项目以 **MIT 协议** 开源——允许自由使用、修改、分发（含商用），只需保留许可声明。完整条款见 [LICENSE](LICENSE)。
 
-## 📚 课程体系（30 讲 · 四幕）
+## 📚 课程体系（38 讲 · 五幕）
 
 <details open>
 <summary><b>第一幕 · 基础协议</b>（点击折叠）</summary>
@@ -231,10 +231,28 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 <details>
 <summary><b>第三幕 · 高阶义体</b></summary>
 
-`19 继承与魔法方法` · `20 综合项目·赛博银行` · `21 生成器引擎` · `22 装饰器战衣` · `23 lambda三剑客` · `24 标准库实战(Counter/re)` · `25 时间与随机宇宙` · `26 毕业项目·日志分析器` · `27 彩蛋·内置函数巡礼(内容中心首发)`
+`19 继承与魔法方法` · `20 综合项目·赛博银行` · `21 生成器引擎` · `22 装饰器战衣` · `23 lambda三剑客` · `24 标准库实战(Counter/re)` · `25 时间与随机宇宙` · `26 毕业项目·日志分析器`
 
-**终幕 · 边界之外** —— Python 核心在此通关：
-`28 文件读写协议` · `29 自定义异常` · `30 模块与主守卫(__main__)`
+</details>
+
+<details>
+<summary><b>第四幕 · 边界之外</b></summary>
+
+`27 资源管家with` · `28 文件读写协议` · `29 自定义异常` · `30 模块与主守卫(__main__)`
+
+</details>
+
+<details>
+<summary><b>第五幕 · 生产实战</b></summary>
+
+`31 正则表达式` · `32 类型提示与数据类` · `33 函数式工具箱` · `34 并发初探` · `35 异步协程` · `36 命令行工具箱` · `37 调试与测试` · `38 虚拟环境与工程化`
+
+</details>
+
+<details>
+<summary><b>语言扩展包 · 内容中心下载</b></summary>
+
+彩蛋课·内置函数巡礼（1 讲）· 增补包·DSA 算法基础（5 讲）· 增补包·DSA 算法进阶（5 讲）· 语言包·JavaScript 启程（6 讲，需内置 JS 运行时，本版本已带）
 
 </details>
 
@@ -245,8 +263,9 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 
 ```
 Kotlin + Jetpack Compose (Material3 赛博定制主题)
-        │  JSON 协议桥 PyBridge
-Chaquopy 17.0.0 ──► CPython 3.13 (runner.py 沙箱 / repl.py 会话)
+        │  LanguageRuntime 统一契约（JSON 载荷）
+PyBridge(Chaquopy) ──► CPython 3.13 (runner.py / repl.py)
+JsBridge(Rhino)    ──► JavaScript（语言包课程经内容中心下载）
 DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮器
 ```
 
@@ -259,7 +278,8 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 - [x] v0.2.1 内容中心：在线课程包下载（端云协同），首发包「内置函数巡礼」
 - [x] v0.3 阶段成果：DSA 增补包 ×2（10 讲）、L0 离线规则教练、错题本 + 间隔复习、UI 可读性整改（特效收敛、正文无衬线放大）
 - [ ] v0.3 剩余计划：turtle 海龟画布 · matplotlib 图表输出 · 执行过程变量动画
-- [ ] v0.4 端侧 AI 助教（线上大模型）· 多语言 · 平板适配
+- [x] v0.3.8 多语言架构落地：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI
+- [ ] v0.4 端侧 AI 助教（线上大模型）· QuickJS 后端（ES6+）· 平板适配
 - [ ] v1.0 应用商店全渠道上架
 
 ## 🤝 参与贡献
@@ -273,7 +293,7 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 
 - ✅ 可查看、学习、修改、再分发，也可基于此构建商业产品。
 - ✅ 按「原样」提供，不附带任何担保，风险自负。
-- ™ "PY//NOW" / "码上 Python" 名称与标识为保留商标。
+- ™ "码上" / "Mashang" 名称与标识为保留商标。
 
 第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)。
 

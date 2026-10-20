@@ -7,7 +7,7 @@
 * Merge conflicts: resolve conflicts in the working tree against the latest main; never force-push shared branches; never resolve a conflict by blindly taking either side — re-read both sides and keep both changes when they are both valid.
 * Versioning: releases follow X.Y.Z starting at 0.0.0. Last digit = fixes, middle digit = feature work, first digit stays 0 until a stable release is declared. Bump the version in code, CHANGELOG.md and the tag in the same change.
 
-感谢关注「码上Python」！欢迎以下形式的贡献：
+感谢关注「码上」！欢迎以下形式的贡献：
 
 ## 课程内容
 1. 在 `app/src/main/assets/lessons_*.json` 中新增或修改课程块

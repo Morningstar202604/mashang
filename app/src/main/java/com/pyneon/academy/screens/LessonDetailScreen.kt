@@ -49,8 +49,8 @@ import com.pyneon.academy.data.MistakeViewModel
 import com.pyneon.academy.data.Progress
 import com.pyneon.academy.data.ProgressStore
 import com.pyneon.academy.data.ReviewViewModel
-import com.pyneon.academy.py.PyBridge
-import com.pyneon.academy.py.RunResult
+import com.pyneon.academy.lang.LanguageRegistry
+import com.pyneon.academy.lang.RunResult
 import com.pyneon.academy.ui.components.ConsoleResult
 import com.pyneon.academy.ui.components.CodeEditor
 import com.pyneon.academy.ui.components.PythonCodeField
@@ -189,20 +189,23 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
                     is Block.Diagram -> DiagramBox(block.text)
                     is Block.Task -> TipBox(block.text, NeonYellow, "TASK · 跟着做")
                     is Block.Steps -> StepsCard(block.items)
-                    is Block.Practice -> PracticeCard(block)
-                    is Block.Fill -> FillCard(block)
+                    is Block.Practice -> PracticeCard(block, lang = lesson.lang)
+                    is Block.Fill -> FillCard(block, lang = lesson.lang)
                     is Block.Order -> OrderPuzzleCard(block)
                     is Block.Quiz -> QuizCard(block)
                     is Block.CodeBlock -> CodeExampleCard(
                         code = block.code,
                         runnable = block.runnable,
+                        lang = block.lang.ifBlank { lesson.lang },
                         result = runResults[index],
                         running = runningKey == index,
                         onRun = {
                             scope.launch {
                                 runningKey = index
                                 val r = withContext(Dispatchers.Default) {
-                                    PyBridge.runCode(block.code, block.stdin)
+                                    // 代码块可自带 lang 覆盖（对比教学）；否则沿用本讲语言
+                                    LanguageRegistry.get(block.lang.ifBlank { lesson.lang })
+                                        .runCode(block.code, block.stdin)
                                 }
                                 runResults[index] = r
                                 runningKey = null
@@ -229,7 +232,7 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
                             .fillMaxWidth()
                             .height(200.dp),
                         showLineNumbers = true,
-                        language = "python"
+                        language = lesson.lang
                     )
 
                     Spacer(Modifier.height(14.dp))
@@ -243,7 +246,8 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
                                     checking = true
                                     checkResult = null
                                     val r = withContext(Dispatchers.Default) {
-                                        PyBridge.checkExercise(editorValue, exercise.tests, exercise.stdin)
+                                        LanguageRegistry.get(lesson.lang)
+                                            .checkExercise(editorValue, exercise.tests, exercise.stdin)
                                     }
                                     checkResult = r
                                     checking = false

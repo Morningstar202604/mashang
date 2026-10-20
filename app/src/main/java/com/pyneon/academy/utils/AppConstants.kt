@@ -10,15 +10,16 @@ object AppConstants {
     val VERSION_NAME: String = BuildConfig.VERSION_NAME
     val VERSION_CODE: Int = BuildConfig.VERSION_CODE
     
-    // 应用名称
-    const val APP_NAME = "PY//NOW"
-    const val APP_NAME_CN = "码上 Python"
+    // 应用名称（2026-10 品牌重塑：去除 Python 专属命名，扩展为多语言学习终端）
+    const val APP_NAME = "码上"
+    const val APP_NAME_CN = "码上"
+    const val APP_NAME_EN = "Mashang"
     
     // 项目主页（GitCode 主仓）
     const val REPO_URL = "https://gitcode.com/badhope/mashang-python"
 
-    // 分享标签
-    const val SHARE_HASHTAG = "#PY_NOW #Python学习"
+    // 分享标签（2026-10 品牌重塑：PY_NOW 已退役，统一为「码上 / Mashang」）
+    const val SHARE_HASHTAG = "#码上 #Mashang #编程学习"
 
     // ===== 法律主体与合规信息（上架前请将占位符替换为实名信息）=====
     // 上架开发者/运营者名称（华为应用市场公开显示）

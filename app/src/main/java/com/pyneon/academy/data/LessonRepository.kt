@@ -1,6 +1,7 @@
 package com.pyneon.academy.data
 
 import android.content.Context
+import com.pyneon.academy.lang.LanguageIds
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -9,7 +10,17 @@ sealed class Block {
     data class Paragraph(val text: String) : Block()
     data class Tip(val text: String) : Block()
     data class Warn(val text: String) : Block()
-    data class CodeBlock(val code: String, val runnable: Boolean, val stdin: List<String> = emptyList()) : Block()
+    /**
+     * 代码块。
+     * @param lang 代码语言；为空表示继承所属课程的 lang（绝大多数情况）。
+     *             显式指定可用于"同一讲里对比两门语言"的教学片段。
+     */
+    data class CodeBlock(
+        val code: String,
+        val runnable: Boolean,
+        val stdin: List<String> = emptyList(),
+        val lang: String = ""
+    ) : Block()
     data class Output(val text: String) : Block()
     data class Table(val headers: List<String>, val rows: List<List<String>>) : Block()
     data class Diagram(val text: String) : Block()
@@ -45,7 +56,9 @@ data class Lesson(
     val subtitle: String,
     val xp: Int,
     val blocks: List<Block>,
-    val exercise: Exercise?
+    val exercise: Exercise?,
+    /** 课程语言，见 LanguageIds；缺省 python 以保持旧课程 JSON 完全兼容 */
+    val lang: String = LanguageIds.PYTHON
 )
 
 data class Challenge(
@@ -57,7 +70,8 @@ data class Challenge(
     val starterCode: String,
     val hint: String,
     val tests: List<String>,
-    val stdin: List<String>
+    val stdin: List<String>,
+    val lang: String = LanguageIds.PYTHON
 )
 
 object LessonRepository {
@@ -127,7 +141,8 @@ object LessonRepository {
                     runnable = b.optBoolean("runnable", defaultRunnable),
                     stdin = b.optJSONArray("stdin")?.let { sa ->
                         buildList { for (j in 0 until sa.length()) add(sa.getString(j)) }
-                    } ?: emptyList()
+                    } ?: emptyList(),
+                    lang = b.optString("lang", "")
                 ))
                 "output" -> blocks.add(Block.Output(b.getString("text")))
                 "table" -> {
@@ -207,7 +222,8 @@ object LessonRepository {
                     } ?: emptyList(),
                     xp = ex.optInt("xp", 80)
                 )
-            }
+            },
+            lang = obj.optString("lang", LanguageIds.PYTHON).ifBlank { LanguageIds.PYTHON }
         )
     }
 
@@ -222,6 +238,20 @@ object LessonRepository {
         tests = obj.getJSONArray("tests").let { ta ->
             buildList { for (j in 0 until ta.length()) add(ta.getString(j)) }
         },
-        stdin = emptyList()
+        stdin = emptyList(),
+        lang = obj.optString("lang", LanguageIds.PYTHON).ifBlank { LanguageIds.PYTHON }
     )
+
+    /**
+     * 课程里出现过的语言 id 列表（按出现顺序去重）。
+     * 用于多语言切换器：只展示有内容的语言，避免切进空课程列表。
+     */
+    fun languages(context: Context): List<String> =
+        lessons(context).map { it.lang }.distinct()
+
+    /** 按语言过滤课程；传 null 返回全部 */
+    fun lessonsByLang(context: Context, lang: String?): List<Lesson> {
+        val all = lessons(context)
+        return if (lang == null) all else all.filter { it.lang == lang }
+    }
 }

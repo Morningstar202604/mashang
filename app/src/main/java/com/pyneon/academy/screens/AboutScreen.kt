@@ -49,16 +49,15 @@ fun AboutScreen(onBack: () -> Unit) {
 
         SectionHeader("开源与授权", accent = NeonCyan)
         Text(
-            "本应用以「源码可见·非商业」协议开源，仅用于学习、研究与交流，目的是宣称项目主权。" +
-                "版权持有人保留全部商业化权利：任何商业使用（付费分发、内购、广告变现、集成至商业产品等）" +
-                "须事先获得书面授权。\"PY//NOW\"、\"码上 Python\" 名称与标识为保留商标。",
+            "本应用以 MIT 协议开源：允许自由使用、修改与再分发（含个人、教育及商业用途），只需保留版权与许可声明。" +
+                "按「原样」提供，不附带任何担保。\"码上\"、\"Mashang\" 名称与标识为保留商标。",
             style = MaterialTheme.typography.bodySmall,
             color = TextMid
         )
 
         SectionHeader("技术致谢", accent = NeonGreen)
         Text(
-            "· CPython 3.13 — 设备端嵌入的 Python 运行时\n" +
+            "· CPython 3.13 — 设备端嵌入的 Python 运行时（首发语言包）\n" +
                 "· Chaquopy — Android 上的 Python 集成\n" +
                 "· Jetpack Compose / AndroidX — UI 与架构\n" +
                 "· 课程设计与霓虹派视觉系统由开发团队原创",
@@ -91,7 +90,7 @@ fun AboutScreen(onBack: () -> Unit) {
             NeonButton(
                 label = "联系我们",
                 accent = NeonCyan,
-                onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "PY//NOW 联系") },
+                onClick = { ShareHelper.sendEmail(context, AppConstants.CONTACT_EMAIL, "码上 联系") },
                 modifier = Modifier.weight(1f)
             )
         }

@@ -598,7 +598,9 @@ def structural_checks(lessons):
         ex = lesson.get("exercise")
         if not ex:
             problems.append(f"{lid}: 缺少练习")
-        elif lid not in SOLUTIONS:
+        elif lid not in SOLUTIONS and not ex.get("solution"):
+            # 多语言：非 Python 课程的参考答案直接放在 exercise.solution 里，
+            # 由对应语言的判题器（如 JS → node）使用
             problems.append(f"{lid}: 缺少参考答案")
         for b in lesson["blocks"]:
             if b.get("type") == "quiz":
@@ -760,7 +762,7 @@ def main():
     )
     with open(pack_path, encoding="utf-8") as f:
         lessons.extend(json.load(f))
-    for pack in ("dsa-basics.json", "dsa-mastery.json"):
+    for pack in ("dsa-basics.json", "dsa-mastery.json", "js-basics.json"):
         pack_path = os.path.join(os.path.dirname(__file__), "..", "content_packs", pack)
         with open(pack_path, encoding="utf-8") as f:
             lessons.extend(json.load(f))
@@ -772,8 +774,12 @@ def main():
         os.path.join(os.path.dirname(__file__), "..", "catalog.json")
     ):
         problems.append("catalog.json 缺失（内容中心远端目录）")
+    # 多语言：JS 课程的判题在 tests/test_js_lessons.py 里用真实 JS 引擎（node）
+    # 执行；Python runner 无法执行 JS，这里只做结构检查并单独计数。
+    js_lessons = [l for l in lessons if l.get("lang", "python") == "javascript"]
+    py_lessons = [l for l in lessons if l.get("lang", "python") != "javascript"]
     items = []
-    for lesson in sorted(lessons, key=lambda x: x["order"]):
+    for lesson in sorted(py_lessons, key=lambda x: x["order"]):
         ex = lesson.get("exercise")
         if ex:
             items.append(
@@ -785,7 +791,10 @@ def main():
                 )
             )
     for ch in challenges:
+        if ch.get("lang", "python") == "javascript":
+            continue  # JS 挑战由 tests/test_js_lessons.py 用 node 判题
         items.append((ch["id"], ch["tests"], [], SOLUTIONS[ch["id"]]))
+    py_challenges = [c for c in challenges if c.get("lang", "python") != "javascript"]
 
     failures = []
     checked = 0
@@ -804,7 +813,10 @@ def main():
             )
 
     print(
-        f"\n课程数={len(lessons)} 挑战数={len(challenges)} 判题项={checked} 用例总数={total_cases}"
+        f"\n课程数={len(lessons)}（Python {len(py_lessons)} + JavaScript {len(js_lessons)}，"
+        f"JS 判题由 tests/test_js_lessons.py 用 node 执行）"
+        f" 挑战数={len(challenges)}（JS {len(challenges) - len(py_challenges)} 道）"
+        f" 判题项={checked} 用例总数={total_cases}"
     )
     print(f"结构问题={len(problems)} 判题失败={len(failures)}")
     for p in problems:

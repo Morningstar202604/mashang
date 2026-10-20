@@ -1,5 +1,53 @@
 # Changelog
 
+## [Unreleased] - 品牌重塑与多语言架构
+
+### Verified
+- **APK 构建通过**（2026-10-20）：本机搭 Android SDK（cmdline-tools + platform-tools + platforms;android-36 + build-tools;36.0.0，许可已接受）后 `./gradlew assembleDebug` BUILD SUCCESSFUL（7m29s，48 tasks）；产物 38.3 MB（arm64-v8a），aapt 元信息验证：applicationId com.pyneon.academy / versionName 0.3.7 / 应用名「码上」/ minSdk 24 / targetSdk 35；dex 内确认 JsBridge / LanguageRuntime / LanguageRegistry / LangChipsKt / Rhino 均已编入；assets 内 JS 语法与挑战数据完整。品牌重塑与多语言全部代码经真实 Kotlin 编译验证
+- **签名 release 构建通过**：`KEYSTORE_PATH` 等环境变量注入凭据后 `./gradlew assembleRelease` BUILD SUCCESSFUL（63 tasks，R8 混淆 + 资源压缩 + lintVital + 签名）；apksigner verify PASS；APK 22.1 MB（较 debug −42%），dex 59.7→4.7 MB。**修复一处 R8 裁剪缺口**：`org.mozilla.classfile` 包不在原 keep 范围内会被裁掉（解释模式虽不用编译器，但部分 Rhino 路径引用），keep 规则扩大为 `org.mozilla.**` 后 ClassFileWriter/ContextFactory 均确认在 dex 内
+
+### Changed
+- 品牌重塑：「码上Python / PY//NOW」→「码上 / Mashang」，去除单一语言命名；应用内全部文案中立化（终端/开屏/帮助/证书/主题等）
+- 课程数量口径统一：内置 38 讲 + 内容中心扩展包 11 讲（README 原「30 讲」与实际数据不符，一并修正）
+- 许可表述统一为 MIT（AboutScreen / SettingsScreen 原「非商业许可」文案与 LICENSE 矛盾，已修正）
+- **多语言运行时抽象**（新增 `lang/LanguageRuntime.kt`）：
+  - `LanguageRuntime` 接口统一 run / check / repl / warmup / ensureStarted 五组能力，跨语言通信沿用既有 JSON 契约，新增语言只需另起一个"说同一种 JSON"的后端
+  - `LanguageRegistry` 负责注册 / 当前语言持久化（SharedPreferences）/ 未知 id 回落；`UnsupportedRuntime` 保证 UI 层永不拿到 null，未内置语言以可读错误回显而非崩溃
+  - `PyBridge` 改为实现 `LanguageRuntime`，注册于 `PyNeonApp.onCreate`；`RunResult` / `VarInfo` 由 `py` 包迁移至 `lang` 包
+  - 6 个界面（Terminal / Home / Profile / Boot / LessonDetail / Arena）全部改走 `LanguageRegistry`，不再直接引用 `PyBridge`
+  - 课程数据模型新增 `lang` 字段：`Lesson` / `Challenge` 默认 `python`（旧 JSON 零改动兼容），`Block.CodeBlock.lang` 可显式覆盖以支持"同讲对比两门语言"的教学片段
+  - `LessonRepository` 新增 `languages()` / `lessonsByLang()` 供后续语言切换器使用
+- `tools/update_catalog.py`：`strip_self_sha` 改为只剥离顶层 sha256（与 Kotlin `ContentCenter.stripSelfSha` 的 replaceFirst 语义一致），原实现会清空全部 packs[].sha256 导致内容中心拒绝下载
+
+### Added
+- **JavaScript 运行时落地**（新增 `js/JsBridge.kt`，依赖 `org.mozilla:rhino:1.7.15`，Apache-2.0）：
+  - 第二个 `LanguageRuntime` 实现：Rhino 解释模式（`optimizationLevel = -1`，ART 上的硬性要求），指令计数看门狗等价 Python 侧 settrace
+  - 结果契约与 runner.py 逐项对齐（ok/stdout/stderr/error/duration_ms/variables/passed）；print / console.log|warn|error / input（stdin 队列）/ assert 宿主函数注入
+  - 判题语义对齐 runner.py：用例间共享状态；变量快照先于判题采集，测试赋值不污染面板
+  - REPL 支持括号平衡续行、空行强制提交；R8 保留规则补齐 `org.mozilla.javascript.**`
+- **语言包 · JavaScript 启程**（`content_packs/js-basics.json`，6 讲 ES5 入门，经内容中心分发，catalog 已登记重签）：
+  - 与 Python 课一一对照移植（greet/damage/slugify/access/peak/freq），判题统一 `assert(cond, msg)` + `===`
+  - 参考答案直接放在 `exercise.solution`（单一事实源，validate_content 结构检查与 node 判题共用）
+- **语言切换 UI**：新增 `ui/components/LangChipRow` 共用组件；终端页可切换运行时（自动重置 REPL 会话），课程列表页按语言过滤
+- **编辑器与示例高亮多语言适配**：
+  - 新增原创精简语法 `assets/syntaxes/javascript.tmLanguage.json`（plist，scopeName source.js，与 JsBridge.grammarScope 一致；scope 命名与 PyNeon 主题 tokenColors 对齐）
+  - `CodeEditor.createEditor` 按 `language` 加载 `syntaxes/<language>.tmLanguage.json`，未内置语法的语言降级纯文本（复用既有降级路径）
+  - `buildAnnotatedString`（只读示例正则高亮）支持 javascript：独立关键词/内置表，注释前缀 `#`→`//`
+  - 接线：课程练习编辑器与三个内容卡片（CodeExampleCard/PracticeCard/FillCard）按 `lesson.lang` / `block.lang` 取高亮，训练场挑战按 `challenge.lang`
+- **训练场 JS 挑战 ×2**（`challenges.json`，lang=javascript，参考答案内嵌 `solution` 字段）：霓虹计数器·JS 版（js-c1）、括号防火墙·JS 版（js-c2）；validate_content 判题分流（Python runner 只跑 Python 挑战）
+- 软著登记材料：`tools/softcopy_source.py` 自动生成符合受理要求的源程序册（前 30 页 + 后 30 页、每页 50 行、页眉标注软件名+版本号、仅收录原创文件）；`docs/softcopy/软件说明书.md`（10 章设计说明书）；`docs/softcopy/申请指南.md`（流程、申请表填写模板、前置事项、补正自查）
+
+### Fixed
+- catalog.json 中 dsa-basics / dsa-mastery 的 sha256 与文件实际哈希不符（commit 5004113 改内容未同步目录），应用内下载必被完整性校验拦截；已重算并重签目录自签名
+- HelpScreen 内置课程数由硬编码 38 改为动态统计；WelcomeTutorial 的「38 讲」等表述随品牌中立化
+- 分享标签 `#PY_NOW` 随旧品牌退役，改为 `#码上 #Mashang #编程学习`；`docs/logo.svg` 同步更名为 码上 / MASHANG
+- js02 判题期望值勘误：damage(1, 100) = Math.floor(√1) − Math.floor(100/2) = **−49**（原写成 −50），由 node 实跑测试捕获
+
+### Tests
+- 新增 tests/test_update_catalog.py：4 项回归测试锁定 catalog 剥离语义与包哈希一致性（先红后绿）；packs 计数改为动态断言（随语言包扩充不再失效）
+- 新增 tests/test_multilang_content.py：11 项契约测试 —— lang 字段合法性、id 跨语言唯一性、规划中语言不得出现在课程里、LanguageRuntime 接口完整性、**UI 层不得直接引用 PyBridge**（该项在重构前为红，重构后转绿）
+- 新增 tests/test_js_lessons.py：9 项行为测试，用 node（vm 模块 + 超时）真实执行 js-basics 包的每讲代码块与判题（Rhino 无法在本沙箱编译，但课程内容是语言本身，可在任何 ES 引擎验证）
+
 ## [0.3.7] - 2026-09-14
 ### Added
 - 亮色主题「白纸模式」：新增第 6 套主题，白底深字、全套色彩按白底重新调优；主题切换即时生效，无需重启

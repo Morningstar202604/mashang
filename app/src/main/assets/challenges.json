@@ -96,5 +96,40 @@
       "bad_ok = False\ntry:\n    inv.remove('chip', 99)\nexcept ValueError:\n    bad_ok = True\nassert bad_ok",
       "neg_ok = False\ntry:\n    inv.add('x', -1)\nexcept ValueError:\n    neg_ok = True\nassert neg_ok"
     ]
+  },
+  {
+    "id": "js-c1",
+    "lang": "javascript",
+    "title": "霓虹计数器 · JS 版",
+    "difficulty": "低",
+    "xp": 150,
+    "brief": "实现 neonFb(n)：返回数组，元素为 1..n；能被 3 整除替换为 'NEON'，被 5 整除为 'CITY'，同时整除为 'NEONCITY'，其余为数字字符串。",
+    "starterCode": "function neonFb(n) {\n  var result = [];\n  \n  return result;\n}\n\nconsole.log(neonFb(5));",
+    "hint": "先判断 15 的倍数（i % 15 === 0），再判断 3 和 5；数字用 String(i) 或 '' + i 转成字符串。",
+    "tests": [
+      "assert(neonFb(1).length === 1 && neonFb(1)[0] === '1', 'n=1 应为 [\"1\"]')",
+      "assert(neonFb(3)[2] === 'NEON', '3 应替换为 NEON')",
+      "assert(neonFb(5)[4] === 'CITY', '5 应替换为 CITY')",
+      "assert(neonFb(15)[14] === 'NEONCITY', '15 应替换为 NEONCITY')"
+    ],
+    "solution": "function neonFb(n) {\n  var result = [];\n  for (var i = 1; i <= n; i++) {\n    if (i % 15 === 0) result.push('NEONCITY');\n    else if (i % 3 === 0) result.push('NEON');\n    else if (i % 5 === 0) result.push('CITY');\n    else result.push(String(i));\n  }\n  return result;\n}\n\nconsole.log(neonFb(5));"
+  },
+  {
+    "id": "js-c2",
+    "lang": "javascript",
+    "title": "括号防火墙 · JS 版",
+    "difficulty": "中",
+    "xp": 200,
+    "brief": "实现 isBalanced(s)：只含 ( ) [ ] { } 的字符串，判断括号是否按正确顺序闭合。空串视为平衡。",
+    "starterCode": "function isBalanced(s) {\n  \n}\n\nconsole.log(isBalanced('({[]})'));\nconsole.log(isBalanced('([)]'));",
+    "hint": "用数组当栈：左括号入栈，右括号必须与栈顶配对后弹出；结束时栈必须为空。",
+    "tests": [
+      "assert(isBalanced('') === true, '空串应平衡')",
+      "assert(isBalanced('({[]})') === true, '嵌套配对')",
+      "assert(isBalanced('([)]') === false, '交叉嵌套应拒绝')",
+      "assert(isBalanced('((') === false, '未闭合应拒绝')",
+      "assert(isBalanced('}{') === false, '右括号先出现应拒绝')"
+    ],
+    "solution": "function isBalanced(s) {\n  var stack = [];\n  var pairs = { ')': '(', ']': '[', '}': '{' };\n  for (var i = 0; i < s.length; i++) {\n    var ch = s[i];\n    if (ch === '(' || ch === '[' || ch === '{') {\n      stack.push(ch);\n    } else if (ch === ')' || ch === ']' || ch === '}') {\n      if (stack.pop() !== pairs[ch]) return false;\n    }\n  }\n  return stack.length === 0;\n}\n\nconsole.log(isBalanced('({[]})'));\nconsole.log(isBalanced('([)]'));"
   }
 ]
