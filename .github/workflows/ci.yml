@@ -106,6 +106,26 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
 
+  mirror-sync:
+    name: 同步镜像仓（仅主仓）
+    runs-on: ubuntu-latest
+    needs: android-build
+    if: github.repository == 'badhope/mashang-python' && github.ref == 'refs/heads/main'
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: 推送到 GitCode / Gitee / 两个 GitHub 镜像
+        env:
+          MIRROR_GITCODE_TOKEN: ${{ secrets.MIRROR_GITCODE_TOKEN }}
+          MIRROR_GITEE_TOKEN: ${{ secrets.MIRROR_GITEE_TOKEN }}
+          MIRROR_GH_X33834_TOKEN: ${{ secrets.MIRROR_GH_X33834_TOKEN }}
+          MIRROR_GH_MORNINGSTAR_TOKEN: ${{ secrets.MIRROR_GH_MORNINGSTAR_TOKEN }}
+        run: bash scripts/ci/sync_mirrors.sh
+
   release:
     name: 发布 Release（仅 tag）
     runs-on: ubuntu-latest
