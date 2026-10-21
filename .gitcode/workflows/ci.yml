@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   python-tests:
-    name: Python 引擎与内容校验
+    name: Python engine and content checks
     runs-on: [ubuntu-latest, x64, small]
     steps:
       - name: 检出代码
@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: 设置 Node.js（JS 课程判题依赖 node）
-        uses: setup-nodejs
+        uses: setup-node
         with:
           node-version: '22'
       - name: 版本探针
@@ -46,7 +46,7 @@ jobs:
           git diff --exit-code -- web/data.js web/engine.js
 
   android-build:
-    name: Android 构建（assembleDebug + lint）
+    name: Android build - assembleDebug and lint
     runs-on: [ubuntu-latest, x64, medium]
     needs: [python-tests]
     steps:
