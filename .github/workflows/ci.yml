@@ -1,0 +1,150 @@
+name: CI
+
+# 桌面端（Python 引擎 / 内容 / web 同源）+ Android 构建 + release 打包。
+# 全部 job 必须在 main 上全绿；任何失败都视为阻断。
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-tests:
+    name: Python 引擎与内容校验
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Set up Node.js 22（JS 课程判题依赖 node）
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: 版本探针
+        run: |
+          python --version
+          node --version
+
+      - name: 全量单元测试（unittest discover）
+        run: python -m unittest discover -s tests -v
+
+      - name: 课程内容校验（55 讲 / 8 挑战 / all judge cases）
+        run: python tests/validate_content.py
+
+      - name: web 数据与引擎同源校验（含生成产物可复现）
+        run: |
+          python web/gen_data.py
+          git diff --exit-code -- web/data.js web/engine.js
+
+  android-build:
+    name: Android 构建（assembleDebug + lint）
+    runs-on: ubuntu-latest
+    needs: python-tests
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: 接受 Android SDK 许可
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Lint（阻断级，0 error 才通过）
+        run: ./gradlew :app:lintDebug --no-daemon
+
+      - name: Build Debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon
+
+      - name: 构建产物探针（APK 内 runner.py 与 assets 完整性）
+        run: python tests/ci_apk_probe.py app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
+
+  release:
+    name: 发布 Release（仅 tag）
+    runs-on: ubuntu-latest
+    needs: android-build
+    if: startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build Release APK（未配置签名时产出未签名包）
+        run: ./gradlew :app:assembleRelease --no-daemon
+
+      - name: 归档并重命名为 mashang-<tag>.apk
+        run: |
+          set -euo pipefail
+          src=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          cp "$src" "mashang-${GITHUB_REF_NAME}.apk"
+          python tests/ci_apk_probe.py "mashang-${GITHUB_REF_NAME}.apk"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: mashang-*.apk
+          generate_release_notes: true
+          fail_on_unmatched_files: true

@@ -187,7 +187,8 @@ class ContentCenter {
             }
             out.write(buf, 0, n)
         }
-        return out.toString(StandardCharsets.UTF_8)
+        // ByteArrayOutputStream.toString(Charset) 需 API 33；用 toString(String) 兼容 minSdk 24
+        return out.toString("UTF-8")
     }
 
     private fun sha256Hex(input: String): String {

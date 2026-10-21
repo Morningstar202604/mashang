@@ -1,0 +1,74 @@
+name: CI
+
+# GitCode（AtomGit Action）流水线：与 .github/workflows/ci.yml 同一套验证口径。
+# 注意：GitCode Action 当前为内测功能，需仓库开通「代码化流水线」后才会触发。
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  enable: true
+  max: 1
+  exceed-action: QUEUE
+
+jobs:
+  python-tests:
+    name: Python 引擎与内容校验
+    runs-on: [ubuntu-latest, x64, small]
+    steps:
+      - name: 检出代码
+        uses: checkout
+      - name: 设置 Python
+        uses: setup-python
+        with:
+          python-version: '3.12'
+      - name: 设置 Node.js（JS 课程判题依赖 node）
+        uses: setup-nodejs
+        with:
+          node-version: '22'
+      - name: 版本探针
+        run: |
+          python --version
+          node --version
+      - name: 全量单元测试
+        run: python -m unittest discover -s tests -v
+      - name: 课程内容校验
+        run: python tests/validate_content.py
+      - name: web 生成产物可复现
+        run: |
+          python web/gen_data.py
+          git diff --exit-code -- web/data.js web/engine.js
+
+  android-build:
+    name: Android 构建（assembleDebug + lint）
+    runs-on: [ubuntu-latest, x64, medium]
+    needs: [python-tests]
+    steps:
+      - name: 检出代码
+        uses: checkout
+      - name: 设置 JDK
+        uses: setup-jdk
+        with:
+          jdk-version: '17'
+          distribution: 'temurin'
+      - name: 缓存 Gradle
+        uses: cache
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      - name: 赋予 gradlew 执行权限
+        run: chmod +x gradlew
+      - name: Lint
+        run: ./gradlew :app:lintDebug --no-daemon
+      - name: 构建 Debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon
+      - name: 构建产物探针
+        run: python tests/ci_apk_probe.py app/build/outputs/apk/debug/app-debug.apk

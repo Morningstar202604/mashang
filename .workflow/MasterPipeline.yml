@@ -1,0 +1,53 @@
+# Gitee Go 流水线（主干）：三端同源校验 + Android 构建
+# 触发：推送到 main。首次使用需在 Gitee 仓库「流水线」Tab 一键开通 Gitee Go
+# （开通后本文件即被识别；未开通时文件存在但不会执行）。
+version: '1.0'
+name: mashang_ci
+displayName: 码上 CI · 主干
+
+triggers:
+  push:
+    branches:
+      include:
+        - main
+
+stages:
+  - stage:
+      name: verify
+      displayName: 引擎与内容校验
+      strategy: fast
+      trigger: auto
+      steps:
+        - step: build@python
+          name: python_tests
+          displayName: Python 全量测试 + 内容校验
+          pythonVersion: '3.12'
+          commands:
+            - python --version
+            - pip install --upgrade pip
+            - python -m unittest discover -s tests -v
+            - python tests/validate_content.py
+        - step: build@nodejs
+          name: node_js_judge
+          displayName: JS 课程判题（node 实跑）
+          nodeVersion: '20'
+          commands:
+            - node --version
+            - python -m unittest tests.test_js_lessons -v
+          dependsOn: python_tests
+
+  - stage:
+      name: android
+      displayName: Android 构建
+      strategy: fast
+      trigger: auto
+      steps:
+        - step: build@gradle
+          name: gradle_android
+          displayName: assembleDebug + lint
+          jdkVersion: '17'
+          gradleVersion: '9.5'
+          commands:
+            - chmod +x ./gradlew
+            - ./gradlew :app:lintDebug --no-daemon
+            - ./gradlew :app:assembleDebug --no-daemon

@@ -15,8 +15,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.time.LocalDate
-import java.time.ZoneId
+import java.util.Calendar
 
 // --- Mistake data model ---
 @Serializable
@@ -76,7 +75,15 @@ class StreakViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onAppOpen() {
         viewModelScope.launch(Dispatchers.IO) {
-            val today = LocalDate.now(ZoneId.systemDefault()).toEpochDay()
+            // 用 Calendar 取本地零点再折算为「天序号」：java.time 在 minSdk 24 需要
+            // core library desugaring，此处只有一个调用点，不值得引入整包依赖。
+            val cal = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            val today = cal.timeInMillis / 86_400_000L
             val progress = ProgressStore.snapshot(getApplication())
             val last = progress.lastActiveEpochDay
             val context = getApplication<Application>()
