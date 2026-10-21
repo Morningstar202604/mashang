@@ -297,6 +297,6 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 
 第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（构建 + lint + 签名发布）· GitCode Actions（同一套门禁）· Gitee Go 流水线文件已就位（需在 Gitee 网页端手动开通）。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）。GitCode Actions 负责引擎/内容/同源门禁（其托管 Runner 无法访问 Google 的 Android SDK 源，Android 构建留在 GitHub）。Gitee Go 流水线文件已就位，需在 Gitee 网页端手动开通。
 
 📄 [隐私政策](PRIVACY_POLICY.md) · [用户协议](TERMS_OF_SERVICE.md)

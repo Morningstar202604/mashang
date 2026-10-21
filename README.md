@@ -298,6 +298,6 @@ This repository is published under the **MIT License** — free to use, modify, 
 
 Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (Apache-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
 
-**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang-python/actions) (build + lint + signed release) · GitCode Actions (same gates) · Gitee Go pipeline file included (activation requires manual enable on Gitee).
+**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang-python/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos). GitCode Actions runs the engine/content/web gates (its hosted runners cannot reach Google's Android SDK CDN, so Android build stays on GitHub). Gitee Go pipeline file included; activation requires manual enable on Gitee.
 
 📄 [Privacy Policy](PRIVACY_POLICY.md) · [Terms of Service](TERMS_OF_SERVICE.md)

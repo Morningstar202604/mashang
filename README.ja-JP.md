@@ -295,6 +295,6 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 
 サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（ビルド + lint + 署名付きリリース）· GitCode Actions（同一ゲート）· Gitee Go パイプライン定義は配置済み（Gitee 側での手動有効化が必要）。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）。GitCode Actions はエンジン/コンテンツ/同源ゲートを担当（ホスト Runner から Google の Android SDK 配布元へ到達できず、Android ビルドは GitHub 側）。Gitee Go の定義は配置済み（Gitee 側で手動有効化が必要）。
 
 📄 [プライバシーポリシー](PRIVACY_POLICY.md) · [利用規約](TERMS_OF_SERVICE.md)
