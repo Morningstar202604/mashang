@@ -49,12 +49,20 @@ def main():
         fail("缺少 assets/chaquopy/app.imy")
     inner = zipfile.ZipFile(io.BytesIO(z.read("assets/chaquopy/app.imy")))
     pycs = set(inner.namelist())
-    for want in ("runner.pyc", "repl.pyc"):
-        if want not in pycs:
-            fail(f"app.imy 缺少 {want}")
+
+    def find_pyc(stem):
+        # Chaquopy 17 在部分平台上输出 __pycache__/<stem>.cpython-313.pyc，
+        # 另一些平台直接是 <stem>.pyc —— 两种布局都要接受。
+        hits = [n for n in pycs if n.rsplit("/", 1)[-1].split(".")[0] == stem and n.endswith(".pyc")]
+        if not hits:
+            fail(f"app.imy 缺少 {stem}.pyc（现有：{sorted(pycs)}）")
+        return min(hits, key=len)
+
+    runner_pyc = find_pyc("runner")
+    find_pyc("repl")
     print(f"[PASS] app.imy 含 {sorted(pycs)}")
 
-    raw = inner.read("runner.pyc")
+    raw = inner.read(runner_pyc)
     try:
         code = marshal.loads(raw[16:])
     except Exception as exc:  # noqa: BLE001
