@@ -1,6 +1,6 @@
 """Web 端与 App 内置内容的同源一致性回归网（S9 切片）。
 
-锁定六条契约（见 .aqg/code-construction/mashang-web-sync-cleanup.md）：
+锁定七条契约（见 .aqg/code-construction/mashang-web-sync-cleanup.md）：
   R1 data.js 课程/挑战 == app/src/main/assets（含 lessons_pro）
   R2 engine.js 内嵌 ENGINE_PY == app/src/main/python/runner.py（逐字节）
   R3 内置课程结构字段：chapter int / chapterName 非空 / exercise.xp > 0
