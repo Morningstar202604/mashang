@@ -38,7 +38,7 @@ object BackupUtil {
         val mistakes: List<MistakeRecord>
     )
 
-    // Export backup to Downloads/PYNOW
+    // Export backup to Downloads/Mashang
     suspend fun exportBackup(context: Context): Result<Uri> = withContext(Dispatchers.IO) {
         try {
             val progress = ProgressStore.snapshot(context)
@@ -64,7 +64,7 @@ object BackupUtil {
             )
 
             val jsonString = backupToJson(backup).toString(2)
-            val uri = saveToStorage(context, jsonString, "pyneon_backup_${System.currentTimeMillis()}.json")
+            val uri = saveToStorage(context, jsonString, "mashang_backup_${System.currentTimeMillis()}.json")
             Result.success(uri)
         } catch (e: Exception) {
             Result.failure(e)
@@ -99,9 +99,7 @@ object BackupUtil {
                 terminalHead = backup.terminalHead,
                 badges = backup.badges
             )
-            // Also restore longest/total which aren't in the old restoreFromBackup signature
-            // Need to add them - let's update restoreFromBackup or do it separately
-            // For now, use updateStreakStats
+            // restoreFromBackup 不带 longest/total（旧备份字段），单独补写
             ProgressStore.updateStreakStats(context, backup.streakDays, backup.longestStreak, backup.totalActiveDays)
 
             // Save review cards and mistakes to their JSON files
@@ -302,7 +300,7 @@ object BackupUtil {
         val values = ContentValues().apply {
             put(MediaStore.Downloads.DISPLAY_NAME, fileName)
             put(MediaStore.Downloads.MIME_TYPE, "application/json")
-            put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/PYNOW")
+            put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Mashang")
             put(MediaStore.Downloads.IS_PENDING, 1)
         }
 
@@ -323,7 +321,7 @@ object BackupUtil {
 
     private fun saveToFilePreQ(context: Context, jsonString: String, fileName: String): Uri {
         val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val pyneonDir = java.io.File(dir, "PYNOW").apply { if (!exists()) mkdirs() }
+        val pyneonDir = java.io.File(dir, "Mashang").apply { if (!exists()) mkdirs() }
         val file = java.io.File(pyneonDir, fileName)
         file.writeText(jsonString)
         return Uri.fromFile(file)

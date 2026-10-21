@@ -223,6 +223,9 @@ fun AppRoot() {
                 onOpenSettings = { navController.navigate("settings") }
             ) }
             composable("contenthub") { ContentHubScreen(onBack = { navController.popBackStack() }) }
+            // 「备份/恢复」入口此前只在 ProfileScreen 里 navigate("backup")，但导航图
+            // 从未注册该路由 → 点击必崩（IllegalArgumentException: route backup not found）。
+            composable("backup") { BackupScreen(onBack = { navController.popBackStack() }) }
             composable("certificate") { CertificateScreen(onBack = { navController.popBackStack() }) }
             composable("streak") {
                 StreakScreen(

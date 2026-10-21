@@ -1,7 +1,10 @@
 package com.pyneon.academy.screens
 
 import android.os.Bundle
+import androidx.compose.foundation.border
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -115,41 +119,45 @@ fun MistakeScreen(
                 )
             )
 
-            // Filter chips
+            // 筛选条目：用可横向滚动的 Row + 自绘 chip，不用 Material3 TabRow
+            // —— TabRow 的 indicator/container 在深色主题下会被 Ambient 色染成
+            // 一条贯屏实心色块（实测 1080px 宽 × 120px 高），改自绘最稳。
             if (weakConcepts.isNotEmpty()) {
-                androidx.compose.foundation.layout.Spacer(modifier = Modifier.padding(8.dp))
-                androidx.compose.material3.ScrollableTabRow(
-                    selectedTabIndex = weakConcepts.indexOfFirst { it.first == filterConcept } - 1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    indicator = { tabPositions ->
+                val options = listOf<String?>(null) + weakConcepts.map { it.first }
+                androidx.compose.foundation.lazy.LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(options.size) { i ->
+                        val concept = options[i]
+                        val label = if (concept == null) "全部" else "$concept (${
+                            weakConcepts.first { it.first == concept }.second
+                        })"
+                        val selected = filterConcept == concept
                         androidx.compose.foundation.layout.Box(
                             Modifier
-                                .height(2.dp)
-                                .fillMaxWidth()
-                                .graphicsLayer { translationX = tabPositions.firstOrNull()?.left?.toPx() ?: 0f }
-                                .background(LocalNeonTokens.current.primary)
-                        )
-                    },
-                    divider = {},
-                    edgePadding = 8.dp
-                ) {
-                    androidx.compose.material3.Tab(
-                        text = { Text("全部") },
-                        selected = filterConcept == null,
-                        onClick = { filterConcept = null },
-                        selectedContentColor = LocalNeonTokens.current.primary,
-                        unselectedContentColor = LocalNeonTokens.current.textDim
-                    )
-                    weakConcepts.forEach { (concept, count) ->
-                        androidx.compose.material3.Tab(
-                            text = { Text("$concept ($count)") },
-                            selected = filterConcept == concept,
-                            onClick = { filterConcept = concept },
-                            selectedContentColor = LocalNeonTokens.current.primary,
-                            unselectedContentColor = LocalNeonTokens.current.textDim
-                        )
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
+                                .background(
+                                    if (selected) LocalNeonTokens.current.primary.copy(alpha = 0.16f)
+                                    else LocalNeonTokens.current.surfaceDark
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = if (selected) LocalNeonTokens.current.primary
+                                    else LocalNeonTokens.current.primary.copy(alpha = 0.25f),
+                                    shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                                )
+                                .clickable { filterConcept = concept }
+                                .padding(horizontal = 14.dp, vertical = 6.dp)
+                        ) {
+                            Text(
+                                label,
+                                style = AppTypography.bodySmall,
+                                color = if (selected) LocalNeonTokens.current.primary
+                                else LocalNeonTokens.current.textDim
+                            )
+                        }
                     }
                 }
             }
@@ -254,9 +262,11 @@ fun MistakeItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // 两列必须显式等宽：NeonCard 内部 Column 以内容固有宽度参与测量，
+                // 只给 weight(1f) 时长 assert 文本会把左列撑到很窄、右列留白。
                 Column(modifier = Modifier.weight(1f)) {
-                    NeonCard(elevation = 1.dp) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                    NeonCard(modifier = Modifier.fillMaxWidth(), elevation = 1.dp) {
+                        Column(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
                             Text("期望输出", style = AppTypography.bodySmall, color = LocalNeonTokens.current.success)
                             androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(4.dp))
                             Text(mistake.expectedOutput, style = MonoCode, color = LocalNeonTokens.current.textHi)
@@ -264,11 +274,11 @@ fun MistakeItem(
                     }
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    NeonCard(elevation = 1.dp) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                    NeonCard(modifier = Modifier.fillMaxWidth(), elevation = 1.dp) {
+                        Column(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
                             Text("实际输出", style = AppTypography.bodySmall, color = LocalNeonTokens.current.danger)
                             androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(4.dp))
-                            Text(mistake.actualOutput, style = MonoCode, color = LocalNeonTokens.current.textHi)
+                            Text(mistake.actualOutput.ifBlank { "（无输出）" }, style = MonoCode, color = LocalNeonTokens.current.textHi)
                         }
                     }
                 }

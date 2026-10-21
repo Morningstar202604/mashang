@@ -106,9 +106,15 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
         return
     }
 
-    // U4: 提升到函数级作用域，供顶部进度条与完成弹窗的「下一课」入口共用
-    val allLessons = remember(lessonId) { LessonRepository.lessons(context) }
+    // U4: 提升到函数级作用域，供顶部进度条与完成弹窗的「下一课」入口共用。
+    // 进度口径必须按【当前课程所属语言】统计：全部课程是混合列表（Python 38 + JS 6），
+    // 直接用它会让 JS 第 1 讲显示「39 / 44 · 88%」，与用户认知完全不符。
+    val allLessons = remember(lessonId) {
+        LessonRepository.lessonsByLang(context, lesson?.lang ?: "python")
+    }
     val lessonIdx = allLessons.indexOfFirst { it.id == lessonId }
+    // 完成度按已通关讲数统计（而不是「当前是第几讲」），与「我的」页口径一致
+    val doneCount = allLessons.count { it.id in progress.completedLessons }
 
     // Generate review cards when lesson is first completed
     androidx.compose.runtime.LaunchedEffect(alreadySolved) {
@@ -148,19 +154,19 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
             Column(Modifier.padding(horizontal = 20.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        "课程进度 ${lessonIdx + 1} / ${allLessons.size}",
+                        "已通关 $doneCount / ${allLessons.size} 讲",
                         style = MaterialTheme.typography.labelSmall,
                         color = TextDim,
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        "${((lessonIdx + 1) * 100) / allLessons.size}%",
+                        "${(doneCount * 100) / allLessons.size}%",
                         style = MaterialTheme.typography.labelSmall,
                         color = NeonCyan
                     )
                 }
                 androidx.compose.material3.LinearProgressIndicator(
-                    progress = { (lessonIdx + 1).toFloat() / allLessons.size },
+                    progress = { doneCount.toFloat() / allLessons.size },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp, bottom = 2.dp),

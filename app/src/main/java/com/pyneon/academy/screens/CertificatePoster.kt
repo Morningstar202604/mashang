@@ -278,10 +278,10 @@ object CertificatePoster {
     private fun saveToGallery(context: Context, bitmap: Bitmap): Uri? {
         val resolver = context.contentResolver
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "PYNOW_Certificate_${System.currentTimeMillis()}.png")
+            put(MediaStore.Images.Media.DISPLAY_NAME, "Mashang_Certificate_${System.currentTimeMillis()}.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/PYNOW")
+                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Mashang")
                 put(MediaStore.Images.Media.IS_PENDING, 1)
             }
         }

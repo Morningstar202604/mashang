@@ -80,13 +80,24 @@ class CatalogIntegrityTests(unittest.TestCase):
             self.assertTrue(
                 os.path.exists(pack_path), "缺少课程包文件: %s" % pack_path
             )
-            with open(pack_path, encoding="utf-8") as f:
-                actual = sha256_text(f.read())
+            # 必须按原始字节算：App 下载后用收到的文本（HTTP body 原样）做 sha256，
+            # 用 text 模式读取会把 CRLF 归一成 LF，从而掩盖「仓库文件是 CRLF、
+            # catalog 按 LF 签名」这类真实故障（2026-10-21 js-basics 实际踩过）。
+            with open(pack_path, "rb") as f:
+                actual = hashlib.sha256(f.read()).hexdigest()
             self.assertEqual(
                 pack["sha256"],
                 actual,
                 "pack %s 的 catalog 哈希与文件不符（内容中心会拒绝下载）" % pack["id"],
             )
+            # 附带说明：包文件必须用 LF，否则不同平台的 git 行为会让哈希漂移
+            with open(pack_path, "rb") as f:
+                self.assertNotIn(
+                    (chr(13) + chr(10)).encode("ascii"), f.read(),
+
+
+                    "pack %s 含 CRLF 换行，会导致下载校验失败（统一用 LF）" % pack["id"],
+                )
 
     def test_catalog_self_signature_valid(self):
         """顶层自签名 MUST 按「剥离顶层 sha256 后的原文」计算且匹配。"""

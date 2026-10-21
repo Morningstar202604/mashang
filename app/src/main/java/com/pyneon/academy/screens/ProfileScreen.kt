@@ -97,7 +97,12 @@ fun ProfileScreen(
     val scope = rememberCoroutineScope()
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
     val lessons = remember { LessonRepository.lessons(context) }
-    val unlocked = remember(progress, lessons.size) { unlockedAchievements(progress, lessons.size) }
+    // 「我的」页的课程统计与毕业口径都只看内置主线（Python），
+    // 下载的扩展包不计入，避免通关主线后仍显示未毕业。
+    val coreLessons = remember(lessons) { lessons.filter { it.lang == "python" } }
+    val unlocked = remember(progress, coreLessons.size) {
+        unlockedAchievements(progress, coreLessons.size)
+    }
     var confirmReset by remember { mutableStateOf(false) }
     val runtime = remember { LanguageRegistry.current(context) }
     var pythonVersion by remember { mutableStateOf(runtime.version) }
@@ -121,7 +126,7 @@ fun ProfileScreen(
             StatCard("连击", "${progress.streakDays}", "天", NeonYellow, Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            StatCard("课程", "${progress.completedLessons.size}/${lessons.size}", "通关", NeonGreen, Modifier.weight(1f))
+            StatCard("课程", "${coreLessons.count { it.id in progress.completedLessons }}/${coreLessons.size}", "通关", NeonGreen, Modifier.weight(1f))
             StatCard("练习", "${progress.solvedKeys.size}", "通过", NeonMagenta, Modifier.weight(1f))
         }
 
@@ -143,7 +148,12 @@ fun ProfileScreen(
         }
 
         SectionHeader("毕业认证", accent = NeonYellow)
-        val allDone = progress.completedLessons.size >= lessons.size
+        // 毕业口径 = 内置主线课程（Python 38 讲）；扩展包不计入，
+        // 否则通关主线后仍显示未毕业（实测显示 "0/44"）。
+        val coreDone = remember(progress, coreLessons) {
+            coreLessons.count { it.id in progress.completedLessons }
+        }
+        val allDone = coreLessons.isNotEmpty() && coreDone >= coreLessons.size
         NeonCard(
             accent = if (allDone) NeonYellow else TextDim,
             onClick = if (allDone) onOpenCertificate else null
@@ -153,7 +163,7 @@ fun ProfileScreen(
                 Column {
                     Text("GRADUATION · 毕业证书", style = MaterialTheme.typography.titleSmall, color = if (allDone) TextHi else TextDim)
                     Text(
-                        if (allDone) "已达成！点击查看并分享你的证书" else "通关全部 ${lessons.size} 讲后解锁（${progress.completedLessons.size}/${lessons.size}）",
+                        if (allDone) "已达成！点击查看并分享你的证书" else "通关全部 ${coreLessons.size} 讲后解锁（$coreDone/${coreLessons.size}）",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextDim
                     )

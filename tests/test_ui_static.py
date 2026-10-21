@@ -10,6 +10,7 @@
 """
 import json
 import os
+import pathlib
 import re
 import unittest
 
@@ -77,6 +78,34 @@ class CopyCountTests(unittest.TestCase):
         m = re.search(r"「挑战」页有 (\d+) 个实战闯关", text)
         self.assertIsNotNone(m, "帮助中心缺少挑战数文案")
         self.assertEqual(int(m.group(1)), _challenge_count(), "帮助中心挑战数与 challenges.json 不一致")
+
+
+class NavigationRouteTests(unittest.TestCase):
+    """所有 navigate("x") 目标必须在 NavHost 里注册，否则点击即崩。
+
+    2026-10-21 模拟器实测：ProfileScreen 的「备份/恢复」调用 navigate("backup")，
+    但 AppNav 从未注册该路由 → IllegalArgumentException 直接闪退。
+    """
+
+    def test_every_navigate_target_is_registered(self):
+        nav = _read(JAVA, "nav", "AppNav.kt")
+        registered = {
+            r.split("/")[0] for r in re.findall(r'composable\("([^"]+)"\)', nav)
+        }
+        self.assertTrue(registered, "未解析到任何 composable 路由")
+
+        targets = {}
+        for path in (pathlib.Path(JAVA)).rglob("*.kt"):
+            text = path.read_text(encoding="utf-8")
+            for m in re.finditer(r'navigate\(\s*"([^"$]+)"', text):
+                targets.setdefault(m.group(1), set()).add(path.name)
+
+        missing = {
+            route: sorted(files)
+            for route, files in targets.items()
+            if route.split("/")[0] not in registered
+        }
+        self.assertEqual(missing, {}, f"navigate 目标未注册（点击会崩溃）: {missing}")
 
 
 class KeyboardInsetTests(unittest.TestCase):
