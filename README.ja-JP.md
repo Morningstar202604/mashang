@@ -7,7 +7,7 @@
 ポケットに入るサイバーパンク風 Python 学習ターミナル：本物の **CPython 3.13** インタープリターを内蔵、
 30 講のステップアップ講座、assert 自動採点、変数可視化、6 段階ランク成長システム。
 
-[![CI Build](https://img.shields.io/github/actions/workflow/status/X33834/mashang-python/ci.yml?branch=main&label=CI%20Build)](https://github.com/X33834/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()

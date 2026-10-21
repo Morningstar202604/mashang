@@ -7,7 +7,7 @@
 一台装进口袋的赛博朋克 Python 学习终端：内嵌真·CPython 3.13 解释器，
 38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
-[![CI Build](https://img.shields.io/github/actions/workflow/status/X33834/mashang-python/ci.yml?branch=main&label=CI%20Build)](https://github.com/X33834/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()

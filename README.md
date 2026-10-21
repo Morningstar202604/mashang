@@ -6,7 +6,7 @@
 
 A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython first, more via language packs), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
 
-[![CI Build](https://img.shields.io/github/actions/workflow/status/X33834/mashang-python/ci.yml?branch=main&label=CI%20Build)](https://github.com/X33834/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
