@@ -43,6 +43,14 @@
 - 分享标签 `#PY_NOW` 随旧品牌退役，改为 `#码上 #Mashang #编程学习`；`docs/logo.svg` 同步更名为 码上 / MASHANG
 - js02 判题期望值勘误：damage(1, 100) = Math.floor(√1) − Math.floor(100/2) = **−49**（原写成 −50），由 node 实跑测试捕获
 
+### CI/CD（2026-10-21）
+- **GitHub Actions 重建**（`.github/workflows/ci.yml`）：`python-tests`（unittest discover + 内容校验 + web 生成产物可复现）→ `android-build`（lintDebug 阻断 + assembleDebug + APK 产物探针）→ `release`（tag 触发，Secrets 还原 keystore → 签名构建 → apksigner 验签 + 证书主体断言 → 探针 `--require-release` → 发布）；支持 `workflow_dispatch` 演练模式，不消耗版本号即可验证签名链路
+- **GitCode AtomGit Action 流水线**（`.gitcode/workflows/ci.yml`）：同一套门禁；托管 Runner 未预装 Android SDK，新增幂等脚本 `scripts/ci/install_android_sdk.sh`
+- **Gitee Go 流水线定义**（`.workflow/MasterPipeline.yml`）：阶段化（引擎校验 → Android 构建），需在 Gitee 网页端手动开通后生效
+- **APK 产物探针**（`tests/ci_apk_probe.py`）：校验 app.imy 内 runner/repl 模块（兼容 `.py` / `.pyc` / `__pycache__/*.pyc` 三种 Chaquopy 布局）、threading+settrace 看门狗、课程与挑战 JSON 可解析、JS 语法资源、AXML 包名；`--require-release` 额外校验 dex 与 APK 签名块
+- **lint 阻断级错误归零**：`ContentCenter` 的 `ByteArrayOutputStream.toString(Charset)`（API 33）改 `toString("UTF-8")`；`ViewModels` 的 `java.time.LocalDate/ZoneId`（API 26 或 desugaring）改 `Calendar` 折算天序号
+- 实测：GitHub 三仓 + GitCode 主仓同一 commit 全部 success；release 演练包 apksigner v2 验签通过（CN=Mashang）
+
 ### Web / 桌面端（S9 切片）
 - **web 三落后补齐**：`gen_data.py` 收录 `lessons_pro.json`（38 讲全量，原仅前 30 讲）；`engine.js` 引擎随 `runner.py` 重生成；Pyodide 由 0.26.4 升到 **0.29.5（CPython 3.13.2，与手机端 Chaquopy 3.13 对齐）**，`index.html` 主源改 jsdelivr，`app.js` 增 fastly.jsdelivr / unpkg 两级回退
 - **修复 web 判题全线不可用**：Pyodide 未启用 SharedArrayBuffer 时 `threading.Thread.start()` 抛 `RuntimeError: can't start new thread`，导致任何运行/判题都报错。`runner.py` 两处 `Thread` 启动加 except 降级为主线程执行（settrace 看门狗仍能掐断纯 Python 死循环；C 阻塞调用失去超时保护，与既有 E1 限制一致）。真浏览器验证：运行示例/判题通过/判题失败/ZeroDivisionError/REPL/`while True` 超时全部符合预期
