@@ -7,13 +7,13 @@
 一台装进口袋的赛博朋克 Python 学习终端：内嵌真·CPython 3.13 解释器，
 38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
-[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/%E8%AF%BE%E7%A8%8B-38%E8%AE%B2-F7FF00.svg)](#-课程体系38-讲--五幕)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E4%B8%8B%E8%BD%BD%E9%A1%B5-FF2D78.svg)](https://badhope.github.io/mashang-python/)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E4%B8%8B%E8%BD%BD%E9%A1%B5-FF2D78.svg)](https://badhope.github.io/mashang/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
@@ -33,7 +33,7 @@
   <sub>▶ 点击海报观看 · <a href="demo/promo-video.mp4">直接打开视频</a>（MP4，1080×1920，约 50 秒，原创合成配乐）</sub>
 </p>
 
-> 🌐 [在线下载页](https://badhope.github.io/mashang-python/) —— 手机打开即看截图 / 视频 / 二维码下载，无需登录任何账号
+> 🌐 [在线下载页](https://badhope.github.io/mashang/) —— 手机打开即看截图 / 视频 / 二维码下载，无需登录任何账号
 
 ## ⚡ 核心亮点 · 30 秒速览
 
@@ -182,13 +182,13 @@ flowchart LR
 
 ## 📥 下载安装
 
-> ⚡ **最快路径** → 🌐 [在线下载页](https://badhope.github.io/mashang-python/)：扫码或点链接，含宣传片、截图与安装引导。
-> 🛰 **GitHub Pages 镜像** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/)（同款页面 + 内核可视化图解）
-> 📦 **仓库（并列同步，任选其一）** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
+> ⚡ **最快路径** → 🌐 [在线下载页](https://badhope.github.io/mashang/)：扫码或点链接，含宣传片、截图与安装引导。
+> 🛰 **GitHub Pages 镜像** → [x33834.github.io/mashang](https://x33834.github.io/mashang/)（同款页面 + 内核可视化图解）
+> 📦 **仓库（并列同步，任选其一）** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24），arm64-v8a 单架构（面向 64 位 ARM 真机）；release 构建已开启 R8 混淆压缩。
 
-- ⭐ 推荐：从 [Releases](https://gitcode.com/badhope/mashang-python/releases)（GitCode）下载最新的 `mashang-*.apk`
+- ⭐ 推荐：从 [Releases](https://gitcode.com/badhope/mashang/releases)（GitCode）下载最新的 `mashang-*.apk`
 - 开发者自行构建：
 
 ```bash
@@ -297,6 +297,6 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 
 第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）。GitCode Actions 负责引擎/内容/同源门禁（其托管 Runner 无法访问 Google 的 Android SDK 源，Android 构建留在 GitHub）。Gitee Go 流水线文件已就位，需在 Gitee 网页端手动开通。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）。GitCode Actions 负责引擎/内容/同源门禁（其托管 Runner 无法访问 Google 的 Android SDK 源，Android 构建留在 GitHub）。
 
 📄 [隐私政策](PRIVACY_POLICY.md) · [用户协议](TERMS_OF_SERVICE.md)

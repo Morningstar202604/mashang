@@ -16,10 +16,11 @@ except ModuleNotFoundError:  # pragma: no cover - 取决于运行环境
     yaml = None
 
 ROOT = Path(__file__).resolve().parent.parent
+# Gitee Go 未开通（其平台无法用 API 激活），故不再维护 .workflow/ 流水线；
+# 若将来开通，把文件加回此列表即可纳入校验。
 WORKFLOWS = [
     ROOT / ".github/workflows/ci.yml",
     ROOT / ".gitcode/workflows/ci.yml",
-    ROOT / ".workflow/MasterPipeline.yml",
 ]
 
 
@@ -56,10 +57,7 @@ class WorkflowSyntaxTests(unittest.TestCase):
                 doc = _strict_load(path)
                 self.assertIsInstance(doc, dict)
                 # GitHub/GitCode 用 jobs，Gitee Go 用 stages —— 都要求至少有一层任务
-                self.assertTrue(
-                    "jobs" in doc or "stages" in doc,
-                    f"{path.name} 既无 jobs 也无 stages",
-                )
+                self.assertIn("jobs", doc, f"{path.name} 缺少 jobs")
 
 
 class GitHubGateTests(unittest.TestCase):
@@ -102,7 +100,7 @@ class GitHubGateTests(unittest.TestCase):
         self.assertIn("environment: release", self.text)
 
     def test_mirror_sync_is_primary_repo_only(self):
-        self.assertIn("github.repository == 'badhope/mashang-python'", self.text)
+        self.assertIn("github.repository == 'badhope/mashang'", self.text)
 
     def test_js_tests_are_forced_to_run(self):
         self.assertIn('REQUIRE_NODE: "1"', self.text)

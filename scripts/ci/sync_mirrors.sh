@@ -24,9 +24,9 @@ push_one() {
   git -c credential.helper= push --force "$url" ci-sync:refs/heads/main
 }
 
-push_one "GitCode"            "https://oauth2:${MIRROR_GITCODE_TOKEN}@gitcode.com/badhope/mashang-python.git"
-push_one "Gitee"              "https://oauth2:${MIRROR_GITEE_TOKEN}@gitee.com/badhope/mashang-python.git"
-push_one "GitHub X33834"      "https://X33834:${MIRROR_GH_X33834_TOKEN}@ghfast.top/https://github.com/X33834/mashang-python"
-push_one "GitHub Morningstar" "https://Morningstar202604:${MIRROR_GH_MORNINGSTAR_TOKEN}@ghfast.top/https://github.com/Morningstar202604/mashang-python"
+push_one "GitCode"            "https://oauth2:${MIRROR_GITCODE_TOKEN}@gitcode.com/badhope/mashang.git"
+push_one "Gitee"              "https://oauth2:${MIRROR_GITEE_TOKEN}@gitee.com/badhope/mashang.git"
+push_one "GitHub X33834"      "https://X33834:${MIRROR_GH_X33834_TOKEN}@ghfast.top/https://github.com/X33834/mashang"
+push_one "GitHub Morningstar" "https://Morningstar202604:${MIRROR_GH_MORNINGSTAR_TOKEN}@ghfast.top/https://github.com/Morningstar202604/mashang"
 
 echo "all mirrors synced to $SHA"

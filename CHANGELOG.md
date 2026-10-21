@@ -46,7 +46,6 @@
 ### CI/CD（2026-10-21）
 - **GitHub Actions 重建**（`.github/workflows/ci.yml`）：`python-tests`（unittest discover + 内容校验 + web 生成产物可复现）→ `android-build`（lintDebug 阻断 + assembleDebug + APK 产物探针）→ `release`（tag 触发，Secrets 还原 keystore → 签名构建 → apksigner 验签 + 证书主体断言 → 探针 `--require-release` → 发布）；支持 `workflow_dispatch` 演练模式，不消耗版本号即可验证签名链路
 - **GitCode AtomGit Action 流水线**（`.gitcode/workflows/ci.yml`）：同一套门禁；托管 Runner 未预装 Android SDK，新增幂等脚本 `scripts/ci/install_android_sdk.sh`
-- **Gitee Go 流水线定义**（`.workflow/MasterPipeline.yml`）：阶段化（引擎校验 → Android 构建），需在 Gitee 网页端手动开通后生效
 - **APK 产物探针**（`tests/ci_apk_probe.py`）：校验 app.imy 内 runner/repl 模块（兼容 `.py` / `.pyc` / `__pycache__/*.pyc` 三种 Chaquopy 布局）、threading+settrace 看门狗、课程与挑战 JSON 可解析、JS 语法资源、AXML 包名；`--require-release` 额外校验 dex 与 APK 签名块
 - **lint 阻断级错误归零**：`ContentCenter` 的 `ByteArrayOutputStream.toString(Charset)`（API 33）改 `toString("UTF-8")`；`ViewModels` 的 `java.time.LocalDate/ZoneId`（API 26 或 desugaring）改 `Calendar` 折算天序号
 - 实测：GitHub 三仓 + GitCode 主仓同一 commit 全部 success；release 演练包 apksigner v2 验签通过（CN=Mashang）

@@ -7,13 +7,13 @@
 ポケットに入るサイバーパンク風 Python 学習ターミナル：本物の **CPython 3.13** インタープリターを内蔵、
 38 講のステップアップ講座、assert 自動採点、変数可視化、6 段階ランク成長システム。
 
-[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/%E8%AC%9B%E5%BA%A7-30%E8%AC%9B-F7FF00.svg)](#-カリキュラム30-講--4-幕)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9A%E3%83%BC%E3%82%B8-FF2D78.svg)](https://badhope.github.io/mashang-python/)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9A%E3%83%BC%E3%82%B8-FF2D78.svg)](https://badhope.github.io/mashang/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
@@ -33,7 +33,7 @@
   <sub>▶ ポスターをクリックで再生 · <a href="demo/promo-video.mp4">動画を直接開く</a>（MP4, 1080×1920, 約 50 秒, オリジナルシンセサウンドトラック）</sub>
 </p>
 
-> 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang-python/) — スマホで開けばスクリーンショット・動画・QR コードからのダウンロード。アカウント不要
+> 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang/) — スマホで開けばスクリーンショット・動画・QR コードからのダウンロード。アカウント不要
 
 ## ⚡ TL;DR · 30 秒で分かる
 
@@ -182,13 +182,13 @@ flowchart LR
 
 ## 📥 ダウンロードとインストール
 
-> ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang-python/)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
-> 🛰 **GitHub Pages ミラー** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/)（同ページ + アーキテクチャ図解付き）
-> 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
+> ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang/)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
+> 🛰 **GitHub Pages ミラー** → [x33834.github.io/mashang](https://x33834.github.io/mashang/)（同ページ + アーキテクチャ図解付き）
+> 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24）、arm64-v8a（64bit ARM 実機向け）。Release ビルドは R8 難読化済み。
 
-- ⭐ おすすめ：[Releases](https://gitcode.com/badhope/mashang-python/releases)（GitCode）から最新の `mashang-*.apk` をダウンロード
+- ⭐ おすすめ：[Releases](https://gitcode.com/badhope/mashang/releases)（GitCode）から最新の `mashang-*.apk` をダウンロード
 - 自分でビルド：
 
 ```bash
@@ -295,6 +295,6 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 
 サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）。GitCode Actions はエンジン/コンテンツ/同源ゲートを担当（ホスト Runner から Google の Android SDK 配布元へ到達できず、Android ビルドは GitHub 側）。Gitee Go の定義は配置済み（Gitee 側で手動有効化が必要）。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）。GitCode Actions はエンジン/コンテンツ/同源ゲートを担当（ホスト Runner から Google の Android SDK 配布元へ到達できず、Android ビルドは GitHub 側）。
 
 📄 [プライバシーポリシー](PRIVACY_POLICY.md) · [利用規約](TERMS_OF_SERVICE.md)

@@ -132,7 +132,7 @@ jobs:
     name: 同步镜像仓（仅主仓）
     runs-on: ubuntu-latest
     needs: android-build
-    if: github.repository == 'badhope/mashang-python' && github.ref == 'refs/heads/main'
+    if: github.repository == 'badhope/mashang' && github.ref == 'refs/heads/main'
     timeout-minutes: 15
     steps:
       - name: Checkout

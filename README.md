@@ -6,19 +6,19 @@
 
 A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython first, more via language packs), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang-python/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang-python/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/Curriculum-38_Lessons-F7FF00.svg)](#curriculum-38-lessons--5-acts)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-Download_Page-FF2D78.svg)](https://badhope.github.io/mashang-python/)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-Download_Page-FF2D78.svg)](https://badhope.github.io/mashang/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
 [🎬 Trailer](#-trailer50-seconds) · [⚡ TL;DR](#-tldr30-seconds) · [📊 How it runs](#-how-it-runs-fully-offline) · [📥 Download](#download--install) · [Curriculum](#curriculum-38-lessons--5-acts) · [⭐ Star](../../stargazers)
 
-🌐 **Live Site / 在线官网**：[X33834 Pages](https://x33834.github.io/mashang-python/) · [Morningstar202604 Pages](https://morningstar202604.github.io/mashang-python/)
+🌐 **Live Site / 在线官网**：[X33834 Pages](https://x33834.github.io/mashang/) · [Morningstar202604 Pages](https://morningstar202604.github.io/mashang/)
 
 </div>
 
@@ -34,7 +34,7 @@ A cyberpunk-styled coding learning terminal that fits in your pocket: embedded r
   <sub>▶ Click the poster to watch · <a href="demo/promo-video.mp4">open video directly</a> (MP4, 1080×1920, ~50s, original synth soundtrack)</sub>
 </p>
 
-> 🌐 [Online download page](https://badhope.github.io/mashang-python/) — screenshots, videos and QR download on your phone, no account needed
+> 🌐 [Online download page](https://badhope.github.io/mashang/) — screenshots, videos and QR download on your phone, no account needed
 
 ## ⚡ TL;DR · 30 Seconds
 
@@ -183,13 +183,13 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 
 ## 📥 Download & Install
 
-> ⚡ **Fastest path** → 🌐 [Online download page](https://badhope.github.io/mashang-python/): scan or tap, with trailer, screenshots and install guide.
-> 🛰 **GitHub Pages mirror** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/) (same page + architecture visuals)
-> 📦 **Repos (parallel sync, pick any)** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
+> ⚡ **Fastest path** → 🌐 [Online download page](https://badhope.github.io/mashang/): scan or tap, with trailer, screenshots and install guide.
+> 🛰 **GitHub Pages mirror** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) (same page + architecture visuals)
+> 📦 **Repos (parallel sync, pick any)** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+ (minSdk 24), arm64-v8a (this build targets 64-bit ARM devices). Release builds are R8-minified.
 
-- ⭐ Recommended: download the latest `mashang-*.apk` from [Releases](https://gitcode.com/badhope/mashang-python/releases) (GitCode)
+- ⭐ Recommended: download the latest `mashang-*.apk` from [Releases](https://gitcode.com/badhope/mashang/releases) (GitCode)
 - Build yourself:
 
 ```bash
@@ -298,6 +298,6 @@ This repository is published under the **MIT License** — free to use, modify, 
 
 Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (Apache-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
 
-**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang-python/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos). GitCode Actions runs the engine/content/web gates (its hosted runners cannot reach Google's Android SDK CDN, so Android build stays on GitHub). Gitee Go pipeline file included; activation requires manual enable on Gitee.
+**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos). GitCode Actions runs the engine/content/web gates (its hosted runners cannot reach Google's Android SDK CDN, so Android build stays on GitHub).
 
 📄 [Privacy Policy](PRIVACY_POLICY.md) · [Terms of Service](TERMS_OF_SERVICE.md)

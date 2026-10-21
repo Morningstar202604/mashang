@@ -36,7 +36,7 @@ class ContentCenter {
 
         private val CATALOG_URLS = listOf(
             // GitCode OpenAPI raw（公开免鉴权；原 raw.gitcode.com 对 .json 不可用）
-            "https://api.gitcode.com/api/v5/repos/badhope/mashang-python/raw/catalog.json"
+            "https://api.gitcode.com/api/v5/repos/badhope/mashang/raw/catalog.json"
         )
     }
 

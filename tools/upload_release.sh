@@ -6,7 +6,7 @@
 set -euo pipefail
 
 REPO_OWNER="badhope"
-REPO_NAME="mashang-python"
+REPO_NAME="mashang"
 API="https://api.gitcode.com/api/v5/repos/$REPO_OWNER/$REPO_NAME/releases"
 TOKEN="${GITCODE_TOKEN:?please export GITCODE_TOKEN}"
 
