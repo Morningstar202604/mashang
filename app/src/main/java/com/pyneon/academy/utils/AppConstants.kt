@@ -12,7 +12,9 @@ object AppConstants {
     
     // 应用名称（2026-10 品牌重塑：去除 Python 专属命名，扩展为多语言学习终端）
     const val APP_NAME = "码上"
-    const val APP_NAME_CN = "码上"
+    // APP_NAME_CN 用作「码上（X）」里的括号内容，与 APP_NAME 相同会导致
+    // 「码上（码上）」这类重复品牌；中文名已在 APP_NAME，这里用英文名。
+    const val APP_NAME_CN = "Mashang"
     const val APP_NAME_EN = "Mashang"
     
     // 项目主页（GitCode 主仓）

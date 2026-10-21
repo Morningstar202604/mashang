@@ -44,7 +44,7 @@ A cyberpunk-styled coding learning terminal that fits in your pocket: embedded r
 | **Will I actually learn to code?** | ✅ **Assert auto-grading** — you don't advance until test cases pass; cures "understood but can't write" |
 | **Ads? Account? Tracking?** | ✅ **Zero ads · zero account · zero data upload**, MIT-licensed — safe to recommend to students |
 | **Anything unique?** | 🔬 **Variable Snapshot panel** (whole namespace visualized after each run) · Six Tiers · Daily Quests · Mistake Book |
-| **How much content?** | 📚 **38 built-in lessons + 11 language-pack lessons**, from `print` to decorators, plus 6 Arena challenges |
+| **How much content?** | 📚 **38 built-in lessons + 17 extension lessons (55 total)**, from `print` to decorators, plus 8 Arena challenges (6 Python + 2 JavaScript) |
 
 > 🎯 **One-line pitch**: not another blank code editor — a pocket learning terminal that bundles a **CPython interpreter + grading engine + game-like progression**, fully offline.
 
@@ -93,8 +93,8 @@ flowchart LR
 pie title Content Scale (lessons / items)
     "38 Built-in Lessons" : 38
     "17 Language-Pack Lessons" : 17
-    "6 Arena Challenges" : 6
-    "47 assert Graders" : 47
+    "8 Arena Challenges" : 8
+    "55 assert Graders" : 55
 ```
 
 ## 🏆 Six-Tier Progression
@@ -177,9 +177,9 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 
 ### 🧩 Engineering Quality
 
-- 🎨 **6 Color Themes** — Cyber Neon / Deep Space Gray / Aurora Green / Twilight Purple / Twilight Orange / Paper White, instant switch without restart
+- 🎨 **7 Color Themes** — Cyber Neon / Deep Space Gray / Aurora Green / Twilight Purple / Twilight Orange / Soft Eye-Care / Paper White, instant switch without restart
 - 👓 **Readability-First UI** — effects confined to decoration zones (boot/home/terminal…); lesson body and graded results use larger sans-serif text, no gimmicks
-- ⚡ **In-App Self-Update** — check for new versions in Settings, pull from GitCode repo, verify SHA-256, install via system installer
+- ⚡ **Fully Offline** — lessons and interpreter ship inside the APK, no account required; new versions are installed from Releases (no in-app updater yet)
 
 ## 📥 Download & Install
 
@@ -187,9 +187,9 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 > 🛰 **GitHub Pages mirror** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/) (same page + architecture visuals)
 > 📦 **Repos (parallel sync, pick any)** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
 
-> Android 7.0+ (minSdk 24), arm64-v8a / x86_64 dual architecture. Release builds are R8-minified.
+> Android 7.0+ (minSdk 24), arm64-v8a (this build targets 64-bit ARM devices). Release builds are R8-minified.
 
-- ⭐ Recommended: download the latest `pynow-*.apk` from [Releases](../../releases) (GitCode)
+- ⭐ Recommended: download the latest `mashang-*.apk` from [Releases](https://gitcode.com/badhope/mashang-python/releases) (GitCode)
 - Build yourself:
 
 ```bash
