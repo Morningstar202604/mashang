@@ -5,11 +5,13 @@
 
 校验项：
   R1 APK 可被 zipfile 打开且条目数 > 500
-  R2 assets/chaquopy/app.imy 存在，解包后含 runner.pyc / repl.pyc
-  R3 runner.pyc 可被 marshal 解析，且引用 threading（看门狗路径）
+  R2 assets/chaquopy/app.imy 存在，解包后含 runner / repl 模块
+     （Chaquopy 可能产出 .py / .pyc / __pycache__/*.pyc 三种布局，均接受）
+  R3 runner 模块可校验：.pyc 走 marshal 反解、.py 走源码扫描，
+     二者都必须含 threading + settrace（超时看门狗路径）
   R4 assets 内课程与挑战 JSON 存在且可解析（lessons_*.json / challenges.json）
   R5 assets/syntaxes/javascript.tmLanguage.json 存在（多语言高亮）
-  R6 AndroidManifest 声明的包名为 com.pyneon.academy（通过 aapt 或 strings 兜底）
+  R6 AndroidManifest（二进制 AXML，UTF-16LE）含包名 com.pyneon.academy
 """
 import io
 import json
@@ -48,28 +50,37 @@ def main():
     if "assets/chaquopy/app.imy" not in names:
         fail("缺少 assets/chaquopy/app.imy")
     inner = zipfile.ZipFile(io.BytesIO(z.read("assets/chaquopy/app.imy")))
-    pycs = set(inner.namelist())
+    entries = set(inner.namelist())
 
-    def find_pyc(stem):
-        # Chaquopy 17 在部分平台上输出 __pycache__/<stem>.cpython-313.pyc，
-        # 另一些平台直接是 <stem>.pyc —— 两种布局都要接受。
-        hits = [n for n in pycs if n.rsplit("/", 1)[-1].split(".")[0] == stem and n.endswith(".pyc")]
+    def find_module(stem):
+        # Chaquopy 按平台/缓存状态可能产出 <stem>.py、<stem>.pyc 或
+        # __pycache__/<stem>.cpython-3XX.pyc —— 三种布局都接受。
+        hits = [
+            n for n in entries
+            if n.rsplit("/", 1)[-1].split(".")[0] == stem and n.endswith((".py", ".pyc"))
+        ]
         if not hits:
-            fail(f"app.imy 缺少 {stem}.pyc（现有：{sorted(pycs)}）")
+            fail(f"app.imy 缺少 {stem}.py/.pyc（现有：{sorted(entries)}）")
         return min(hits, key=len)
 
-    runner_pyc = find_pyc("runner")
-    find_pyc("repl")
-    print(f"[PASS] app.imy 含 {sorted(pycs)}")
+    runner_entry = find_module("runner")
+    find_module("repl")
+    print(f"[PASS] app.imy 含 {sorted(entries)}")
 
-    raw = inner.read(runner_pyc)
-    try:
-        code = marshal.loads(raw[16:])
-    except Exception as exc:  # noqa: BLE001
-        fail(f"runner.pyc 无法解析：{exc}")
-    if "threading" not in code_names(code, set()):
-        fail("runner.pyc 未引用 threading（超时看门狗缺失）")
-    print("[PASS] runner.pyc 可解析且含 threading 看门狗")
+    raw = inner.read(runner_entry)
+    if runner_entry.endswith(".pyc"):
+        try:
+            code = marshal.loads(raw[16:])
+        except Exception as exc:  # noqa: BLE001
+            fail(f"{runner_entry} 无法解析：{exc}")
+        if "threading" not in code_names(code, set()):
+            fail(f"{runner_entry} 未引用 threading（超时看门狗缺失）")
+        print(f"[PASS] {runner_entry} 可解析且含 threading 看门狗")
+    else:
+        source = raw.decode("utf-8")
+        if "import threading" not in source or "settrace" not in source:
+            fail(f"{runner_entry} 缺 threading/settrace（超时看门狗缺失）")
+        print(f"[PASS] {runner_entry} 源码含 threading + settrace 看门狗")
 
     assets = [n for n in names if n.startswith("app/src/main/assets/") or n.startswith("assets/lessons_")]
     if not assets:
