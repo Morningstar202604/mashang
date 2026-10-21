@@ -32,6 +32,11 @@ jobs:
         uses: setup-node
         with:
           node-version: '20'
+      - name: 安装 CI 依赖
+        run: |
+          set -euo pipefail
+          PY=$(command -v python || command -v python3)
+          "$PY" -m pip install -r requirements-ci.txt
       - name: 版本探针
         run: |
           set -euo pipefail

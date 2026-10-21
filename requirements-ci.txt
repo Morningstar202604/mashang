@@ -1,0 +1,4 @@
+# CI 专用依赖（本地开发不需要装：只有 CI 会跑的静态校验用）
+# PyYAML：tests/test_ci_workflows.py 用严格 loader 检测 workflow 重复键
+# （重复键会让 GitHub 把整份 workflow 判为 Invalid，2026-10-21 实际踩过）
+PyYAML==6.0.2
