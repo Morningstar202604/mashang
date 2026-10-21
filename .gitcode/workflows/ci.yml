@@ -32,14 +32,6 @@ jobs:
         uses: setup-node
         with:
           node-version: '20'
-      # GitCode 托管 Runner 在国内，PyPI 直连常超时：先试官方源，失败退清华镜像，
-      # 最后用 import yaml 作为硬门禁（装没装上不重要，导入得到才算数）。
-      - name: Install CI dependencies
-        run: |
-          set -euo pipefail
-          PY=$(command -v python || command -v python3)
-          "$PY" -m pip install -q -r requirements-ci.txt             || "$PY" -m pip install -q -r requirements-ci.txt                  -i https://pypi.tuna.tsinghua.edu.cn/simple
-          "$PY" -c "import yaml; print('PyYAML', yaml.__version__)"
       - name: 版本探针
         run: |
           set -euo pipefail

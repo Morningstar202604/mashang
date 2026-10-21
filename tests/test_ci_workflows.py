@@ -6,8 +6,14 @@
   R2 关键门禁必须在位：lint、JVM 单测、debug/release 构建、APK 探针、
      版本校验、镜像同步；任何一项被删都要显式改测试，不能悄悄消失
 """
+import os
 import unittest
 from pathlib import Path
+
+try:
+    import yaml  # noqa: F401
+except ModuleNotFoundError:  # pragma: no cover - 取决于运行环境
+    yaml = None
 
 ROOT = Path(__file__).resolve().parent.parent
 WORKFLOWS = [
@@ -18,7 +24,12 @@ WORKFLOWS = [
 
 
 def _strict_load(path):
-    import yaml
+    if yaml is None:
+        if os.environ.get("REQUIRE_YAML") == "1":
+            raise AssertionError(
+                "REQUIRE_YAML=1 但未安装 PyYAML：CI 不允许跳过 workflow 静态校验"
+            )
+        raise unittest.SkipTest("未安装 PyYAML；由平台自身校验器兜底")
 
     class Strict(yaml.SafeLoader):
         pass
@@ -95,6 +106,9 @@ class GitHubGateTests(unittest.TestCase):
 
     def test_js_tests_are_forced_to_run(self):
         self.assertIn('REQUIRE_NODE: "1"', self.text)
+
+    def test_yaml_check_is_enforced_on_github(self):
+        self.assertIn('REQUIRE_YAML: "1"', self.text)
 
 
 if __name__ == "__main__":
