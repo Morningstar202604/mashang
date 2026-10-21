@@ -134,7 +134,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
-        with:
           fetch-depth: 0
 
       - name: 推送到 GitCode / Gitee / 两个 GitHub 镜像
