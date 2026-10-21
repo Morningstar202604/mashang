@@ -164,12 +164,14 @@ jobs:
       - name: Build signed Release APK
         run: ./gradlew :app:assembleRelease --no-daemon
 
-      - name: 校验签名（apksigner）
+      - name: 校验签名（apksigner + 证书主体）
         run: |
           set -euo pipefail
           APK=$(ls app/build/outputs/apk/release/*.apk | head -1)
           APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort | tail -1)
           "$APKSIGNER" verify --verbose "$APK"
+          # 必须是 Mashang release 证书，防止误用 debug keystore 签名后当成正式版
+          "$APKSIGNER" verify --print-certs "$APK" | grep -F "CN=Mashang"             || { echo "签名证书不是 Mashang release 证书"; exit 1; }
 
       - name: 归档并重命名为 mashang-<tag>.apk
         run: |

@@ -122,6 +122,8 @@ def main():
             tail = fh.read()
         if b"APK Sig Block 42" not in tail:
             fail("release APK 未签名（缺 APK Signing Block，v2/v3 签名）")
+        # 注：签名块存在不等于用的是 release 密钥（debug 包同样有签名块），
+        # 证书指纹校验由 CI 的 apksigner --print-certs 步骤负责。
         print(f"[PASS] release 产物含 dex({len(dexes)}) 且带 APK 签名块")
 
     print("ALL APK PROBES PASSED")
