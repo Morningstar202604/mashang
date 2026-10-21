@@ -79,6 +79,10 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
       - name: 赋予 gradlew 执行权限
         run: chmod +x gradlew
+      # GitCode 托管 Runner 不预装 Android SDK，需自行安装（脚本幂等，
+      # GitHub runner 上已装则直接复用）
+      - name: 准备 Android SDK
+        run: bash scripts/ci/install_android_sdk.sh
       - name: Lint
         run: ./gradlew :app:lintDebug --no-daemon
       - name: 构建 Debug APK
