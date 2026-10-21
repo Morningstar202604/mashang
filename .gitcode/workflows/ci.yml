@@ -31,11 +31,14 @@ jobs:
       - name: 设置 Node.js（JS 课程判题依赖 node）
         uses: setup-node
         with:
-          node-version: '22'
+          node-version: '20'
       - name: 版本探针
         run: |
-          python --version
-          node --version
+          set -euo pipefail
+          echo "PATH=$PATH"
+          command -v python || command -v python3
+          python --version || python3 --version
+          command -v node && node --version
       - name: 全量单元测试
         run: python -m unittest discover -s tests -v
       - name: 课程内容校验
