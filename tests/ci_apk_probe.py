@@ -13,11 +13,14 @@
   R5 assets/syntaxes/javascript.tmLanguage.json 存在（多语言高亮）
   R6 AndroidManifest（二进制 AXML，UTF-16LE）含包名 com.pyneon.academy
 """
+import importlib.util
 import io
 import json
 import marshal
 import sys
 import zipfile
+
+CHAQUOPY_PYC_MAGIC = 0x0DF3  # CPython 3.13（app/build.gradle.kts 的 chaquopy.version）
 
 
 def fail(msg):
@@ -72,17 +75,30 @@ def main():
 
     raw = inner.read(runner_entry)
     if runner_entry.endswith(".pyc"):
+        # 校验 pyc 头结构：CPython pyc 前 4 字节是魔数，后两字节固定为 CRLF。
+        # 只做 marshal.loads 会把「头部乱填、正文恰好是合法 code」的假包放行。
+        # 这里不比对本地解释器魔数（CI 用 3.12 解析、Chaquopy 产出 3.13），
+        # 只校验结构合法 + Chaquopy 目标版本主次号（3.13 -> 0x0df3）。
+        if raw[2:4] != bytes([13, 10]):
+            fail(f"{runner_entry} 不是合法 pyc（魔数尾部 {raw[2:4]!r}）")
+        if int.from_bytes(raw[0:2], "little") != CHAQUOPY_PYC_MAGIC:
+            fail(
+                f"{runner_entry} 的 pyc 版本不是 Chaquopy 目标 3.13"
+                f"（魔数 {raw[0:2].hex()}，期望 {CHAQUOPY_PYC_MAGIC:04x}）"
+            )
         try:
             code = marshal.loads(raw[16:])
         except Exception as exc:  # noqa: BLE001
             fail(f"{runner_entry} 无法解析：{exc}")
-        if "threading" not in code_names(code, set()):
-            fail(f"{runner_entry} 未引用 threading（超时看门狗缺失）")
-        print(f"[PASS] {runner_entry} 可解析且含 threading 看门狗")
+        missing = {"threading", "settrace"} - code_names(code, set())
+        if missing:
+            fail(f"{runner_entry} 缺 {sorted(missing)}（超时看门狗缺失）")
+        print(f"[PASS] {runner_entry} 魔数正确、可解析且含 threading+settrace")
     else:
         source = raw.decode("utf-8")
-        if "import threading" not in source or "settrace" not in source:
-            fail(f"{runner_entry} 缺 threading/settrace（超时看门狗缺失）")
+        missing = [k for k in ("import threading", "settrace") if k not in source]
+        if missing:
+            fail(f"{runner_entry} 缺 {missing}（超时看门狗缺失）")
         print(f"[PASS] {runner_entry} 源码含 threading + settrace 看门狗")
 
     assets = [n for n in names if n.startswith("app/src/main/assets/") or n.startswith("assets/lessons_")]

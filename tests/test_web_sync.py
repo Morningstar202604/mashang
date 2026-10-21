@@ -146,9 +146,19 @@ class TestArenaLangSplit(unittest.TestCase):
             r"function splitChallenges",
             "app.js 缺少 splitChallenges 分流函数",
         )
-        seg = text[text.index("function splitChallenges"):][:600]
-        self.assertIn("javascript", seg, "splitChallenges 未按 lang 过滤 javascript")
+        seg = text[text.index("function splitChallenges"):][:800]
+        # 断言真实分流逻辑：python 进判题组，其余进 appOnly 组
+        self.assertRegex(
+            seg,
+            r'if \(\(ch\.lang \|\| "python"\) === "python"\) python\.push\(ch\);\s*\n\s*else appOnly\.push\(ch\);',
+            "splitChallenges 未把非 python 挑战放进 appOnly",
+        )
+        self.assertNotIn("if (true)", seg, "splitChallenges 出现恒真短路")
         self.assertIn("App 内体验", text, "app.js 缺少 JS 挑战的「App 内体验」标注")
+        # 渲染路径必须真的只用 split.python 进判题卡片
+        arena = text[text.index("function renderArena"):][:1200]
+        self.assertIn("split.python.forEach", arena, "renderArena 未使用 python 分流结果")
+        self.assertIn("split.appOnly.forEach", arena, "renderArena 未渲染 appOnly 卡片")
 
 
 class TestBrandResidue(unittest.TestCase):
@@ -172,19 +182,26 @@ class TestBrandResidue(unittest.TestCase):
 
 class TestResetClearsAll(unittest.TestCase):
     def test_progress_store_reset_deletes_mistakes_and_review(self):
-        """R7: ProgressStore.reset 同步删除错题本/复习卡 JSON。"""
-        text = _read(
-            os.path.join(
-                ROOT,
-                "app", "src", "main", "java", "com", "pyneon", "academy",
-                "data", "ProgressStore.kt",
-            )
+        """R7: reset 必须经 UserDataFiles.deleteAll 删除，且失败要留痕。"""
+        data_dir = os.path.join(
+            ROOT, "app", "src", "main", "java", "com", "pyneon", "academy", "data"
         )
+        text = _read(os.path.join(data_dir, "ProgressStore.kt"))
         m = re.search(r"suspend fun reset\(context: Context\) \{(.*?)\n    \}", text, re.S)
         self.assertIsNotNone(m, "未找到 ProgressStore.reset 实现")
         body = m.group(1)
+        self.assertIn("UserDataFiles.deleteAll(", body, "reset 未调用 UserDataFiles.deleteAll")
+        self.assertIn("it.clear()", body, "reset 未清 DataStore")
+        self.assertIn("Log.w", body, "reset 删除失败未记录日志")
+
+        files = _read(os.path.join(data_dir, "UserDataFiles.kt"))
         for fname in ("pyneon_mistakes.json", "pyneon_review_cards.json"):
-            self.assertIn(fname, body, f"reset 未清除 {fname}")
+            self.assertIn(fname, files, f"UserDataFiles 未覆盖 {fname}")
+
+        for fname in ("ViewModels.kt", "BackupUtil.kt"):
+            src = _read(os.path.join(data_dir, fname))
+            self.assertNotIn('"pyneon_mistakes.json"', src, f"{fname} 仍硬编码文件名")
+            self.assertNotIn('"pyneon_review_cards.json"', src, f"{fname} 仍硬编码文件名")
 
     def test_profile_dialog_copy_covers_cleared_data(self):
         """R7: 档案页重置弹窗文案覆盖错题本与复习卡。"""

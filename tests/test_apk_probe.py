@@ -2,13 +2,12 @@
 
 背景：GitHub runner 与本机构建出的 Chaquopy app.imy 布局不同
 （runner.py / runner.pyc / __pycache__/runner.cpython-3XX.pyc），
-探针必须三种都接受，否则 CI 假红。本测试用最小伪造 APK 锁住该行为，
-并验证缺资源时确实失败（fail-closed）。
+探针必须三种都接受，否则 CI 假红；反过来，缺看门狗、假 pyc、未签名
+必须判红，否则 CI 假绿。两种方向都在这里锁住。
 """
 import io
 import json
 import marshal
-import os
 import subprocess
 import sys
 import tempfile
@@ -20,30 +19,41 @@ ROOT = Path(__file__).resolve().parent.parent
 PROBE = ROOT / "tests" / "ci_apk_probe.py"
 
 LAYOUTS = ("py", "pyc", "pycache")
+NUL = bytes([0])
 
 
-def _inner_archive(layout):
-    runner_src = (ROOT / "app/src/main/python/runner.py").read_text(encoding="utf-8")
-    repl_src = (ROOT / "app/src/main/python/repl.py").read_text(encoding="utf-8")
-    pyc = b"\x00" * 16 + marshal.dumps(compile(runner_src, "runner.py", "exec"))
+def _runner_src():
+    return (ROOT / "app/src/main/python/runner.py").read_text(encoding="utf-8")
+
+
+def _repl_src():
+    return (ROOT / "app/src/main/python/repl.py").read_text(encoding="utf-8")
+
+
+def _fake_pyc():
+    """构造结构合法的 pyc：3.13 魔数 + CRLF + 16 字节头。"""
+    header = bytes([0xF3, 0x0D]) + bytes([13, 10]) + bytes(12)
+    return header + marshal.dumps(compile(_runner_src(), "runner.py", "exec"))
+
+
+def _write_apk(path, layout="py", *, with_assets=True, runner=None, repl=None):
+    runner = runner if runner is not None else _runner_src()
+    repl = repl if repl is not None else _repl_src()
 
     buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as inner:
         if layout == "py":
-            z.writestr("runner.py", runner_src)
-            z.writestr("repl.py", repl_src)
+            inner.writestr("runner.py", runner)
+            inner.writestr("repl.py", repl)
         elif layout == "pyc":
-            z.writestr("runner.pyc", pyc)
-            z.writestr("repl.pyc", b"\x00" * 16)
+            inner.writestr("runner.pyc", _fake_pyc())
+            inner.writestr("repl.pyc", _fake_pyc())
         else:
-            z.writestr("__pycache__/runner.cpython-313.pyc", pyc)
-            z.writestr("__pycache__/repl.cpython-313.pyc", b"\x00" * 16)
-    return buf.getvalue()
+            inner.writestr("__pycache__/runner.cpython-313.pyc", _fake_pyc())
+            inner.writestr("__pycache__/repl.cpython-313.pyc", _fake_pyc())
 
-
-def _write_apk(path, layout, *, with_assets=True):
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("assets/chaquopy/app.imy", _inner_archive(layout))
+        z.writestr("assets/chaquopy/app.imy", buf.getvalue())
         if with_assets:
             for name in ("lessons_basic.json", "lessons_mid.json", "lessons_adv.json",
                          "lessons_pro.json", "challenges.json"):
@@ -56,9 +66,9 @@ def _write_apk(path, layout, *, with_assets=True):
 
 
 class ApkProbeTests(unittest.TestCase):
-    def _run(self, apk):
+    def _run(self, apk, *flags):
         return subprocess.run(
-            [sys.executable, str(PROBE), str(apk)],
+            [sys.executable, str(PROBE), str(apk), *flags],
             capture_output=True, text=True, encoding="utf-8",
         )
 
@@ -71,15 +81,64 @@ class ApkProbeTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 self.assertIn("ALL APK PROBES PASSED", result.stdout)
 
-    def test_require_release_rejects_unsigned(self):
-        """--require-release 必须拒绝未签名包（防止未签名包被当正式版发布）。"""
+    def test_rejects_runner_without_watchdog(self):
+        """runner 模块缺 threading/settrace 时必须失败。"""
+        for layout in LAYOUTS:
+            with self.subTest(layout=layout), tempfile.TemporaryDirectory() as tmp:
+                apk = Path(tmp) / "app.apk"
+                if layout == "py":
+                    _write_apk(apk, "py", runner="print('no watchdog')\n")
+                else:
+                    buf = io.BytesIO()
+                    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as inner:
+                        name = "runner.pyc" if layout == "pyc" else "__pycache__/runner.cpython-313.pyc"
+                        inner.writestr(name, _fake_pyc())
+                        inner.writestr(name.replace("runner", "repl"), _fake_pyc())
+                    with zipfile.ZipFile(apk, "w", zipfile.ZIP_DEFLATED) as z:
+                        z.writestr("assets/chaquopy/app.imy", buf.getvalue())
+                        for n in ("lessons_basic.json", "lessons_mid.json", "lessons_adv.json",
+                                  "lessons_pro.json", "challenges.json"):
+                            z.writestr(f"assets/{n}", "[]")
+                        z.writestr("assets/syntaxes/javascript.tmLanguage.json", "{}")
+                        z.writestr("AndroidManifest.xml", "com.pyneon.academy".encode("utf-16-le"))
+                        z.writestr("classes.dex", b"dex-035")
+                        for i in range(520):
+                            z.writestr(f"res/d{i}.txt", "x")
+                    continue
+                result = self._run(apk)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("超时看门狗缺失", result.stdout)
+
+    def test_rejects_corrupt_pyc_magic(self):
+        """pyc 头两个魔数字节不对时必须失败（防假 pyc 混过 marshal）。"""
         with tempfile.TemporaryDirectory() as tmp:
             apk = Path(tmp) / "app.apk"
-            _write_apk(apk, "py")  # 无 META-INF 签名
-            result = subprocess.run(
-                [sys.executable, str(PROBE), str(apk), "--require-release"],
-                capture_output=True, text=True, encoding="utf-8",
-            )
+            buf = io.BytesIO()
+            with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as inner:
+                bad = NUL + NUL + bytes([13, 10]) + bytes(12) + marshal.dumps(
+                    compile(_runner_src(), "runner.py", "exec"))
+                inner.writestr("runner.pyc", bad)
+                inner.writestr("repl.pyc", _fake_pyc())
+            with zipfile.ZipFile(apk, "w", zipfile.ZIP_DEFLATED) as z:
+                z.writestr("assets/chaquopy/app.imy", buf.getvalue())
+                for n in ("lessons_basic.json", "lessons_mid.json", "lessons_adv.json",
+                          "lessons_pro.json", "challenges.json"):
+                    z.writestr(f"assets/{n}", "[]")
+                z.writestr("assets/syntaxes/javascript.tmLanguage.json", "{}")
+                z.writestr("AndroidManifest.xml", "com.pyneon.academy".encode("utf-16-le"))
+                z.writestr("classes.dex", b"dex-035")
+                for i in range(520):
+                    z.writestr(f"res/d{i}.txt", "x")
+            result = self._run(apk)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("pyc", result.stdout)
+
+    def test_require_release_rejects_unsigned(self):
+        """--require-release 必须拒绝未签名包。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "app.apk"
+            _write_apk(apk, "py")
+            result = self._run(apk, "--require-release")
             self.assertEqual(result.returncode, 1)
             self.assertIn("未签名", result.stdout)
 

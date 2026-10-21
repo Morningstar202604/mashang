@@ -249,8 +249,8 @@ object BackupUtil {
     }
 
     // File I/O helpers for review cards and mistakes
-    private fun reviewCardsFile(context: Context) = java.io.File(context.filesDir, "pyneon_review_cards.json")
-    private fun mistakesFile(context: Context) = java.io.File(context.filesDir, "pyneon_mistakes.json")
+    private fun reviewCardsFile(context: Context) = java.io.File(context.filesDir, UserDataFiles.REVIEW_CARDS)
+    private fun mistakesFile(context: Context) = java.io.File(context.filesDir, UserDataFiles.MISTAKES)
 
     private fun loadReviewCardsFromFile(context: Context): List<ReviewCard> {
         val file = reviewCardsFile(context)

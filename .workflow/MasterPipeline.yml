@@ -49,5 +49,8 @@ stages:
           gradleVersion: '9.5'
           commands:
             - chmod +x ./gradlew
+            - bash scripts/ci/install_android_sdk.sh
+            - ./gradlew :app:testDebugUnitTest --no-daemon
             - ./gradlew :app:lintDebug --no-daemon
             - ./gradlew :app:assembleDebug --no-daemon
+            - python tests/ci_apk_probe.py app/build/outputs/apk/debug/app-debug.apk

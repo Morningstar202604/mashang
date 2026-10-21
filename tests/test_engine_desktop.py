@@ -61,17 +61,35 @@ class RunnerTests(unittest.TestCase):
             def join(self, timeout=None):
                 pass
 
+        class _BrokenThread(_NoThread):
+            def start(self):
+                raise RuntimeError("some unrelated failure")
+
         original = runner.threading.Thread
         runner.threading.Thread = _NoThread
         try:
             result = runner.run_code("value = 6 * 7\nprint(value)")
             self.assertTrue(result["ok"])
-            self.assertIn("42", result["stdout"])
+            self.assertEqual(result["stdout"], "42\n")
             self.assertFalse(result["worker_still_alive"])
             timed = runner.run_code("while True:\n    pass", timeout=0.5)
             self.assertEqual(timed["error"]["type"], "Timeout")
             checked = runner.check_exercise("x = 1", ["assert x == 1"])
             self.assertTrue(checked["passed"])
+
+            # 非「can't start new thread」的 RuntimeError 必须原样抛出，
+            # 不能被降级逻辑吞掉（否则真实故障会被伪装成正常执行）
+            runner.threading.Thread = _BrokenThread
+            with self.assertRaises(RuntimeError) as ctx:
+                runner.run_code("x = 1")
+            self.assertIn("some unrelated failure", str(ctx.exception))
+
+            # 降级路径下异常 traceback 不得混入 runner.py 帧或
+            # "During handling of the above exception" 噪声
+            runner.threading.Thread = _NoThread
+            err = runner.run_code("1 / 0")
+            self.assertEqual(err["error"]["type"], "ZeroDivisionError")
+            self.assertNotIn("During handling", err["error"]["traceback"])
         finally:
             runner.threading.Thread = original
 

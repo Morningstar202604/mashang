@@ -112,4 +112,7 @@ dependencies {
 
     // 多语言：JavaScript 运行时后端（Rhino，纯 Java 解释模式，无 NDK；Apache-2.0）
     implementation("org.mozilla:rhino:1.7.15")
+
+    // JVM 单元测试（纯 JVM，不需要 Android 设备）：JUnit4 + Kotlin 断言
+    testImplementation("junit:junit:4.13.2")
 }

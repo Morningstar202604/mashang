@@ -99,7 +99,12 @@ NODE = _find_node()
 CHALLENGES = ROOT / "app" / "src" / "main" / "assets" / "challenges.json"
 
 
-@unittest.skipUnless(NODE, "未找到 node，无法执行 JS 行为验证（结构检查仍由 validate_content.py 覆盖）")
+_REQUIRE_NODE = os.environ.get("REQUIRE_NODE") == "1"
+if _REQUIRE_NODE and not NODE:
+    raise RuntimeError("REQUIRE_NODE=1 但未找到 node：CI 不允许静默跳过 JS 行为验证")
+
+
+@unittest.skipUnless(NODE, "未找到 node，无法执行 JS 行为验证（本地开发可跳过；CI 设 REQUIRE_NODE=1 强制运行）")
 class JsPackBehaviorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

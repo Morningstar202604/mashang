@@ -114,13 +114,21 @@ def _run_protected(code, namespace, stdin_lines, timeout):
 
     started_at = time.perf_counter()
     worker = threading.Thread(target=target, daemon=True, name="pyneon-sandbox")
+    thread_started = True
     try:
         worker.start()
-        worker.join(timeout + 1.5)
-    except RuntimeError:
+    except RuntimeError as exc:
         # 无多线程能力的环境（Pyodide 未启用 SharedArrayBuffer 时 start() 抛
         # RuntimeError: can't start new thread）：降级为主线程直接执行。
         # settrace 看门狗仍能中断纯 Python 死循环；C 阻塞调用失去超时保护。
+        if "can't start new thread" not in str(exc):
+            raise
+        thread_started = False
+    if thread_started:
+        worker.join(timeout + 1.5)
+    else:
+        # 在 except 之外调用，避免异常的 "During handling of the above"
+        # 上下文污染用户代码的 traceback。
         target()
     duration_ms = int((time.perf_counter() - started_at) * 1000)
 
@@ -256,10 +264,16 @@ def check_exercise(code, tests, stdin_lines=None):
                 st["finished"] = True
 
         worker = threading.Thread(target=test_target, daemon=True)
+        test_thread_started = True
         try:
             worker.start()
+        except RuntimeError as exc:
+            if "can't start new thread" not in str(exc):
+                raise
+            test_thread_started = False
+        if test_thread_started:
             worker.join(EXERCISE_TEST_TIMEOUT + 1.0)
-        except RuntimeError:
+        else:
             test_target()  # 无多线程环境降级为主线程执行（同 run_code）
         if not test_state["finished"]:
             test_state["error"] = "测试执行超时"

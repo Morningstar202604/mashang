@@ -1,6 +1,7 @@
 package com.pyneon.academy.data
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -244,10 +245,9 @@ object ProgressStore {
     suspend fun reset(context: Context) {
         val app = context.applicationContext
         app.progressDataStore.edit { it.clear() }
-        withContext(Dispatchers.IO) {
-            listOf("pyneon_mistakes.json", "pyneon_review_cards.json").forEach { name ->
-                runCatching { java.io.File(app.filesDir, name).delete() }
-            }
+        val failures = withContext(Dispatchers.IO) { UserDataFiles.deleteAll(app.filesDir) }
+        if (failures.isNotEmpty()) {
+            Log.w("ProgressStore", "reset 未能删除：${failures.joinToString()}")
         }
     }
 }

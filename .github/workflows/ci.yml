@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v7
@@ -47,6 +49,8 @@ jobs:
           node --version
 
       - name: 全量单元测试（unittest discover）
+        env:
+          REQUIRE_NODE: "1"
         run: python -m unittest discover -s tests -v
 
       - name: 课程内容校验（55 讲 / 8 挑战 / all judge cases）
@@ -65,6 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up JDK 17
         uses: actions/setup-java@v6
@@ -93,8 +99,19 @@ jobs:
       - name: Lint（阻断级，0 error 才通过）
         run: ./gradlew :app:lintDebug --no-daemon
 
+      - name: JVM 单元测试
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
+
       - name: Build Debug APK
         run: ./gradlew :app:assembleDebug --no-daemon
+
+      # 无签名也跑 release 变体：验证 R8 混淆 / 资源压缩 / proguard 规则在
+      # main 上就被覆盖，而不是等到打 tag 才发现
+      - name: Build Release APK（未签名，验证 R8 链路）
+        run: ./gradlew :app:assembleRelease --no-daemon
+
+      - name: Lint Release（阻断）
+        run: ./gradlew :app:lintRelease --no-daemon
 
       - name: 构建产物探针（APK 内 runner.py 与 assets 完整性）
         run: python tests/ci_apk_probe.py app/build/outputs/apk/debug/app-debug.apk
@@ -116,6 +133,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          persist-credentials: false
+        with:
           fetch-depth: 0
 
       - name: 推送到 GitCode / Gitee / 两个 GitHub 镜像
@@ -133,11 +152,14 @@ jobs:
     # tag 推送自动发布；手动触发时可用 dry_run_release 演练同一条打包/验签链路
     if: startsWith(github.ref, 'refs/tags/v') || inputs.dry_run_release
     timeout-minutes: 45
+    environment: release
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up JDK 17
         uses: actions/setup-java@v6
@@ -160,6 +182,9 @@ jobs:
 
       # 从仓库 Secrets 还原签名密钥库（4 个 secret 缺一不可，缺失则此步失败，
       # 避免悄悄产出未签名包被当成正式版发布）
+      - name: 校验 tag 与 versionName/versionCode
+        run: python scripts/ci/check_release_version.py
+
       - name: 还原 release 签名密钥库
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -201,7 +226,7 @@ jobs:
           python tests/ci_apk_probe.py "mashang-${GITHUB_REF_NAME}.apk" --require-release
 
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !inputs.dry_run_release
         uses: softprops/action-gh-release@v3
         with:
           files: mashang-*.apk

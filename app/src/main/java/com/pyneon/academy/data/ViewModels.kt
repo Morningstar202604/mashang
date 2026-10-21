@@ -15,7 +15,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.util.Calendar
 
 // --- Mistake data model ---
 @Serializable
@@ -75,15 +74,9 @@ class StreakViewModel(app: Application) : AndroidViewModel(app) {
 
     fun onAppOpen() {
         viewModelScope.launch(Dispatchers.IO) {
-            // 用 Calendar 取本地零点再折算为「天序号」：java.time 在 minSdk 24 需要
-            // core library desugaring，此处只有一个调用点，不值得引入整包依赖。
-            val cal = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-            val today = cal.timeInMillis / 86_400_000L
+            // 复用 Clock.todayEpochDay()（本地日期 → 天序号，与 java.time.toEpochDay 等价）；
+            // 不能用 millis / 86_400_000 折算，跨时区与夏令时会差一天导致连击清零。
+            val today = Clock.todayEpochDay()
             val progress = ProgressStore.snapshot(getApplication())
             val last = progress.lastActiveEpochDay
             val context = getApplication<Application>()
@@ -276,10 +269,10 @@ class MistakeViewModel(app: Application) : AndroidViewModel(app) {
 
 // --- JSON file I/O helpers ---
 private fun mistakesFile(context: Application): File =
-    File(context.filesDir, "pyneon_mistakes.json")
+    File(context.filesDir, UserDataFiles.MISTAKES)
 
 private fun reviewCardsFile(context: Application): File =
-    File(context.filesDir, "pyneon_review_cards.json")
+    File(context.filesDir, UserDataFiles.REVIEW_CARDS)
 
 private fun loadMistakesInternal(context: Application? = null): List<MistakeRecord> {
     return try {
