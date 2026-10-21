@@ -34,8 +34,10 @@ object TrackRepository {
         category = "编程语言",
         status = TrackStatus.READY,
         accentArgb = CYAN,
-        lessonCount = 30,
-        progressHint = "30 讲 · 判题实战 · REPL 终端",
+        // 讲数与 assets 中 Python 课程数一致（lessons_*.json 合计 38 讲）。
+        // 这里只用于首页「课程体系」卡片的展示；真实进度以 LessonRepository 为准。
+        lessonCount = 38,
+        progressHint = "38 讲 · 判题实战 · REPL 终端",
         progressPercent = 100
     )
 

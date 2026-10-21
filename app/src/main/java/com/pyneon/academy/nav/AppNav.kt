@@ -10,6 +10,8 @@ import androidx.compose.material.icons.outlined.SpaceDashboard
 import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -71,6 +73,7 @@ private val TOP_DESTS = listOf(
 )
 
 @Composable
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 fun AppRoot() {
     val navController = rememberNavController()
     val backStack by navController.currentBackStackEntryAsState()
@@ -86,7 +89,9 @@ fun AppRoot() {
     Scaffold(
         containerColor = Bg0,
         bottomBar = {
-            if (showBar) {
+            // 键盘弹出时隐藏底部导航：否则它要么被键盘盖住点不到，要么和输入框
+            // 争夺垂直空间把输入区挤没（终端/练习页实测）。输入期间不需要切 Tab。
+            if (showBar && !WindowInsets.isImeVisible) {
                 NavigationBar(containerColor = Bg1) {
                     TOP_DESTS.forEach { dest ->
                         NavigationBarItem(

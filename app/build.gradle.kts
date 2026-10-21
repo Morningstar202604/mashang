@@ -20,9 +20,13 @@ android {
         buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
         buildConfigField("int", "VERSION_CODE", "$versionCode")
         ndk {
-            // F6: 发布版只打 arm64-v8a（真机覆盖 99.9%，APK 体积减半）；
-            // x86_64 仅 debug 保留（模拟器）。需要模拟器调试时在 debug 构建追加。
+            // F6: 发布版只打 arm64-v8a（真机覆盖 99.9%，APK 体积减半）。
+            // 需要装到 x86_64 模拟器验收时加 -PemulatorAbi=true（Chaquopy 只读
+            // defaultConfig / productFlavors 的 abiFilters，buildType 里的不生效）。
             abiFilters += listOf("arm64-v8a")
+            if ((findProperty("emulatorAbi") as String?)?.toBoolean() == true) {
+                abiFilters += "x86_64"
+            }
         }
     }
 
@@ -62,6 +66,10 @@ android {
     }
     packaging {
         resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1")
+    }
+    lint {
+        // 本机 local.properties 的路径转义告警不影响构建（CI 上不生成该文件）
+        lintConfig = file("lint.xml")
     }
 }
 

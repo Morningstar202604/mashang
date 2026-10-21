@@ -47,7 +47,18 @@ private val PYNEON_THEME_JSON: String =
     "editor.background": "#10141C",
     "editor.foreground": "#D8E2E8",
     "editor.lineHighlightBackground": "#1A2230",
-    "editorLineNumber.foreground": "#3E4C5C"
+    "editorLineNumber.foreground": "#3E4C5C",
+    "editorLineNumber.activeForeground": "#00E5FF",
+    "editorCursor.foreground": "#00E5FF",
+    "editor.selectionBackground": "#1E4C5A",
+    "editorIndentGuide.background": "#1A2230",
+    "editorIndentGuide.activeBackground": "#00E5FF",
+    "editorWhitespace.foreground": "#263244",
+    "editor.findMatchBackground": "#4A3A00",
+    "editorSuggestWidget.background": "#10141C",
+    "editorSuggestWidget.foreground": "#D8E2E8",
+    "editorSuggestWidget.selectedBackground": "#1A2230",
+    "editorSuggestWidget.highlightForeground": "#F7FF00"
   },
   "tokenColors": [
     { "scope": "comment", "settings": { "foreground": "#5A6B78", "fontStyle": "italic" } },
@@ -83,9 +94,20 @@ private fun createEditor(
             .open("syntaxes/$language.tmLanguage.json")
             .bufferedReader(Charsets.UTF_8)
             .use { it.readText() }
-        // .tmLanguage 文件是 plist(XML) 格式，显式声明 ContentType.XML
+        // .tmLanguage 文件是 plist(XML) 格式，显式声明 ContentType.XML。
+        // 必须把真实 scopeName 一起传进去：单参数的 withGrammarSource 会把
+        // scopeName 默认成 "source.string"，与语法文件里的声明不符，
+        // TextMateLanguage.create 会抛 IllegalStateException 并静默降级成
+        // 默认（白底）编辑器 —— 曾因此在深色主题上出现刺眼的白底代码框。
+        val scopeName = when (language) {
+            "python" -> "source.python"
+            "javascript" -> "source.js"
+            else -> "source.$language"
+        }
         val grammarSource = IGrammarSource.fromString(IGrammarSource.ContentType.XML, grammarText)
-        val grammar = DefaultGrammarDefinition.withGrammarSource(grammarSource)
+        val grammar = DefaultGrammarDefinition.withGrammarSource(
+            grammarSource, language, scopeName
+        )
         val textMateLanguage = TextMateLanguage.create(grammar, true)
         editor.setEditorLanguage(textMateLanguage)
 
