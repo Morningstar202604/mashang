@@ -18,13 +18,17 @@ concurrency:
   exceed-action: QUEUE
 
 jobs:
+  # 说明：GitCode 托管 Runner 不预装 Android SDK，且到 dl.google.com 的出网被限制，
+  # 无法在此平台完成 Android 构建。为避免制造「看起来绿但没真构建」的假象，
+  # 本流水线只跑可稳定执行的门禁（引擎/内容/同源/JS 判题）；
+  # Android 构建与签名发布由 GitHub Actions 承担（三仓实跑，见 README）。
   python-tests:
     name: Python engine and content checks
     runs-on: [ubuntu-latest, x64, small]
     steps:
-      - name: 检出代码
+      - name: Checkout
         uses: checkout
-      - name: 设置 Python
+      - name: Setup Python
         uses: setup-python
         with:
           python-version: '3.12'
@@ -32,67 +36,30 @@ jobs:
         uses: setup-node
         with:
           node-version: '20'
-      - name: 版本探针
+      - name: Version probe
         run: |
           set -euo pipefail
-          echo "PATH=$PATH"
-          command -v python || command -v python3
-          python --version || python3 --version
-          command -v node && node --version
-      # setup-python 在不同资源池可能只装 python3（无 python 别名），
-      # 这里显式解析解释器路径，避免 1 秒即失败的 "command not found"。
-      - name: 全量单元测试
+          PY=$(command -v python || command -v python3)
+          "$PY" --version
+          node --version
+      - name: Full unit tests
         run: |
           set -euo pipefail
           PY=$(command -v python || command -v python3)
           "$PY" -m unittest discover -s tests -v
-      - name: 课程内容校验
+      - name: Content validation
         run: |
           set -euo pipefail
           PY=$(command -v python || command -v python3)
           "$PY" tests/validate_content.py
-      - name: web 生成产物可复现
+      - name: Web artifacts reproducible
         run: |
           set -euo pipefail
           PY=$(command -v python || command -v python3)
           "$PY" web/gen_data.py
           git diff --exit-code -- web/data.js web/engine.js
-
-  android-build:
-    name: Android build - assembleDebug and lint
-    runs-on: [ubuntu-latest, x64, medium]
-    needs: [python-tests]
-    steps:
-      - name: 检出代码
-        uses: checkout
-      - name: 设置 JDK
-        uses: setup-jdk
-        with:
-          jdk-version: '17'
-          distribution: 'temurin'
-      - name: 缓存 Gradle
-        uses: cache
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      - name: 赋予 gradlew 执行权限
-        run: chmod +x gradlew
-      # GitCode 托管 Runner 不预装 Android SDK，需自行安装（脚本幂等，
-      # GitHub runner 上已装则直接复用）
-      - name: 准备 Android SDK
-        run: bash scripts/ci/install_android_sdk.sh
-      - name: JVM 单元测试
-        run: ./gradlew :app:testDebugUnitTest --no-daemon
-      - name: Lint
-        run: ./gradlew :app:lintDebug --no-daemon
-      - name: 构建 Debug APK
-        run: ./gradlew :app:assembleDebug --no-daemon
-      - name: Build unsigned Release APK for R8 check
-        run: ./gradlew :app:assembleRelease --no-daemon
-      - name: 构建产物探针
+      - name: APK probe script self-test
         run: |
           set -euo pipefail
           PY=$(command -v python || command -v python3)
-          "$PY" tests/ci_apk_probe.py app/build/outputs/apk/debug/app-debug.apk
+          "$PY" -m unittest tests.test_apk_probe -v
