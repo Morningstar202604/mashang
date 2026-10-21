@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -95,10 +96,15 @@ fun HomeScreen(
                 GlitchText("码上", style = MaterialTheme.typography.headlineMedium, color = NeonCyan)
                 Text("码上 · 编程学院 v${AppConstants.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = TextDim)
             }
+            // 运行时名可能很长（如 "JavaScript Rhino 1.7.15 (ES5/部分 ES6)"），
+            // 不限制宽度会把左侧品牌名与版本号挤成两行，因此限宽 + 单行省略。
             Text(
                 "${runtime.displayName} $pythonVersion 就绪",
                 style = MaterialTheme.typography.labelSmall,
-                color = NeonGreen.copy(alpha = 0.8f)
+                color = NeonGreen.copy(alpha = 0.8f),
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                modifier = Modifier.widthIn(max = 200.dp)
             )
         }
 
