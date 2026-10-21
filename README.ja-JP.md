@@ -259,7 +259,8 @@ DataStore 進捗保存 │ Navigation 単 Activity 5 タブ │ 自作構文ハ�
 - [x] v0.2.1 コンテンツハブ：オンラインコースパック DL（端末クラウド協調）、初回パック「組み込み関数巡礼」
 - [x] v0.3 成果：DSA 増補パック ×2（10 講）、L0 オフラインルールコーチ、間違いノート + 間隔復習、UI 可読性リファイン
 - [ ] v0.3 残り：turtle キャンバス · matplotlib チャート出力 · 実行中変数アニメーション
-- [ ] v0.4 端末側 AI チューター（オンライン LLM）· 多言語 · タブレット対応
+- [x] v0.3.8 多言語ランタイム：`LanguageRuntime` 抽象化 + JavaScript パック（Rhino バックエンド）+ 言語フィルタ/切替 UI · Web 版パリティ（Pyodide 0.29.5）· CI 整備（GitHub Actions + GitCode Actions）
+- [ ] v0.4 端末側 AI チューター（オンライン LLM）· QuickJS バックエンド（ES6+）· タブレット対応
 - [ ] v1.0 アプリストア全チャネル リリース
 
 ## 🤝 コントリビューション
@@ -275,6 +276,8 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 - ✅ 「現状有姿」で提供、いかなる保証もなし。リスクは自己責任。
 - ™ 「Mashang」/「码上」の名称とロゴは登録商標として保持されます。
 
-サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)。
+サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
+
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（ビルド + lint + 署名付きリリース）· GitCode Actions（同一ゲート）· Gitee Go パイプライン定義は配置済み（Gitee 側での手動有効化が必要）。
 
 📄 [プライバシーポリシー](PRIVACY_POLICY.md) · [利用規約](TERMS_OF_SERVICE.md)

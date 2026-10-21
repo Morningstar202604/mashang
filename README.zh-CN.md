@@ -278,7 +278,7 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 - [x] v0.2.1 内容中心：在线课程包下载（端云协同），首发包「内置函数巡礼」
 - [x] v0.3 阶段成果：DSA 增补包 ×2（10 讲）、L0 离线规则教练、错题本 + 间隔复习、UI 可读性整改（特效收敛、正文无衬线放大）
 - [ ] v0.3 剩余计划：turtle 海龟画布 · matplotlib 图表输出 · 执行过程变量动画
-- [x] v0.3.8 多语言架构落地：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI
+- [x] v0.3.8 多语言架构落地：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI · 网页端对齐（Pyodide 0.29.5）· CI 落地 GitHub Actions + GitCode Actions
 - [ ] v0.4 端侧 AI 助教（线上大模型）· QuickJS 后端（ES6+）· 平板适配
 - [ ] v1.0 应用商店全渠道上架
 
@@ -295,6 +295,8 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 - ✅ 按「原样」提供，不附带任何担保，风险自负。
 - ™ "码上" / "Mashang" 名称与标识为保留商标。
 
-第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)。
+第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
+
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang-python/actions)（构建 + lint + 签名发布）· GitCode Actions（同一套门禁）· Gitee Go 流水线文件已就位（需在 Gitee 网页端手动开通）。
 
 📄 [隐私政策](PRIVACY_POLICY.md) · [用户协议](TERMS_OF_SERVICE.md)

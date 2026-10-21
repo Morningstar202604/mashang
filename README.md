@@ -279,7 +279,8 @@ See the [How It Runs](#-how-it-runs-fully-offline) architecture diagram above fo
 - [x] v0.2.1 Content Hub: online course-pack download (client-cloud), first pack "Built-in Function Tour"
 - [x] v0.3 milestone: DSA bonus packs ×2 (10 lessons), L0 offline rule coach, mistake book + spaced repetition, UI readability cleanup
 - [ ] v0.3 remaining: turtle canvas · matplotlib output · runtime variable animation
-- [ ] v0.4 on-device AI tutor (online LLM) · multi-language · tablet layout
+- [x] v0.3.8 multi-language runtime: `LanguageRuntime` abstraction + JavaScript pack (Rhino backend) + language filter/switch UI · web client parity (Pyodide 0.29.5) · CI on GitHub Actions + GitCode Actions
+- [ ] v0.4 on-device AI tutor (online LLM) · QuickJS backend (ES6+) · tablet layout
 - [ ] v1.0 full app-store distribution
 
 ## 🤝 Contributing
@@ -295,6 +296,8 @@ This repository is published under the **MIT License** — free to use, modify, 
 - ✅ No warranty is provided; use at your own risk.
 - ™ "Mashang" / "码上" names and logos remain reserved trademarks.
 
-Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0).
+Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (Apache-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
+
+**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang-python/actions) (build + lint + signed release) · GitCode Actions (same gates) · Gitee Go pipeline file included (activation requires manual enable on Gitee).
 
 📄 [Privacy Policy](PRIVACY_POLICY.md) · [Terms of Service](TERMS_OF_SERVICE.md)
