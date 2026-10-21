@@ -132,15 +132,45 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Release APK（未配置签名时产出未签名包）
+      # 从仓库 Secrets 还原签名密钥库（4 个 secret 缺一不可，缺失则此步失败，
+      # 避免悄悄产出未签名包被当成正式版发布）
+      - name: 还原 release 签名密钥库
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${KEYSTORE_B64:?secrets.ANDROID_KEYSTORE_BASE64 未配置}"
+          : "${KEYSTORE_PASSWORD:?secrets.ANDROID_KEYSTORE_PASSWORD 未配置}"
+          : "${KEY_ALIAS:?secrets.ANDROID_KEY_ALIAS 未配置}"
+          : "${KEY_PASSWORD:?secrets.ANDROID_KEY_PASSWORD 未配置}"
+          mkdir -p "$RUNNER_TEMP/keystore"
+          echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/keystore/release.keystore"
+          {
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/keystore/release.keystore"
+            echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "KEY_ALIAS=$KEY_ALIAS"
+            echo "KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Build signed Release APK
         run: ./gradlew :app:assembleRelease --no-daemon
+
+      - name: 校验签名（apksigner）
+        run: |
+          set -euo pipefail
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort | tail -1)
+          "$APKSIGNER" verify --verbose "$APK"
 
       - name: 归档并重命名为 mashang-<tag>.apk
         run: |
           set -euo pipefail
           src=$(ls app/build/outputs/apk/release/*.apk | head -1)
           cp "$src" "mashang-${GITHUB_REF_NAME}.apk"
-          python tests/ci_apk_probe.py "mashang-${GITHUB_REF_NAME}.apk"
+          python tests/ci_apk_probe.py "mashang-${GITHUB_REF_NAME}.apk" --require-release
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3

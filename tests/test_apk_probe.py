@@ -50,6 +50,7 @@ def _write_apk(path, layout, *, with_assets=True):
                 z.writestr(f"assets/{name}", json.dumps([]))
             z.writestr("assets/syntaxes/javascript.tmLanguage.json", "{}")
         z.writestr("AndroidManifest.xml", "com.pyneon.academy".encode("utf-16-le"))
+        z.writestr("classes.dex", b"dex-035")
         for i in range(520):
             z.writestr(f"res/dummy_{i}.txt", "x")
 
@@ -69,6 +70,18 @@ class ApkProbeTests(unittest.TestCase):
                 result = self._run(apk)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 self.assertIn("ALL APK PROBES PASSED", result.stdout)
+
+    def test_require_release_rejects_unsigned(self):
+        """--require-release 必须拒绝未签名包（防止未签名包被当正式版发布）。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            apk = Path(tmp) / "app.apk"
+            _write_apk(apk, "py")  # 无 META-INF 签名
+            result = subprocess.run(
+                [sys.executable, str(PROBE), str(apk), "--require-release"],
+                capture_output=True, text=True, encoding="utf-8",
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("未签名", result.stdout)
 
     def test_fails_when_lessons_missing(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -34,9 +34,12 @@ def code_names(code, acc):
 
 
 def main():
-    if len(sys.argv) != 2:
-        fail("用法：python tests/ci_apk_probe.py <apk路径>")
-    apk = sys.argv[1]
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    if len(args) != 1:
+        fail("用法：python tests/ci_apk_probe.py <apk路径> [--require-release]")
+    apk = args[0]
+    require_release = "--require-release" in flags
     try:
         z = zipfile.ZipFile(apk)
     except Exception as exc:  # noqa: BLE001
@@ -104,6 +107,23 @@ def main():
     if "com.pyneon.academy" not in manifest:
         fail("AndroidManifest 中未找到包名 com.pyneon.academy")
     print("[PASS] AndroidManifest 包名就位")
+
+    if require_release:
+        # release 特有：R8 处理后仍有 dex，且 APK 带 v2+ 签名块。
+        # minSdk 24 且 AGP 8 默认只出 v2 签名（不写 META-INF/*.RSA），
+        # 因此用 APK Signing Block 魔数判断，而不是找 JAR 签名文件。
+        dexes = [n for n in names if n.endswith(".dex")]
+        if not dexes:
+            fail("release APK 无 dex")
+        with open(apk, "rb") as fh:
+            fh.seek(0, 2)
+            size = fh.tell()
+            fh.seek(max(0, size - 1_048_576))
+            tail = fh.read()
+        if b"APK Sig Block 42" not in tail:
+            fail("release APK 未签名（缺 APK Signing Block，v2/v3 签名）")
+        print(f"[PASS] release 产物含 dex({len(dexes)}) 且带 APK 签名块")
+
     print("ALL APK PROBES PASSED")
 
 
