@@ -13,7 +13,7 @@
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/%E8%AF%BE%E7%A8%8B-38%E8%AE%B2-F7FF00.svg)](#-课程体系38-讲--五幕)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E4%B8%8B%E8%BD%BD%E9%A1%B5-FF2D78.svg)](https://aa84776376caeb1e2.app.workbuddy.host)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E4%B8%8B%E8%BD%BD%E9%A1%B5-FF2D78.svg)](https://badhope.github.io/mashang-python/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
@@ -33,7 +33,7 @@
   <sub>▶ 点击海报观看 · <a href="demo/promo-video.mp4">直接打开视频</a>（MP4，1080×1920，约 50 秒，原创合成配乐）</sub>
 </p>
 
-> 🌐 [在线下载页](https://aa84776376caeb1e2.app.workbuddy.host) —— 手机打开即看截图 / 视频 / 二维码下载，无需登录任何账号
+> 🌐 [在线下载页](https://badhope.github.io/mashang-python/) —— 手机打开即看截图 / 视频 / 二维码下载，无需登录任何账号
 
 ## ⚡ 核心亮点 · 30 秒速览
 
@@ -182,7 +182,7 @@ flowchart LR
 
 ## 📥 下载安装
 
-> ⚡ **最快路径** → 🌐 [在线下载页](https://aa84776376caeb1e2.app.workbuddy.host)：扫码或点链接，含宣传片、截图与安装引导。
+> ⚡ **最快路径** → 🌐 [在线下载页](https://badhope.github.io/mashang-python/)：扫码或点链接，含宣传片、截图与安装引导。
 > 🛰 **GitHub Pages 镜像** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/)（同款页面 + 内核可视化图解）
 > 📦 **仓库（并列同步，任选其一）** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
 

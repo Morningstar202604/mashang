@@ -13,7 +13,7 @@
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/%E8%AC%9B%E5%BA%A7-30%E8%AC%9B-F7FF00.svg)](#-カリキュラム30-講--4-幕)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9A%E3%83%BC%E3%82%B8-FF2D78.svg)](https://aa84776376caeb1e2.app.workbuddy.host)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9A%E3%83%BC%E3%82%B8-FF2D78.svg)](https://badhope.github.io/mashang-python/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
@@ -33,7 +33,7 @@
   <sub>▶ ポスターをクリックで再生 · <a href="demo/promo-video.mp4">動画を直接開く</a>（MP4, 1080×1920, 約 50 秒, オリジナルシンセサウンドトラック）</sub>
 </p>
 
-> 🌐 [オンラインダウンロードページ](https://aa84776376caeb1e2.app.workbuddy.host) — スマホで開けばスクリーンショット・動画・QR コードからのダウンロード。アカウント不要
+> 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang-python/) — スマホで開けばスクリーンショット・動画・QR コードからのダウンロード。アカウント不要
 
 ## ⚡ TL;DR · 30 秒で分かる
 
@@ -182,7 +182,7 @@ flowchart LR
 
 ## 📥 ダウンロードとインストール
 
-> ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://aa84776376caeb1e2.app.workbuddy.host)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
+> ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang-python/)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
 > 🛰 **GitHub Pages ミラー** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/)（同ページ + アーキテクチャ図解付き）
 > 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
 

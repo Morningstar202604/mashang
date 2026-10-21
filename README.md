@@ -12,7 +12,7 @@ A cyberpunk-styled coding learning terminal that fits in your pocket: embedded r
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
 [![Lessons](https://img.shields.io/badge/Curriculum-38_Lessons-F7FF00.svg)](#curriculum-38-lessons--5-acts)
-[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-Download_Page-FF2D78.svg)](https://aa84776376caeb1e2.app.workbuddy.host)
+[![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-Download_Page-FF2D78.svg)](https://badhope.github.io/mashang-python/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
@@ -34,7 +34,7 @@ A cyberpunk-styled coding learning terminal that fits in your pocket: embedded r
   <sub>▶ Click the poster to watch · <a href="demo/promo-video.mp4">open video directly</a> (MP4, 1080×1920, ~50s, original synth soundtrack)</sub>
 </p>
 
-> 🌐 [Online download page](https://aa84776376caeb1e2.app.workbuddy.host) — screenshots, videos and QR download on your phone, no account needed
+> 🌐 [Online download page](https://badhope.github.io/mashang-python/) — screenshots, videos and QR download on your phone, no account needed
 
 ## ⚡ TL;DR · 30 Seconds
 
@@ -183,7 +183,7 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 
 ## 📥 Download & Install
 
-> ⚡ **Fastest path** → 🌐 [Online download page](https://aa84776376caeb1e2.app.workbuddy.host): scan or tap, with trailer, screenshots and install guide.
+> ⚡ **Fastest path** → 🌐 [Online download page](https://badhope.github.io/mashang-python/): scan or tap, with trailer, screenshots and install guide.
 > 🛰 **GitHub Pages mirror** → [x33834.github.io/mashang-python](https://x33834.github.io/mashang-python/) (same page + architecture visuals)
 > 📦 **Repos (parallel sync, pick any)** → [GitHub/x33834](https://github.com/x33834/mashang-python) · [GitCode](https://gitcode.com/badhope/mashang-python) · [Gitee](https://gitee.com/badhope/mashang-python)
 
