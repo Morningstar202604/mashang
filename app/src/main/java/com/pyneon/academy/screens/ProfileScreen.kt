@@ -404,7 +404,7 @@ fun ProfileScreen(
         AlertDialog(
             onDismissRequest = { confirmReset = false },
             title = { Text("确认格式化？", color = NeonMagenta, style = MaterialTheme.typography.titleLarge) },
-            text = { Text("将清除全部 XP、课程进度与成就，此操作不可撤销。", color = TextMid) },
+            text = { Text("将清除全部 XP、课程进度、成就、错题本与复习卡，此操作不可撤销。", color = TextMid) },
             confirmButton = {
                 TextButton(onClick = {
                     scope.launch { ProgressStore.reset(context) }

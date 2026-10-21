@@ -206,6 +206,9 @@ table.neon td { padding: 8px 10px; border: 1px solid rgba(143,163,191,0.2); colo
 .arena-card .at { color: var(--textHi); font-size: 17px; font-weight: 700; }
 .arena-card .ad { color: var(--neonMagenta); font-size: 12px; }
 .arena-card .ab { color: var(--textDim); font-size: 13px; margin-top: 8px; }
+.arena-card.app-only { border-color: rgba(143,163,191,0.3); cursor: default; }
+.arena-card.app-only:hover { box-shadow: none; transform: none; }
+.arena-card .badge { display: inline-block; margin-left: 8px; padding: 1px 8px; font-size: 11px; font-weight: 700; color: var(--neonYellow); border: 1px solid rgba(247,255,0,0.45); vertical-align: middle; }
 .brief { color: var(--textMid); border-left: 3px solid var(--neonCyan); padding: 8px 14px; margin: 12px 0; background: rgba(0,229,255,0.05); }
 .hint { color: var(--neonYellow); font-size: 13px; margin-top: 8px; }
 

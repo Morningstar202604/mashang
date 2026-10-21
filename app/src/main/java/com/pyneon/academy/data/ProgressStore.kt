@@ -10,9 +10,11 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 private val Context.progressDataStore: DataStore<Preferences> by preferencesDataStore(name = "pyneon_progress")
 
@@ -240,6 +242,12 @@ object ProgressStore {
     }
 
     suspend fun reset(context: Context) {
-        context.applicationContext.progressDataStore.edit { it.clear() }
+        val app = context.applicationContext
+        app.progressDataStore.edit { it.clear() }
+        withContext(Dispatchers.IO) {
+            listOf("pyneon_mistakes.json", "pyneon_review_cards.json").forEach { name ->
+                runCatching { java.io.File(app.filesDir, name).delete() }
+            }
+        }
     }
 }

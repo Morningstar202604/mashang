@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="码上 · 码上" width="830"/>
+<img src="docs/banner.png" alt="码上 · Mashang" width="830"/>
 
 **码上，就是马上。Learn Python instantly — on your phone, fully offline.**
 
@@ -12,7 +12,7 @@
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
-[![Lessons](https://img.shields.io/badge/%E8%AF%BE%E7%A8%8B-30%E8%AE%B2-F7FF00.svg)](#-课程体系30-讲--四幕)
+[![Lessons](https://img.shields.io/badge/%E8%AF%BE%E7%A8%8B-38%E8%AE%B2-F7FF00.svg)](#-课程体系38-讲--五幕)
 [![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E4%B8%8B%E8%BD%BD%E9%A1%B5-FF2D78.svg)](https://aa84776376caeb1e2.app.workbuddy.host)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)

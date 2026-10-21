@@ -47,6 +47,34 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(result["error"]["type"], "Timeout")
         self.assertLess(elapsed, 6.0)
 
+    def test_no_thread_fallback_runs_inline(self):
+        """Pyodide 无 SharedArrayBuffer 时 Thread.start() 抛 RuntimeError，
+        引擎须降级为主线程执行（settrace 看门狗仍生效）。"""
+
+        class _NoThread:
+            def __init__(self, *a, **k):
+                pass
+
+            def start(self):
+                raise RuntimeError("can't start new thread")
+
+            def join(self, timeout=None):
+                pass
+
+        original = runner.threading.Thread
+        runner.threading.Thread = _NoThread
+        try:
+            result = runner.run_code("value = 6 * 7\nprint(value)")
+            self.assertTrue(result["ok"])
+            self.assertIn("42", result["stdout"])
+            self.assertFalse(result["worker_still_alive"])
+            timed = runner.run_code("while True:\n    pass", timeout=0.5)
+            self.assertEqual(timed["error"]["type"], "Timeout")
+            checked = runner.check_exercise("x = 1", ["assert x == 1"])
+            self.assertTrue(checked["passed"])
+        finally:
+            runner.threading.Thread = original
+
     def test_stdin_consumed_in_order(self):
         code = "first = input()\nsecond = input()\nprint(first + second)"
         result = runner.run_code(code, stdin_lines=["neon", "city"])

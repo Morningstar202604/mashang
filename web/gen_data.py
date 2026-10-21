@@ -26,7 +26,7 @@ WEB.mkdir(exist_ok=True)
 
 # ---- 课程 ----
 lessons = []
-for fname in ("lessons_basic.json", "lessons_mid.json", "lessons_adv.json"):
+for fname in ("lessons_basic.json", "lessons_mid.json", "lessons_adv.json", "lessons_pro.json"):
     p = ASSETS / fname
     if p.exists():
         lessons += json.loads(p.read_text(encoding="utf-8"))
@@ -66,15 +66,18 @@ def repl_reset_json(payload_json=""):
     "window.LESSONS = " + json.dumps(lessons, ensure_ascii=False) + ";\n"
     "window.CHALLENGES = " + json.dumps(challenges, ensure_ascii=False) + ";\n",
     encoding="utf-8",
+    newline="\n",
 )
 
 (WEB / "engine.js").write_text(
     "window.ENGINE_PY = " + json.dumps(runner_src, ensure_ascii=False) + ";\n"
     "window.REPL_HELPER_PY = " + json.dumps(repl_helper, ensure_ascii=False) + ";\n",
     encoding="utf-8",
+    newline="\n",
 )
 
+js_challenges = sum(1 for c in challenges if c.get("lang", "python") == "javascript")
 print("OK generated web/data.js + web/engine.js")
 print("  lessons      :", len(lessons))
-print("  challenges   :", len(challenges))
+print("  challenges   :", len(challenges), f"(python {len(challenges) - js_challenges} + javascript {js_challenges}，JS 挑战仅 App 内可运行)")
 print("  engine.py len:", len(runner_src), "chars")

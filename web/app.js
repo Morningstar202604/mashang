@@ -1,5 +1,5 @@
 /* 码上 · 电脑端 (web/app.js)
- * 纯前端 + Pyodide(浏览器内 CPython 3.13)。
+ * 纯前端 + Pyodide 0.29.5（浏览器内 CPython 3.13）。
  * 引擎直接复用手机端 runner.py：run_code_json / check_exercise_json / repl_exec_json。
  * 因此判题与变量快照逻辑和手机端完全一致。
  */
@@ -25,6 +25,26 @@
   }
 
   // ---------- Pyodide 引擎 ----------
+  // 0.29.5 = CPython 3.13.2，与手机端 Chaquopy 内核同为 3.13。主源在 index.html
+  // 预加载；脚本或内核任一环节失败时按 PYODIDE_SOURCES 依次换主机重试——
+  // 浏览器对装载失败的 ES 模块按 URL 缓存，必须换 URL 才能重新加载。
+  const PYODIDE_VERSION = "0.29.5";
+  const PYODIDE_SOURCES = [
+    { js: "https://cdn.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/pyodide.js", index: "https://cdn.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/" },
+    { js: "https://fastly.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/pyodide.js", index: "https://fastly.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/" },
+    { js: "https://unpkg.com/pyodide@" + PYODIDE_VERSION + "/pyodide.js", index: "https://unpkg.com/pyodide@" + PYODIDE_VERSION + "/" }
+  ];
+
+  function loadScript(url) {
+    return new Promise(function (resolve, reject) {
+      const s = document.createElement("script");
+      s.src = url;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { s.remove(); reject(new Error("脚本加载失败：" + url)); };
+      document.head.appendChild(s);
+    });
+  }
+
   function setStatus(on) {
     const d = document.getElementById("py-status");
     const t = document.getElementById("py-text");
@@ -32,12 +52,30 @@
     t.textContent = on ? "引擎在线 · CPython 3.13" : "引擎离线";
   }
 
+  async function bootPyodide(line) {
+    let lastErr = null;
+    for (let i = 0; i < PYODIDE_SOURCES.length; i++) {
+      const src = PYODIDE_SOURCES[i];
+      try {
+        if (typeof loadPyodide !== "function") {
+          line.textContent = "> 加载 Pyodide 运行器（源 " + (i + 1) + "/" + PYODIDE_SOURCES.length + "）…";
+          await loadScript(src.js);
+        }
+        if (typeof loadPyodide !== "function") throw new Error("loadPyodide 未就绪");
+        line.textContent = "> 下载 CPython 内核（约 12 MB，源 " + (i + 1) + "/" + PYODIDE_SOURCES.length + "）…";
+        return await loadPyodide({ indexURL: src.index });
+      } catch (err) {
+        lastErr = err;
+        console.warn("Pyodide 源失败，尝试下一个：", src.index, err);
+      }
+    }
+    throw lastErr || new Error("全部 CDN 源均不可用");
+  }
+
   async function boot() {
     const line = document.getElementById("boot-line");
     try {
-      if (typeof loadPyodide !== "function") throw new Error("Pyodide 脚本未加载（无法访问 CDN）");
-      line.textContent = "> 正在下载 CPython 内核 (Pyodide)…";
-      pyodide = await loadPyodide();
+      pyodide = await bootPyodide(line);
       line.textContent = "> 注入执行引擎 (runner.py)…";
       if (window.ENGINE_PY) {
         // 优先用内联引擎（gen_data.py 已把 runner.py 全文塞进 window.ENGINE_PY），
@@ -61,7 +99,8 @@
     } catch (err) {
       line.innerHTML =
         "> 引擎载入失败：" + esc(err.message) +
-        "<br>请确认能访问 cdn.jsdelivr.net，或用本地静态服务（python -m http.server）打开本页后重试。";
+        "<br>已依次尝试 jsdelivr / fastly.jsdelivr / unpkg 三个源。请检查网络后重试，" +
+        "或用本地静态服务（python -m http.server）打开本页。";
       console.error(err);
     }
   }
@@ -436,17 +475,39 @@
     print("// 神经接口已连接 · CPython 3.13 在线 · 输入代码回车执行", "dim");
   }
 
+  // 角斗场分流：网页端只有 Python 引擎，javascript 挑战展示为「App 内体验」卡片
+  function splitChallenges(list) {
+    const python = [];
+    const appOnly = [];
+    (list || []).forEach(function (ch) {
+      // 只有 python 能进网页判题；javascript（及未来语言）仅 App 内可运行
+      if ((ch.lang || "python") === "python") python.push(ch);
+      else appOnly.push(ch);
+    });
+    return { python: python, appOnly: appOnly };
+  }
+
   function renderArena() {
     view.innerHTML = "";
+    const split = splitChallenges(challenges);
     view.appendChild(el("div", "section-title", "角斗场 · 编程挑战（" + challenges.length + "）"));
     const grid = el("div", "arena-list");
-    challenges.forEach(function (ch) {
+    split.python.forEach(function (ch) {
       const c = el("div", "arena-card");
       c.innerHTML =
         '<div class="at">' + esc(ch.title) + "</div>" +
         '<div class="ad">难度 ' + esc(ch.difficulty || "") + " · +" + (ch.xp || 0) + " XP</div>" +
         '<div class="ab">' + esc(ch.brief) + "</div>";
       c.onclick = function () { renderChallenge(ch); };
+      grid.appendChild(c);
+    });
+    split.appOnly.forEach(function (ch) {
+      const c = el("div", "arena-card app-only");
+      c.innerHTML =
+        '<div class="at">' + esc(ch.title) + '<span class="badge">App 内体验</span></div>' +
+        '<div class="ad">' + esc(ch.lang || "javascript") + " · 难度 " + esc(ch.difficulty || "") + " · +" + (ch.xp || 0) + " XP</div>" +
+        '<div class="ab">' + esc(ch.brief) + "</div>" +
+        '<div class="ab dim">JavaScript 挑战需要手机端多语言运行时，请在「码上」App 内打开。</div>';
       grid.appendChild(c);
     });
     view.appendChild(grid);
@@ -457,6 +518,13 @@
     const back = el("button", "back-btn", "‹ 返回角斗场");
     back.onclick = renderArena;
     view.appendChild(back);
+    if ((ch.lang || "python") !== "python") {
+      const notice = el("div", "card");
+      notice.appendChild(el("div", "blk-heading", esc(ch.title) + " · " + esc(ch.lang)));
+      notice.appendChild(el("div", "brief", "此挑战为 " + esc(ch.lang) + " 语言，网页端仅有 Python 引擎，请在「码上」App 内体验。"));
+      view.appendChild(notice);
+      return;
+    }
     const c = el("div", "card");
     c.appendChild(el("div", "blk-heading", esc(ch.title) + " · 难度 " + esc(ch.difficulty || "")));
     c.appendChild(el("div", "brief", esc(ch.brief)));

@@ -114,8 +114,14 @@ def _run_protected(code, namespace, stdin_lines, timeout):
 
     started_at = time.perf_counter()
     worker = threading.Thread(target=target, daemon=True, name="pyneon-sandbox")
-    worker.start()
-    worker.join(timeout + 1.5)
+    try:
+        worker.start()
+        worker.join(timeout + 1.5)
+    except RuntimeError:
+        # 无多线程能力的环境（Pyodide 未启用 SharedArrayBuffer 时 start() 抛
+        # RuntimeError: can't start new thread）：降级为主线程直接执行。
+        # settrace 看门狗仍能中断纯 Python 死循环；C 阻塞调用失去超时保护。
+        target()
     duration_ms = int((time.perf_counter() - started_at) * 1000)
 
     # E1: 说明与兜底——settrace 看门狗只覆盖纯 Python 字节码；若用户代码卡在
@@ -250,8 +256,11 @@ def check_exercise(code, tests, stdin_lines=None):
                 st["finished"] = True
 
         worker = threading.Thread(target=test_target, daemon=True)
-        worker.start()
-        worker.join(EXERCISE_TEST_TIMEOUT + 1.0)
+        try:
+            worker.start()
+            worker.join(EXERCISE_TEST_TIMEOUT + 1.0)
+        except RuntimeError:
+            test_target()  # 无多线程环境降级为主线程执行（同 run_code）
         if not test_state["finished"]:
             test_state["error"] = "测试执行超时"
         # G3b: collect whatever the test printed (both for passing and failing

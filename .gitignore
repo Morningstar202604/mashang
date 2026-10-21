@@ -37,3 +37,6 @@ note.txt
 opencode.json
 
 .aqg/
+
+# 插件本地状态（hook 计数 / 契约归属，含会话 id）
+.v2c/

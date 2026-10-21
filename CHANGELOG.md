@@ -43,7 +43,16 @@
 - 分享标签 `#PY_NOW` 随旧品牌退役，改为 `#码上 #Mashang #编程学习`；`docs/logo.svg` 同步更名为 码上 / MASHANG
 - js02 判题期望值勘误：damage(1, 100) = Math.floor(√1) − Math.floor(100/2) = **−49**（原写成 −50），由 node 实跑测试捕获
 
+### Web / 桌面端（S9 切片）
+- **web 三落后补齐**：`gen_data.py` 收录 `lessons_pro.json`（38 讲全量，原仅前 30 讲）；`engine.js` 引擎随 `runner.py` 重生成；Pyodide 由 0.26.4 升到 **0.29.5（CPython 3.13.2，与手机端 Chaquopy 3.13 对齐）**，`index.html` 主源改 jsdelivr，`app.js` 增 fastly.jsdelivr / unpkg 两级回退
+- **修复 web 判题全线不可用**：Pyodide 未启用 SharedArrayBuffer 时 `threading.Thread.start()` 抛 `RuntimeError: can't start new thread`，导致任何运行/判题都报错。`runner.py` 两处 `Thread` 启动加 except 降级为主线程执行（settrace 看门狗仍能掐断纯 Python 死循环；C 阻塞调用失去超时保护，与既有 E1 限制一致）。真浏览器验证：运行示例/判题通过/判题失败/ZeroDivisionError/REPL/`while True` 超时全部符合预期
+- 角斗场按 `challenge.lang` 分流：2 道 JS 挑战渲染为带「App 内体验」徽标的不可运行卡片，不进 Python 判题路径；补 `.app-only` / `.badge` 样式
+- **品牌残留清零**：`web/index.html`（标题/字标/启动 ASCII 艺术，原「PY//NOW」艺术字含一处 U+FFFD 乱码）、`docs/index.html`（标题/导航/英雄区/页脚「码上 · 码上」「码上PYTHON」）、`README.zh-CN.md`（alt 文本）统一为「码上 / Mashang」；docs 课程幕次与统计（30→38 讲、8 挑战）同步
+- **重置补齐**：`ProgressStore.reset` 除清 DataStore 外同步删除 `pyneon_mistakes.json` / `pyneon_review_cards.json`（BackupUtil 同源文件名），档案页弹窗文案加「错题本与复习卡」
+
 ### Tests
+- 新增 tests/test_web_sync.py：7 组契约测试锁定 web 与 App 内容/引擎同源（R1-R7，含逐字节比对 ENGINE_PY 与 runner.py）
+- 新增 tests/test_engine_desktop.py::test_no_thread_fallback_runs_inline：模拟无多线程环境，验证降级路径下常规执行 / 死循环超时 / 判题三项行为
 - 新增 tests/test_update_catalog.py：4 项回归测试锁定 catalog 剥离语义与包哈希一致性（先红后绿）；packs 计数改为动态断言（随语言包扩充不再失效）
 - 新增 tests/test_multilang_content.py：11 项契约测试 —— lang 字段合法性、id 跨语言唯一性、规划中语言不得出现在课程里、LanguageRuntime 接口完整性、**UI 层不得直接引用 PyBridge**（该项在重构前为红，重构后转绿）
 - 新增 tests/test_js_lessons.py：9 项行为测试，用 node（vm 模块 + 超时）真实执行 js-basics 包的每讲代码块与判题（Rhino 无法在本沙箱编译，但课程内容是语言本身，可在任何 ES 引擎验证）
