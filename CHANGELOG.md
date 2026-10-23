@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] - 品牌重塑与多语言架构
+## [0.3.8] - 2026-10-23
 
 ### Verified
 - **APK 构建通过**（2026-10-20）：本机搭 Android SDK（cmdline-tools + platform-tools + platforms;android-36 + build-tools;36.0.0，许可已接受）后 `./gradlew assembleDebug` BUILD SUCCESSFUL（7m29s，48 tasks）；产物 38.3 MB（arm64-v8a），aapt 元信息验证：applicationId com.pyneon.academy / versionName 0.3.7 / 应用名「码上」/ minSdk 24 / targetSdk 35；dex 内确认 JsBridge / LanguageRuntime / LanguageRegistry / LangChipsKt / Rhino 均已编入；assets 内 JS 语法与挑战数据完整。品牌重塑与多语言全部代码经真实 Kotlin 编译验证
@@ -70,6 +70,12 @@
 - 角斗场按 `challenge.lang` 分流：2 道 JS 挑战渲染为带「App 内体验」徽标的不可运行卡片，不进 Python 判题路径；补 `.app-only` / `.badge` 样式
 - **品牌残留清零**：`web/index.html`（标题/字标/启动 ASCII 艺术，原「PY//NOW」艺术字含一处 U+FFFD 乱码）、`docs/index.html`（标题/导航/英雄区/页脚「码上 · 码上」「码上PYTHON」）、`README.zh-CN.md`（alt 文本）统一为「码上 / Mashang」；docs 课程幕次与统计（30→38 讲、8 挑战）同步
 - **重置补齐**：`ProgressStore.reset` 除清 DataStore 外同步删除 `pyneon_mistakes.json` / `pyneon_review_cards.json`（BackupUtil 同源文件名），档案页弹窗文案加「错题本与复习卡」
+
+### Release 0.3.8 收尾（2026-10-23）
+- **主仓迁移**：GitHub `badhope/NetTools-Hub`（9 star）重命名为 `badhope/mashang` 并整仓替换为本项目（保留 star/watch 计数），原 0 star 的 `badhope/mashang` 删除；GitCode / Gitee / X33834 / Morningstar202604 四镜像同步到同一 commit
+- **界面巡检 12 项修复**（详见下方 Fixed）：GlitchText 重影、连击台徽章裁切与不可滚动、IME 自动大写、Rhino 错误双前缀、挑战按钮图标、重复品牌副标题、进度文案口径、次级页顶部返回、挑战数硬编码、版权表述
+- **素材重制**：`demo/app/` 10 张实机截图 + `demo/usage-video.mp4`（100s / 720×1600 / 30fps）真实操作录屏
+- **APK**：versionCode 13→14，versionName 0.3.7→0.3.8；release 签名包 23MB（R8 + 资源压缩），apksigner v2 验签通过（CN=Mashang）
 
 ### Tests
 - 新增 tests/test_web_sync.py：7 组契约测试锁定 web 与 App 内容/引擎同源（R1-R7，含逐字节比对 ENGINE_PY 与 runner.py）
