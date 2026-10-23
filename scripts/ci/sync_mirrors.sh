@@ -18,10 +18,22 @@ echo "sync mirrors for $SHA"
 # git 需要一个"待推送"的 ref：CI checkout 是 detached HEAD，先建本地分支
 git checkout -q -B ci-sync "$SHA"
 
+# 单个镜像推送失败（Gitee 偶发 connection reset）不应让另外三个镜像也停在旧 commit：
+# 每个镜像独立重试 3 次（指数退避），任一最终失败则整体失败（不吞错）。
 push_one() {
-  local label="$1" url="$2"
+  local label="$1" url="$2" attempt=1
   echo "==> $label"
-  git -c credential.helper= push --force "$url" ci-sync:refs/heads/main
+  while [ "$attempt" -le 3 ]; do
+    if git -c credential.helper= push --force "$url" ci-sync:refs/heads/main; then
+      echo "    $label OK (attempt $attempt)"
+      return 0
+    fi
+    echo "    $label failed (attempt $attempt/3)，$((attempt * 10))s 后重试"
+    sleep $((attempt * 10))
+    attempt=$((attempt + 1))
+  done
+  echo "    $label FAILED after 3 attempts" >&2
+  return 1
 }
 
 push_one "GitCode"            "https://oauth2:${MIRROR_GITCODE_TOKEN}@gitcode.com/badhope/mashang.git"

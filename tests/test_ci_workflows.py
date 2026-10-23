@@ -99,6 +99,17 @@ class GitHubGateTests(unittest.TestCase):
         self.assertIn("--require-release", self.text)
         self.assertIn("environment: release", self.text)
 
+
+    def test_mirror_sync_retries_each_mirror_independently(self):
+        """Gitee 在 CI runner 上偶发 connection reset（2026-10-23 实测），
+        单个镜像失败不得让另外三个镜像停在旧 commit，也不得吞错。"""
+        text = (ROOT / "scripts/ci/sync_mirrors.sh").read_text(encoding="utf-8")
+        self.assertIn("while [ \"$attempt\" -le 3 ]", text, "缺少重试循环")
+        self.assertIn("return 1", text, "重试耗尽必须失败，不能吞错")
+        self.assertIn("set -euo pipefail", text)
+        for label in ("GitCode", "Gitee", "GitHub X33834", "GitHub Morningstar"):
+            self.assertIn(label, text, f"缺少镜像 {label}")
+
     def test_signing_secrets_are_not_written_to_github_env(self):
         """签名口令只能存在于所需 step 的 env 内。
 
