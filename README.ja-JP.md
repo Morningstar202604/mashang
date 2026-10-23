@@ -197,7 +197,7 @@ flowchart LR
 
 > Android 7.0+（minSdk 24）、arm64-v8a（64bit ARM 実機向け）。Release ビルドは R8 難読化済み。
 
-- ⭐ おすすめ：[Releases](https://gitcode.com/badhope/mashang/releases)（GitCode）から最新の `mashang-*.apk` をダウンロード
+- ⭐ おすすめ：[GitHub Releases](https://github.com/badhope/mashang/releases) からダウンロード（直リンク：[mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk)）
 - 自分でビルド：
 
 ```bash

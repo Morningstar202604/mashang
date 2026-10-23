@@ -198,7 +198,7 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 
 > Android 7.0+ (minSdk 24), arm64-v8a (this build targets 64-bit ARM devices). Release builds are R8-minified.
 
-- ⭐ Recommended: download the latest `mashang-*.apk` from [Releases](https://gitcode.com/badhope/mashang/releases) (GitCode)
+- ⭐ Recommended: download the latest `mashang-*.apk` from [GitHub Releases](https://github.com/badhope/mashang/releases) (direct APK: [mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk))
 - Build yourself:
 
 ```bash

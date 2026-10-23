@@ -197,7 +197,7 @@ flowchart LR
 
 > Android 7.0+（minSdk 24），arm64-v8a 单架构（面向 64 位 ARM 真机）；release 构建已开启 R8 混淆压缩。
 
-- ⭐ 推荐：从 [Releases](https://gitcode.com/badhope/mashang/releases)（GitCode）下载最新的 `mashang-*.apk`
+- ⭐ 推荐：从 [GitHub Releases](https://github.com/badhope/mashang/releases) 下载（直链：[mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk)）
 - 开发者自行构建：
 
 ```bash
