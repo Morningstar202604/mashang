@@ -1,17 +1,23 @@
 package com.pyneon.academy.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +46,17 @@ fun AboutScreen(onBack: () -> Unit) {
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        GlitchText("关于 // ABOUT", style = MaterialTheme.typography.headlineSmall, color = NeonMagenta)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.AutoMirrored.Outlined.ArrowBack,
+                contentDescription = "返回",
+                tint = TextMid,
+                modifier = Modifier.size(28.dp).clickable { onBack() }
+            )
+            Box(Modifier.padding(start = 12.dp)) {
+                GlitchText("关于 // ABOUT", style = MaterialTheme.typography.headlineSmall, color = NeonMagenta)
+            }
+        }
         Text(
             "${AppConstants.APP_NAME} · ${AppConstants.APP_NAME_CN}\n版本 v${AppConstants.VERSION_NAME}",
             style = MaterialTheme.typography.bodyMedium,
@@ -60,7 +76,7 @@ fun AboutScreen(onBack: () -> Unit) {
             "· CPython 3.13 — 设备端嵌入的 Python 运行时（首发语言包）\n" +
                 "· Chaquopy — Android 上的 Python 集成\n" +
                 "· Jetpack Compose / AndroidX — UI 与架构\n" +
-                "· 课程设计与霓虹派视觉系统由开发团队原创",
+                "· 课程设计与码上视觉系统由开发团队原创",
             style = MaterialTheme.typography.bodySmall,
             color = TextMid
         )

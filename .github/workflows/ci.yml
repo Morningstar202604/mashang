@@ -83,6 +83,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # APK 探针要解析 Chaquopy 产出的 3.13 pyc，必须用同主次版本的 Python
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
       - name: Cache Gradle
         uses: actions/cache@v6
         with:
@@ -171,6 +177,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
       - name: Cache Gradle
         uses: actions/cache@v6
         with:
@@ -189,6 +200,8 @@ jobs:
       - name: 校验 tag 与 versionName/versionCode
         run: python scripts/ci/check_release_version.py
 
+      # 凭据只在本步 env 内可见，不写入 $GITHUB_ENV —— 否则后续所有 step
+      # （含第三方 action）都能读到签名口令。
       - name: 还原 release 签名密钥库
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -203,14 +216,13 @@ jobs:
           : "${KEY_PASSWORD:?secrets.ANDROID_KEY_PASSWORD 未配置}"
           mkdir -p "$RUNNER_TEMP/keystore"
           echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/keystore/release.keystore"
-          {
-            echo "KEYSTORE_PATH=$RUNNER_TEMP/keystore/release.keystore"
-            echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
-            echo "KEY_ALIAS=$KEY_ALIAS"
-            echo "KEY_PASSWORD=$KEY_PASSWORD"
-          } >> "$GITHUB_ENV"
 
       - name: Build signed Release APK
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/keystore/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: ./gradlew :app:assembleRelease --no-daemon
 
       - name: 校验签名（apksigner + 证书主体）

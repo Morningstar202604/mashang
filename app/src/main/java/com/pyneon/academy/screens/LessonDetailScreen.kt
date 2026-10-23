@@ -154,7 +154,7 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
             Column(Modifier.padding(horizontal = 20.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        "已通关 $doneCount / ${allLessons.size} 讲",
+                        "课程进度 $doneCount / ${allLessons.size} 讲",
                         style = MaterialTheme.typography.labelSmall,
                         color = TextDim,
                         modifier = Modifier.weight(1f)

@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.WifiOff
@@ -69,7 +69,7 @@ fun WelcomeTutorial(onComplete: () -> Unit) {
         WelcomePage(
             title = "多语言课程体系",
             description = "多门语言由浅入深\n从基础语法到生产实战\n每讲配实战判题\n完成后独立写出可用工具",
-            icon = Icons.Outlined.CalendarToday,
+            icon = Icons.Outlined.Code,
             accentColor = NeonMagenta
         )
     )
@@ -96,7 +96,7 @@ fun WelcomeTutorial(onComplete: () -> Unit) {
                 color = NeonCyan
             )
             Text(
-                "码上 · 编程学院",
+                "编程学院",
                 style = MaterialTheme.typography.bodyMedium,
                 color = NeonMagenta,
                 modifier = Modifier.padding(top = 8.dp)

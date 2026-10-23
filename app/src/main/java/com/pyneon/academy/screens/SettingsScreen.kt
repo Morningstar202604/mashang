@@ -77,7 +77,7 @@ fun SettingsScreen(onBack: () -> Unit) {
             )
             Column(Modifier.padding(start = 12.dp)) {
                 GlitchText("系统设置", style = MaterialTheme.typography.headlineSmall, color = NeonGreen)
-                Text("学习记录 · 关于 · 联系方式", style = MaterialTheme.typography.labelSmall, color = TextDim)
+                Text("数据 · 更新 · 关于 · 联系方式", style = MaterialTheme.typography.labelSmall, color = TextDim)
             }
         }
 

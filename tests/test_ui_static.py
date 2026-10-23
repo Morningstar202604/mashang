@@ -73,11 +73,16 @@ class CopyCountTests(unittest.TestCase):
             "首页课程卡片讲数与 assets 不一致",
         )
 
-    def test_help_challenge_count_matches_assets(self):
+    def test_help_challenge_count_is_dynamic(self):
+        """帮助中心的挑战数必须从 challenges.json 读取，不能硬编码。
+
+        2026-10-22 界面巡检：原实现写死「8 个实战闯关」，一旦挑战增删就会与
+        角斗场列表脱节。改为断言「文案引用 totalChallenges」+「总数来自 assets」。
+        """
         text = _read(JAVA, "screens", "HelpScreen.kt")
-        m = re.search(r"「挑战」页有 (\d+) 个实战闯关", text)
-        self.assertIsNotNone(m, "帮助中心缺少挑战数文案")
-        self.assertEqual(int(m.group(1)), _challenge_count(), "帮助中心挑战数与 challenges.json 不一致")
+        self.assertIn("challenges.json", text, "挑战数必须从 assets 读取")
+        self.assertIn("$totalChallenges", text, "挑战数文案必须引用动态变量")
+        self.assertGreaterEqual(_challenge_count(), 1, "challenges.json 至少应有 1 道题")
 
 
 class NavigationRouteTests(unittest.TestCase):
@@ -117,6 +122,55 @@ class KeyboardInsetTests(unittest.TestCase):
             r"if \(showBar && !WindowInsets\.isImeVisible\)",
             "键盘弹出时必须隐藏底部导航，否则遮挡/挤压输入区",
         )
+
+
+class VisualRegressionTests(unittest.TestCase):
+    """2026-10-22 模拟器逐屏点验发现、且可静态锁定的界面缺陷。"""
+
+    def test_glitch_text_does_not_double_draw_permanently(self):
+        """GlitchText 若常驻偏移绘制两份彩色副本，中文标题会糊成重影。
+
+        必须用「只在短脉冲内绘制副本」的实现（amount 门控）。
+        """
+        text = _read(JAVA, "ui", "effects", "Effects.kt")
+        seg = text[text.index("fun GlitchText"):][:1400]
+        self.assertIn("amount", seg, "GlitchText 需要抖动强度门控")
+        self.assertRegex(seg, r"if \(amount > [0-9.]+f?\)", "副本必须在静止期不绘制")
+
+    def test_streak_screen_is_scrollable(self):
+        """连击台 6 个徽章 + 主卡在 1080×2400 上超出屏幕，必须可滚动。"""
+        text = _read(JAVA, "screens", "StreakScreen.kt")
+        self.assertIn("verticalScroll(rememberScrollState())", text)
+
+    def test_badge_grid_is_responsive(self):
+        """徽章格固定 4 列会在窄屏溢出、固定宽度会在宽屏留白。"""
+        text = _read(JAVA, "screens", "StreakScreen.kt")
+        self.assertIn("BoxWithConstraints", text)
+        self.assertIn("maxWidth", text)
+
+    def test_code_inputs_disable_ime_autocapitalization(self):
+        """代码大小写敏感：终端/填空/自定义颜色输入必须关掉 IME 自动大写。"""
+        for rel in (("screens", "TerminalScreen.kt"), ("screens", "LessonBlockCards.kt"),
+                    ("screens", "ProfileScreen.kt")):
+            text = _read(JAVA, *rel)
+            self.assertIn("KeyboardType.Password", text, f"{rel[-1]} 未关闭自动大写")
+            self.assertIn("autoCorrect = false", text, f"{rel[-1]} 未关闭自动纠错")
+
+    def test_js_error_message_has_no_duplicated_type(self):
+        """Rhino 的 EcmaError.message 自带「ReferenceError: …」，不能直接拼 type。"""
+        text = _read(JAVA, "js", "JsBridge.kt")
+        self.assertIn('removePrefix("${e.type}: ")', text)
+
+    def test_secondary_pages_have_top_back(self):
+        """帮助/隐私/关于原先只能滚到底部点返回。"""
+        for name in ("HelpScreen.kt", "PrivacyPolicyScreen.kt", "AboutScreen.kt"):
+            text = _read(JAVA, "screens", name)
+            self.assertIn("ArrowBack", text, f"{name} 缺少顶部返回")
+
+    def test_home_challenge_button_uses_fire_icon(self):
+        text = _read(JAVA, "screens", "HomeScreen.kt")
+        seg = text[text.index('label = "挑战"'):][:300]
+        self.assertIn("LocalFireDepartment", seg, "挑战按钮不应使用人像图标")
 
 
 if __name__ == "__main__":

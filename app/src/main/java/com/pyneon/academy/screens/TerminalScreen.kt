@@ -270,7 +270,18 @@ fun TerminalScreen() {
                     textStyle = com.pyneon.academy.ui.theme.MonoCode.copy(color = TextHi),
                     cursorBrush = Brush.verticalGradient(listOf(NeonGreen, NeonGreen)),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    // 关闭 IME 自动首字母大写与自动纠错：代码是大小写敏感的，
+                    // 实测输入 len(nums) 被 IME 改成 Len(nums) → NameError。
+                    // inputType 必须是 TYPE_TEXT_FLAG_NO_SUGGESTIONS(0x80000) +
+                    // VISIBLE_PASSWORD(0x80) 组合：只设 KeyboardType.Ascii 时
+                    // Compose 仍发 TYPE_CLASS_TEXT|CAP_SENTENCES，Gboard 会把
+                    // 句首字母自动大写（实测 len( 被改成 Len( → NameError）。
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                        capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.None,
+                        autoCorrect = false
+                    ),
                     keyboardActions = KeyboardActions(onDone = { submit(input.text) }),
                     modifier = Modifier
                         .weight(1f)

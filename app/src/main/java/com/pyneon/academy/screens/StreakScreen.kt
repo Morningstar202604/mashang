@@ -2,8 +2,11 @@ package com.pyneon.academy.screens
 
 import android.os.Bundle
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -88,10 +92,12 @@ fun StreakScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = LocalNeonTokens.current.surfaceDark
+        color = LocalNeonTokens.current.bg0
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top
         ) {
             TopAppBar(
@@ -103,7 +109,7 @@ fun StreakScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = LocalNeonTokens.current.surfaceDark,
+                    containerColor = LocalNeonTokens.current.bg0,
                     titleContentColor = LocalNeonTokens.current.primary
                 )
             )
@@ -171,7 +177,16 @@ fun StreakScreen(
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text("已解锁勋章", style = AppTypography.titleMedium, color = LocalNeonTokens.current.textDim)
                     androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(12.dp))
-                    BadgeGrid(badges = streak.badgesUnlocked.split(",").filter { it.isNotBlank() })
+                    val unlocked = streak.badgesUnlocked.split(",").filter { it.isNotBlank() }
+                    if (unlocked.isEmpty()) {
+                        Text(
+                            "还没有解锁的勋章。保持学习，连续打卡、深夜编码、完成练习都会点亮新的勋章。",
+                            style = AppTypography.bodySmall,
+                            color = LocalNeonTokens.current.textDim
+                        )
+                    } else {
+                        BadgeGrid(badges = unlocked)
+                    }
                 }
             }
 
@@ -209,42 +224,54 @@ fun StatItem(label: String, value: String, icon: ImageVector) {
 
 @Composable
 fun BadgeGrid(badges: List<String>, locked: Boolean = false) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(horizontal = 4.dp)
-    ) {
-        items(badges) { badgeId ->
-            BADGE_DEFS.firstOrNull { it.id == badgeId }?.let { def ->
-                BadgeItem(def, locked)
+    // 徽章是 100dp 方形格子：原来用 LazyColumn 会变成一列竖排 100dp 卡片，
+    // 在大屏上留下大片空白（实测 1080×2400 只占左上角）。改成自适应行网格。
+    val defs = badges.mapNotNull { id -> BADGE_DEFS.firstOrNull { it.id == id } }
+    if (defs.isEmpty()) return
+    // 列数按实际可用宽度算（每格最小 92dp），并让每格等宽填满一行：
+    // 写死列数 + 固定宽度会在窄屏溢出被裁、在宽屏右侧留一大片空白。
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val columns = ((maxWidth + 8.dp) / 100.dp).toInt().coerceAtLeast(1)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            defs.chunked(columns).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    row.forEach { def -> BadgeItem(def, locked, Modifier.weight(1f)) }
+                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
+                }
             }
         }
     }
 }
 
 @Composable
-fun BadgeItem(def: BadgeDef, locked: Boolean) {
+fun BadgeItem(def: BadgeDef, locked: Boolean, modifier: Modifier = Modifier) {
     val (icon, color) = if (locked) {
-        Icons.Default.Lock to LocalNeonTokens.current.textDim.copy(alpha = 0.4f)
+        Icons.Default.Lock to LocalNeonTokens.current.textDim.copy(alpha = 0.75f)
     } else {
         def.icon to def.color
     }
+    // 注意：NeonCard 内部自带 16dp padding，这里不能再叠加，否则 118dp 高度里
+    // 只剩不到 24dp 留给文字，徽章名会被裁掉半截（实测「初登基地」只剩上半）。
     NeonCard(
-        modifier = Modifier
-            .width(100.dp)
-            .height(100.dp)
-            .padding(8.dp),
+        modifier = modifier.height(118.dp),
         elevation = if (locked) 0.dp else 4.dp,
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(12.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(icon, contentDescription = "", tint = color, modifier = Modifier.size(32.dp))
-            androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(8.dp))
-            Text(def.name, style = AppTypography.bodySmall, color = color, textAlign = TextAlign.Center, maxLines = 2)
+            Icon(icon, contentDescription = "", tint = color, modifier = Modifier.size(30.dp))
+            androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                def.name,
+                style = AppTypography.bodySmall,
+                color = color,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            )
         }
     }
 }

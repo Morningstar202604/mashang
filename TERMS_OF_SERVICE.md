@@ -1,9 +1,6 @@
 # 用户协议（Terms of Service）
 
-> ⚠️ **可选文件**：华为应用市场不强制要求单独的《用户协议》，本文件仅作补充，用于降低纠纷风险。
-> 开发者信息已填写：**bigbad** / **bigbad338@outlook.com**；管辖地默认「中华人民共和国大陆地区」，可按需修改。
-
-**生效日期：** 2024-09-01  
+**生效日期：** 2026-10-22  
 **应用名称：** 码上（Mashang）  
 **开发者/运营者：** bigbad
 
@@ -56,4 +53,4 @@
 
 ---
 
-> 本协议为中文正本。English version available at the project repository.
+

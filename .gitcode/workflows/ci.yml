@@ -31,7 +31,7 @@ jobs:
       - name: Setup Python
         uses: setup-python
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - name: Setup Node.js for JS grading
         uses: setup-node
         with:

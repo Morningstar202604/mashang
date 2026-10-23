@@ -14,7 +14,6 @@ python -m http.server 8765
 ```
 
 然后在浏览器打开 **http://127.0.0.1:8765/** 即可。
-（当前本机已起好一个，端口 8765，直接开浏览器就能看。）
 
 ### 方式 B：直接双击
 双击 `index.html` 也能开（课程/引擎已内联进 `data.js`/`engine.js`，无需 fetch）。
@@ -36,3 +35,4 @@ python -m http.server 8765
 ## 已知边界
 - **首次加载需联网**取 Pyodide（约 12MB WASM）。要做成完全离线，可把 Pyodide 本地 vendoring 进 `vendor/` 并改 `index.html` 的 `indexURL`（后续项）。
 - 浏览器内 Python 与手机端同内核、同引擎，行为一致；但本页不含手机端的导航/成就/连击等 Android 专属 UI。
+- **超时保护受限**：浏览器无 SharedArrayBuffer 时引擎降级为主线程执行，纯 Python 死循环仍由 settrace 看门狗掐断（约 8s），但 C 阻塞调用（如 `time.sleep`）无法中断，需刷新页面恢复。

@@ -92,24 +92,30 @@ fun GlitchText(
     val phase by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2400, easing = LinearEasing)),
+        animationSpec = infiniteRepeatable(tween(4200, easing = LinearEasing)),
         label = "phase"
     )
-    val jitterX = (sin(phase * Math.PI * 4) * 1.6).toFloat().dp
-    val jitterY = (cos(phase * Math.PI * 7) * 1.1).toFloat().dp
+    // 只在每个周期的最后 5% 抖一下，其余时间完全静止：常量错位会让中文标题看起来
+    // 像重影糊成一团（实测 0.75 alpha + 2dp 偏移，笔画密集处几乎不可读）。
+    val burst = ((phase - 0.95f) / 0.05f).coerceIn(0f, 1f)
+    val amount = if (phase < 0.95f) 0f else sin(burst * Math.PI).toFloat()
+    val jitterX = (sin(phase * Math.PI * 40) * 2.0f * amount).dp
+    val jitterY = (cos(phase * Math.PI * 53) * 1.2f * amount).dp
     Box(modifier) {
-        Text(
-            text = text,
-            style = style,
-            color = NeonMagenta.copy(alpha = 0.75f),
-            modifier = Modifier.offset(x = jitterX + 1.dp, y = jitterY)
-        )
-        Text(
-            text = text,
-            style = style,
-            color = NeonCyan.copy(alpha = 0.75f),
-            modifier = Modifier.offset(x = -jitterX - 1.dp, y = -jitterY)
-        )
+        if (amount > 0.02f) {
+            Text(
+                text = text,
+                style = style,
+                color = NeonMagenta.copy(alpha = 0.5f * amount),
+                modifier = Modifier.offset(x = jitterX, y = jitterY)
+            )
+            Text(
+                text = text,
+                style = style,
+                color = NeonCyan.copy(alpha = 0.5f * amount),
+                modifier = Modifier.offset(x = -jitterX, y = -jitterY)
+            )
+        }
         Text(text = text, style = style, color = color)
     }
 }

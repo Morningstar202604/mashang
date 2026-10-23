@@ -4,7 +4,7 @@
 
 **码上，就是马上。Learn Python instantly — on your phone, fully offline.**
 
-一台装进口袋的赛博朋克 Python 学习终端：内嵌真·CPython 3.13 解释器，
+一台装进口袋的赛博朋克编程学习终端：内嵌真实语言运行时（CPython 3.13 首发，语言包扩展更多），
 38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
@@ -92,7 +92,7 @@ flowchart LR
 pie title 内容规模（讲 / 项）
     "38 讲内置课程" : 38
     "17 讲扩展包" : 17
-    "6 大角斗场挑战" : 6
+    "8 大角斗场挑战" : 8
     "55 道 assert 判题" : 55
 ```
 
@@ -109,26 +109,34 @@ flowchart LR
 
 ## 📱 真机截图
 
+全部来自真机模拟器（API 35，1080×2400）的实装构建，非设计稿。
+
 | 指挥台 Home | 数据流 Lessons | 课程详情 Lesson |
 |:--:|:--:|:--:|
-| ![首页](demo/home.png) | ![课程列表](demo/lessons.png) | ![课程详情](demo/lesson_detail.png) |
+| ![首页](demo/app/home.png) | ![课程列表](demo/app/lessons.png) | ![课程详情](demo/app/lesson_detail.png) |
 
-| 主题切换 Themes | 神经档案 Profile | 角斗场 Arena |
+| 练习编辑器 Editor | 解题步骤与输出 Steps | 角斗场 Arena |
 |:--:|:--:|:--:|
-| ![主题切换](demo/theme_selector.png) | ![档案](demo/profile.png) | ![角斗场](demo/arena.png) |
+| ![练习](demo/app/lesson_exercise.png) | ![步骤](demo/app/lesson_steps.png) | ![角斗场](demo/app/arena.png) |
 
-| 欢迎引导 Welcome |
+| 终端 REPL（实跑） | JS 终端（Rhino） | 神经档案 Profile |
+|:--:|:--:|:--:|
+| ![终端](demo/app/terminal.png) | ![JS 终端](demo/app/terminal_js.png) | ![档案](demo/app/profile.png) |
+
+| 挑战详情 Challenge |
 |:--:|
-| ![欢迎](demo/welcome1.png) |
+| ![挑战](demo/app/challenge.png) |
 
-## 🎥 使用演示 · 57 秒上手实拍
+> 以上全部是实装包的真实输出：`sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`，`sum(nums)/len(nums)` → `3.875`；JS 标签运行在 Rhino 1.7.15（`10 21`）；练习编辑器在填答案前真实报出 `NameError`；霓虹计数器为 150 XP 规格。
+
+## 🎥 使用演示 · 100 秒上手实拍
 
 <p align="center">
-  <video src="demo/usage-video.mp4" poster="demo/shots/home.png" controls width="380"></video>
+  <video src="demo/usage-video.mp4" poster="demo/app/home.png" controls width="380"></video>
   <br/>
-  <a href="demo/usage-video.mp4"><img src="demo/shots/lesson-console.png" width="300" alt="▶ 观看使用演示"/></a>
+  <a href="demo/usage-video.mp4"><img src="demo/app/lesson_exercise.png" width="300" alt="▶ 观看使用演示"/></a>
   <br/>
-  <sub>▶ 点击画面观看 · <a href="demo/usage-video.mp4">直接打开视频</a>（MP4，1080×1920，约 57 秒）</sub>
+  <sub>▶ 点击画面观看 · <a href="demo/usage-video.mp4">直接打开视频</a>（MP4，720×1600，约 100 秒，实机录屏）</sub>
 </p>
 
 ## 👤 适合谁
@@ -171,7 +179,7 @@ flowchart LR
 
 - 🏆 **六段位成长** —— 脚本小子 → 数据幽灵 → 网络浪人 → 义体黑客 → 街头传奇 → 系统架构师
 - ⚡ **每日任务 / XP / 连击** —— 每天有目标，每次运行有反馈
-- 📦 **内容中心** —— 课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶（10 讲），一键下载即学
+- 📦 **内容中心** —— 课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶 + 语言包·JavaScript 启程（共 17 讲），一键下载即学
 - 🎓 **毕业证书** —— 通关全部课程解锁霓虹认证页，截图即分享
 
 ### 🧩 工程品质
@@ -278,7 +286,7 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 - [x] v0.2.1 内容中心：在线课程包下载（端云协同），首发包「内置函数巡礼」
 - [x] v0.3 阶段成果：DSA 增补包 ×2（10 讲）、L0 离线规则教练、错题本 + 间隔复习、UI 可读性整改（特效收敛、正文无衬线放大）
 - [ ] v0.3 剩余计划：turtle 海龟画布 · matplotlib 图表输出 · 执行过程变量动画
-- [x] v0.3.8 多语言架构落地：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI · 网页端对齐（Pyodide 0.29.5）· CI 落地 GitHub Actions + GitCode Actions
+- [x] 多语言架构已在 main 落地（尚未发版，下一版本号待定）：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI · 网页端对齐（Pyodide 0.29.5）· CI 落地 GitHub Actions + GitCode Actions
 - [ ] v0.4 端侧 AI 助教（线上大模型）· QuickJS 后端（ES6+）· 平板适配
 - [ ] v1.0 应用商店全渠道上架
 

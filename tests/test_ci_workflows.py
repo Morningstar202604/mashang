@@ -99,6 +99,15 @@ class GitHubGateTests(unittest.TestCase):
         self.assertIn("--require-release", self.text)
         self.assertIn("environment: release", self.text)
 
+    def test_signing_secrets_are_not_written_to_github_env(self):
+        """签名口令只能存在于所需 step 的 env 内。
+
+        2026-10-22 审计发现：原实现把 KEYSTORE_PASSWORD / KEY_PASSWORD 写进
+        $GITHUB_ENV，后续所有 step（含第三方 action）都能读到。
+        """
+        self.assertNotIn(">> \"$GITHUB_ENV\"", self.text, "签名凭据不得写入 $GITHUB_ENV")
+        self.assertIn("KEYSTORE_PATH: ${{ runner.temp }}/keystore/release.keystore", self.text)
+
     def test_mirror_sync_is_primary_repo_only(self):
         self.assertIn("github.repository == 'badhope/mashang'", self.text)
 

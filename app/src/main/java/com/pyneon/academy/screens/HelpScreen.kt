@@ -1,17 +1,25 @@
 package com.pyneon.academy.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -28,7 +36,15 @@ import com.pyneon.academy.utils.ShareHelper
 @Composable
 fun HelpScreen(onBack: () -> Unit) {
     val context = LocalContext.current
-    val totalLessons = LessonRepository.lessons(context).size
+    // 毕业口径 = 内置 Python 主线（与首页/档案页一致）；下载的语言包不计入
+    val totalLessons = LessonRepository.lessonsByLang(context, "python").size
+    val totalChallenges = remember {
+        runCatching {
+            context.assets.open("challenges.json").bufferedReader(Charsets.UTF_8).use { r ->
+                org.json.JSONArray(r.readText()).length()
+            }
+        }.getOrDefault(0)
+    }
     Column(
         Modifier
             .fillMaxSize()
@@ -38,14 +54,27 @@ fun HelpScreen(onBack: () -> Unit) {
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("帮助中心", style = MaterialTheme.typography.headlineSmall, color = NeonYellow)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.AutoMirrored.Outlined.ArrowBack,
+                contentDescription = "返回",
+                tint = TextMid,
+                modifier = Modifier.size(28.dp).clickable { onBack() }
+            )
+            Text(
+                "帮助中心",
+                style = MaterialTheme.typography.headlineSmall,
+                color = NeonYellow,
+                modifier = Modifier.padding(start = 12.dp)
+            )
+        }
 
         // ===== 快速上手 =====
         HelpSection("快速上手（60 秒）")
         FaqItem("1 · 从哪开始？", "进入「课程」页，从第一幕第一课开始。课程按章节解锁，完成一课才能解锁下一课；通关后按「下一课」直达。")
         FaqItem("2 · 怎么练习？", "每课末尾有「实战演练」：在代码编辑器写代码，点「运行判题」自动批改。答对得 XP 并解锁下一课；答错进错题本。")
         FaqItem("3 · 代码在哪随手试？", "底部「终端」页是 REPL 终端，像语言的交互式命令行一样随时输入、立即运行，适合验证小片段。")
-        FaqItem("4 · 学完能拿什么？", "通关全部 $totalLessons 讲课程后，「我的」页解锁毕业证书；「挑战」页有 8 个实战闯关（Python 6 + JavaScript 2）拿额外 XP。")
+        FaqItem("4 · 学完能拿什么？", "通关全部 $totalLessons 讲课程后，「我的」页解锁毕业证书；「挑战」页有 $totalChallenges 个实战闯关拿额外 XP。")
 
         // ===== 常用功能 =====
         HelpSection("常用功能")

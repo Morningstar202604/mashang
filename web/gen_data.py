@@ -10,7 +10,7 @@
 设计说明(最小实现 + 复用):
 - 课程 JSON 来自 app/src/main/assets/lessons_*.json + challenges.json，结构与手机端完全一致。
 - Python 引擎直接复用 runner.py；网页端通过 Pyodide(浏览器内 CPython)调用同一份
-  run_code_json / check_exercise_json，因此判题与变量快照逻辑与手机端 100% 一致。
+  run_code_json / check_exercise_json，因此判题与变量快照逻辑复用手机端同一份实现（web/README.md 有差异说明）。
 - REPL 需要"有状态"命名空间，runner.py 本身每次 run_code 都用新 namespace，
   故在 engine.js 末尾追加一段 REPL_HELPER_PY（仅网页端用），复用 runner 的
   _run_protected / _snapshot，不修改 runner.py 原件。
@@ -18,7 +18,7 @@
 import json
 import pathlib
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent  # D:\00000\app
+ROOT = pathlib.Path(__file__).resolve().parent.parent  # 仓库根目录（本文件位于 web/ 下）
 ASSETS = ROOT / "app" / "src" / "main" / "assets"
 PY = ROOT / "app" / "src" / "main" / "python"
 WEB = ROOT / "web"

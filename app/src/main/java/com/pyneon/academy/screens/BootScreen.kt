@@ -94,7 +94,7 @@ fun BootScreen(onDone: () -> Unit) {
         Column(Modifier.align(Alignment.Center)) {
             GlitchText("码上", style = MaterialTheme.typography.headlineLarge, color = NeonCyan)
             Text(
-                "码上 · 编程学院",
+                "编程学院",
                 style = MaterialTheme.typography.labelMedium,
                 color = NeonMagenta,
                 modifier = Modifier.padding(top = 6.dp)

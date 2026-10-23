@@ -8,7 +8,7 @@
 
 ### Changed
 - 品牌重塑：「码上Python / PY//NOW」→「码上 / Mashang」，去除单一语言命名；应用内全部文案中立化（终端/开屏/帮助/证书/主题等）
-- 课程数量口径统一：内置 38 讲 + 内容中心扩展包 11 讲（README 原「30 讲」与实际数据不符，一并修正）
+- 课程数量口径统一：内置 38 讲 + 内容中心扩展包 17 讲 = 55 讲（README 原「30 讲」与实际数据不符，一并修正；扩展包 = 彩蛋课 1 + DSA 基础 5 + DSA 进阶 5 + JavaScript 启程 6）
 - 许可表述统一为 MIT（AboutScreen / SettingsScreen 原「非商业许可」文案与 LICENSE 矛盾，已修正）
 - **多语言运行时抽象**（新增 `lang/LanguageRuntime.kt`）：
   - `LanguageRuntime` 接口统一 run / check / repl / warmup / ensureStarted 五组能力，跨语言通信沿用既有 JSON 契约，新增语言只需另起一个"说同一种 JSON"的后端
@@ -38,6 +38,20 @@
 - 软著登记材料：`tools/softcopy_source.py` 自动生成符合受理要求的源程序册（前 30 页 + 后 30 页、每页 50 行、页眉标注软件名+版本号、仅收录原创文件）；`docs/softcopy/软件说明书.md`（10 章设计说明书）；`docs/softcopy/申请指南.md`（流程、申请表填写模板、前置事项、补正自查）
 
 ### Fixed
+- **界面巡检修复（2026-10-22 模拟器全屏点验）**：
+  - `GlitchText` 常量错位把中文标题渲染成「重影」糊字（首页/课程/挑战/我的/设置等 20 处），改为每 4.2s 只抖动 5% 的短脉冲，其余时间完全静止
+  - 连击台整页不可滚动 + 徽章 `LazyColumn` 竖排 100dp 卡片 + `NeonCard` 内建 16dp padding 叠加，导致徽章名被裁掉半截；改为按宽度自适应网格（每格等分）+ 整页可滚动 + 空状态文案
+  - 连击台/错题本 `TopAppBar` 用 `surfaceDark` 在状态栏下形成突兀浅色横带；统一 `bg0` 与全站扁平面板一致
+  - 终端输入框未关 IME 自动大写：输入 `len(nums)` 被改成 `Len(nums)` → NameError；改用 `KeyboardType.Password`（inputType 不含 CAP_SENTENCES）并关 autoCorrect（填空/自定义颜色输入同步）
+  - Rhino 报错信息重复前缀 `ReferenceError: ReferenceError: ...`（`EcmaError.message` 自带类型名）
+  - 首页「挑战」按钮误用 `Icons.Outlined.Person`（人像）；改 `LocalFireDepartment`
+  - 首页/开屏/引导页副标题「码上 · 编程学院」与主标题「码上」重复品牌；改「编程学院」
+  - 课程详情进度文案「已通关 0 / 38 讲」在未通关时语义错误；改「课程进度 0 / 38 讲」
+  - 帮助中心/隐私政策/关于页只能在滚到底部点「返回」；补顶部返回箭头
+  - 帮助中心挑战数写死 8 → 改为读 `challenges.json` 动态统计；课程数改用 Python 主线口径
+  - 关于页「© 2026 bigbad，保留一切权利」与 MIT 冲突；改「© 2026 bigbad · MIT License」；技术致谢里的旧品牌「霓虹派」改「码上」
+  - 个人页成就徽章描述过长换行挤压；统一 maxLines + ellipsis
+- **移除 APK 自更新死链路**：`AndroidManifest.xml` 的 FileProvider 与 `res/xml/file_paths.xml` 在 v0.3.7 质检时已删掉调用方（`AppUpdater.kt`），却留下 provider 声明与缓存路径；已一并删除，应用内「暂未内置自动更新」的表述与代码一致
 - catalog.json 中 dsa-basics / dsa-mastery 的 sha256 与文件实际哈希不符（commit 5004113 改内容未同步目录），应用内下载必被完整性校验拦截；已重算并重签目录自签名
 - HelpScreen 内置课程数由硬编码 38 改为动态统计；WelcomeTutorial 的「38 讲」等表述随品牌中立化
 - 分享标签 `#PY_NOW` 随旧品牌退役，改为 `#码上 #Mashang #编程学习`；`docs/logo.svg` 同步更名为 码上 / MASHANG

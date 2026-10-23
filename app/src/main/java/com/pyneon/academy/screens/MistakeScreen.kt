@@ -92,7 +92,7 @@ fun MistakeScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = LocalNeonTokens.current.surfaceDark
+        color = LocalNeonTokens.current.bg0
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -114,7 +114,7 @@ fun MistakeScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = LocalNeonTokens.current.surfaceDark,
+                    containerColor = LocalNeonTokens.current.bg0,
                     titleContentColor = LocalNeonTokens.current.primary
                 )
             )

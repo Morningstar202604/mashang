@@ -1,0 +1,8 @@
+[run]
+core = sysmon
+source = app/src/main/python
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:

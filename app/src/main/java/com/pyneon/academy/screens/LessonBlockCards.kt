@@ -308,6 +308,12 @@ internal fun FillCard(fill: Block.Fill, lang: String = "python") {
             onValueChange = { input = it },
             singleLine = true,
             label = { Text("输入 ____ 处缺失的内容", style = MaterialTheme.typography.labelMedium) },
+            // 代码大小写敏感：IME 自动大写会把 True 变成 true 的相反结果
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.None,
+                autoCorrect = false
+            ),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(8.dp))

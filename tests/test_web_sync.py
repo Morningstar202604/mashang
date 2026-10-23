@@ -1,6 +1,6 @@
 """Web 端与 App 内置内容的同源一致性回归网（S9 切片）。
 
-锁定七条契约（见 .aqg/code-construction/mashang-web-sync-cleanup.md）：
+锁定八条契约（R6b 为品牌图指纹；见 .aqg/code-construction/mashang-web-sync-cleanup.md）：
   R1 data.js 课程/挑战 == app/src/main/assets（含 lessons_pro）
   R2 engine.js 内嵌 ENGINE_PY == app/src/main/python/runner.py（逐字节）
   R3 内置课程结构字段：chapter int / chapterName 非空 / exercise.xp > 0
@@ -15,6 +15,9 @@ import re
 import unittest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+# 2026-10-22 重建的品牌图指纹（banner 2560x800 / poster 1080x1920）
+BANNER_SHA = "d590a55ac42db2fdb3275b2a055b2d0b4ed3449cefb036f92be1c4744e33fbbd"
+POSTER_SHA = "3423b7d76e7244bbda2291a82e3cf323b77f5e13580a205cd4670cc08f9efd1e"
 ASSETS = os.path.join(ROOT, "app", "src", "main", "assets")
 WEB = os.path.join(ROOT, "web")
 
@@ -178,6 +181,20 @@ class TestBrandResidue(unittest.TestCase):
                     hits.append(f"{os.path.relpath(path, ROOT)}: {p}")
         self.assertEqual(hits, [], f"品牌残留: {hits}")
         self.assertIn("码上", _read(os.path.join(WEB, "index.html")), "web 首页应含新品牌名")
+
+    def test_banner_and_poster_are_not_old_brand_assets(self):
+        """R6b: 头图/海报曾整张是「码上Python / PY//NOW / 30 讲」，
+        只做文本扫描抓不到，用尺寸+文件更新时间无法判断，改为锁定
+        这两个文件必须来自重建脚本标注的产物版本（sha256 白名单）。"""
+        import hashlib
+
+        expected = {
+            os.path.join(ROOT, "docs", "banner.png"): BANNER_SHA,
+            os.path.join(ROOT, "demo", "promo-poster.jpg"): POSTER_SHA,
+        }
+        for path, want in expected.items():
+            digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+            self.assertEqual(digest, want, f"{path} 不是重建后的品牌图（可能被旧图覆盖）")
 
 
 class TestResetClearsAll(unittest.TestCase):

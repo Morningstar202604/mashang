@@ -40,3 +40,11 @@ opencode.json
 
 # 插件本地状态（hook 计数 / 契约归属，含会话 id）
 .v2c/
+
+# 覆盖率产物（本地审计用，不入库）
+.coverage
+coverage.xml
+htmlcov/
+
+# README 截图的原始素材（成品在 demo/app/，原始连拍不入库）
+demo/shots2/

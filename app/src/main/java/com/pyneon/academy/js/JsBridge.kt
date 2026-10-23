@@ -6,6 +6,7 @@ import com.pyneon.academy.lang.LanguageRuntime
 import com.pyneon.academy.lang.RunResult
 import com.pyneon.academy.lang.VarInfo
 import org.mozilla.javascript.BaseFunction
+import org.mozilla.javascript.ClassShutter
 import org.mozilla.javascript.Context as JsContext
 import org.mozilla.javascript.ContextFactory
 import org.mozilla.javascript.EcmaError
@@ -71,6 +72,12 @@ object JsBridge : LanguageRuntime {
             cx.optimizationLevel = -1
             cx.languageVersion = JsContext.VERSION_ES6
             cx.instructionObserverThreshold = 2000
+            // 安全边界：Rhino 默认把 Java 包/类暴露给脚本（Packages.java.lang.Runtime
+            // 可直接 exec 系统命令）。这是用户可输入任意代码的 REPL/判题环境，
+            // 必须用 ClassShutter 全部拒绝 —— 只允许纯 JS 标准库。
+            // 实测 PoC（修复前）：Packages.java.lang.Runtime.getRuntime()
+            //   .exec(["id"]).waitFor() 返回 0，说明系统命令真的被执行了。
+            cx.setClassShutter(ClassShutter { _ -> false })
             return cx
         }
 
@@ -378,7 +385,10 @@ object JsBridge : LanguageRuntime {
 
     private fun formatError(t: Throwable, timeoutSec: Double): String {
         val e = mapError(t, timeoutSec)
-        val head = "${e.type}: ${e.message}"
+        // Rhino 的 EcmaError.message 自带「ReferenceError: xxx is not defined.」前缀，
+        // 直接拼 type 会出现「ReferenceError: ReferenceError: ...」（模拟器终端实测）。
+        val msg = e.message.removePrefix("${e.type}: ").removePrefix("${e.type}:")
+        val head = if (msg.isBlank()) e.type else "${e.type}: $msg"
         val trace = e.traceback.lines().take(4).joinToString("\n")
         return if (trace.isEmpty()) "$head\n" else "$head\n$trace\n"
     }

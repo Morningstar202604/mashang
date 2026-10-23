@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="码上 · Mashang" width="830"/>
+<img src="docs/banner.png" alt="マシャン · Mashang" width="830"/>
 
 **今すぐコードを書こう。オフラインのまま、どこでも Python をマスター。**
 
-ポケットに入るサイバーパンク風 Python 学習ターミナル：本物の **CPython 3.13** インタープリターを内蔵、
+ポケットに入るサイバーパンク風プログラミング学習ターミナル：本物の **CPython 3.13** インタープリターを内蔵（言語パックで拡張）、
 38 講のステップアップ講座、assert 自動採点、変数可視化、6 段階ランク成長システム。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
@@ -49,7 +49,7 @@
 
 ## 📊 なぜオフラインで動くのか
 
-他アプリはクラウド実行ゆえに回線が切れると停止。**码上** は完全な CPython 3.13 を APK に直接埋め込み、すべてのコードをスマホ本体上で実行します。その実行チェーンがこれ：
+他アプリはクラウド実行ゆえに回線が切れると停止。**マシャン** は完全な CPython 3.13 を APK に直接埋め込み、すべてのコードをスマホ本体上で実行します。その実行チェーンがこれ：
 
 ```mermaid
 flowchart TD
@@ -91,7 +91,7 @@ flowchart LR
 ```mermaid
 pie title コンテンツ規模（講 / 件）
     "内置 38 講" : 38
-    "アルゴリズム 10 講" : 10
+    "拡張パック 17 講" : 17
     "アリーナ 8 挑戦" : 8
     "assert 採点 55 項目" : 55
 ```
@@ -107,28 +107,36 @@ flowchart LR
 
 ランクが上がるごとに新称号 + ネオン実績ウォールが解放。全コース修了で**卒業証書**（ネオン認定ページ、スクショしてシェア）を獲得。
 
-## 📱 実機スクリーンショット
+## 📱 真机截图
 
-| ホーム | 講座一覧 | 講座詳細 |
+すべて実機エミュレータ（API 35、1080×2400）の出荷ビルドから撮影。モックアップではありません。
+
+| ホーム | レッスン一覧 | レッスン詳細 |
 |:--:|:--:|:--:|
-| ![ホーム](demo/home.png) | ![講座](demo/lessons.png) | ![詳細](demo/lesson_detail.png) |
+| ![ホーム](demo/app/home.png) | ![レッスン](demo/app/lessons.png) | ![詳細](demo/app/lesson_detail.png) |
 
-| テーマ | プロフィール | アリーナ |
+| 練習エディタ | 解説ステップと出力 | アリーナ |
 |:--:|:--:|:--:|
-| ![テーマ](demo/theme_selector.png) | ![档案](demo/profile.png) | ![アリーナ](demo/arena.png) |
+| ![練習](demo/app/lesson_exercise.png) | ![ステップ](demo/app/lesson_steps.png) | ![アリーナ](demo/app/arena.png) |
 
-| ウェルカム |
+| ターミナル REPL（実行中） | JS ターミナル（Rhino） | プロフィール |
+|:--:|:--:|:--:|
+| ![ターミナル](demo/app/terminal.png) | ![JS ターミナル](demo/app/terminal_js.png) | ![プロフィール](demo/app/profile.png) |
+
+| チャレンジ詳細 |
 |:--:|
-| ![ウェルカム](demo/welcome1.png) |
+| ![チャレンジ](demo/app/challenge.png) |
 
-## 🎥 使用デモ · 57 秒
+> いずれも出荷ビルドの実際の出力です：`sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`、`sum(nums)/len(nums)` → `3.875`、JS タブは Rhino 1.7.15（`10 21`）。練習エディタは未回答時に実際に `NameError` を表示し、ネオンカウンターは 150 XP の仕様です。
+
+## 🎥 使用デモ · 100 秒
 
 <p align="center">
-  <video src="demo/usage-video.mp4" poster="demo/shots/home.png" controls width="380"></video>
+  <video src="demo/usage-video.mp4" poster="demo/app/home.png" controls width="380"></video>
   <br/>
-  <a href="demo/usage-video.mp4"><img src="demo/shots/lesson-console.png" width="300" alt="▶ デモを見る"/></a>
+  <a href="demo/usage-video.mp4"><img src="demo/app/lesson_exercise.png" width="300" alt="▶ デモを見る"/></a>
   <br/>
-  <sub>▶ クリックで再生 · <a href="demo/usage-video.mp4">動画を直接開く</a>（MP4, 1080×1920, 約 57 秒）</sub>
+  <sub>▶ クリックで再生 · <a href="demo/usage-video.mp4">動画を直接開く</a>（MP4, 720×1600, 約 100 秒、実機録画）</sub>
 </p>
 
 ## 👤 こんな人におすすめ
@@ -171,7 +179,7 @@ flowchart LR
 
 - 🏆 **6 段階ランク** — スクリプトキディ → データゴースト → ネット浪人 → サイバーハッカー → ストリートレジェンド → システムアーキテクト
 - ⚡ **デイリークエスト / XP / 連続記録** — 毎日ゴールがあり、実行のたびにフィードバック
-- 📦 **コンテンツハブ** — コースパック方式：組み込み関数巡礼 + DSA 基礎/応用（10 講）、ワンタップでダウンロード
+- 📦 **コンテンツハブ** — コースパック方式：組み込み関数巡礼 + DSA 基礎/応用 + JavaScript 入門言語パック（計 17 講）、ワンタップでダウンロード
 - 🎓 **卒業証書** — 全コース修了でネオン認定ページが解放、スクショしてシェア
 
 ### 🧩 エンジニアリング品質
@@ -276,7 +284,7 @@ DataStore 進捗保存 │ Navigation 単 Activity 5 タブ │ 自作構文ハ�
 - [x] v0.2.1 コンテンツハブ：オンラインコースパック DL（端末クラウド協調）、初回パック「組み込み関数巡礼」
 - [x] v0.3 成果：DSA 増補パック ×2（10 講）、L0 オフラインルールコーチ、間違いノート + 間隔復習、UI 可読性リファイン
 - [ ] v0.3 残り：turtle キャンバス · matplotlib チャート出力 · 実行中変数アニメーション
-- [x] v0.3.8 多言語ランタイム：`LanguageRuntime` 抽象化 + JavaScript パック（Rhino バックエンド）+ 言語フィルタ/切替 UI · Web 版パリティ（Pyodide 0.29.5）· CI 整備（GitHub Actions + GitCode Actions）
+- [x] 多言語ランタイムは main に実装済み（未リリース、次のバージョン番号は未定）：`LanguageRuntime` 抽象化 + JavaScript パック（Rhino バックエンド）+ 言語フィルタ/切替 UI · Web 版パリティ（Pyodide 0.29.5）· CI 整備（GitHub Actions + GitCode Actions）
 - [ ] v0.4 端末側 AI チューター（オンライン LLM）· QuickJS バックエンド（ES6+）· タブレット対応
 - [ ] v1.0 アプリストア全チャネル リリース
 
@@ -291,7 +299,7 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 
 - ✅ 閲覧・学習・改変・再配布、さらに商用製品の構築も可能。
 - ✅ 「現状有姿」で提供、いかなる保証もなし。リスクは自己責任。
-- ™ 「Mashang」/「码上」の名称とロゴは登録商標として保持されます。
+- ™ 「Mashang」/「マシャン」の名称とロゴは商標として保持されます。
 
 サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 

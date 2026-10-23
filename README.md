@@ -110,33 +110,41 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 
 ## 📱 Screenshots
 
+Captured on a real Android emulator (API 35, 1080×2400) from the shipping build — no mockups, no re-touching.
+
 | Home | Lessons | Lesson Detail |
 |:--:|:--:|:--:|
-| ![Home](demo/home.png) | ![Lessons](demo/lessons.png) | ![Lesson Detail](demo/lesson_detail.png) |
+| ![Home](demo/app/home.png) | ![Lessons](demo/app/lessons.png) | ![Lesson Detail](demo/app/lesson_detail.png) |
 
-| Themes | Profile | Arena |
+| Practice & Grading | Steps & Output | Arena |
 |:--:|:--:|:--:|
-| ![Themes](demo/theme_selector.png) | ![Profile](demo/profile.png) | ![Arena](demo/arena.png) |
+| ![Practice](demo/app/lesson_exercise.png) | ![Steps](demo/app/lesson_steps.png) | ![Arena](demo/app/arena.png) |
 
-| Welcome |
+| Python REPL (live) | JavaScript REPL (Rhino) | Profile |
+|:--:|:--:|:--:|
+| ![Terminal](demo/app/terminal.png) | ![JS Terminal](demo/app/terminal_js.png) | ![Profile](demo/app/profile.png) |
+
+| Challenge Detail |
 |:--:|
-| ![Welcome](demo/welcome1.png) |
+| ![Challenge](demo/app/challenge.png) |
 
-## 🎥 Usage Demo · 57s Hands-on
+> Everything above is real output from the shipping build: `sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`, `sum(nums) / len(nums)` → `3.875`, the JS tab running on Rhino 1.7.15 (`10 21`), the practice editor failing with `NameError` before the answer is filled in, and the Neon Counter challenge with its 150 XP spec.
+
+## 🎥 Usage Demo · 100s Hands-on
 
 <p align="center">
-  <video src="demo/usage-video.mp4" poster="demo/shots/home.png" controls width="380"></video>
+  <video src="demo/usage-video.mp4" poster="demo/app/home.png" controls width="380"></video>
   <br/>
-  <a href="demo/usage-video.mp4"><img src="demo/shots/lesson-console.png" width="300" alt="▶ Watch the demo"/></a>
+  <a href="demo/usage-video.mp4"><img src="demo/app/lesson_exercise.png" width="300" alt="▶ Watch the demo"/></a>
   <br/>
-  <sub>▶ Click to watch · <a href="demo/usage-video.mp4">open video directly</a> (MP4, 1080×1920, ~57s)</sub>
+  <sub>▶ Click to watch · <a href="demo/usage-video.mp4">open video directly</a> (MP4, 720×1600, ~100s, real device capture)</sub>
 </p>
 
 ## 👤 Who Is This For
 
 | You Are | You Get |
 |---|---|
-| Beginner / Career Changer | 30 Chinese narrative lessons, from `print` to decorators |
+| Beginner / Career Changer | 38 Chinese narrative lessons, from `print` to decorators |
 | Commuter / Fragmented Learner | Fully offline, code even in subway tunnels |
 | Teacher / Parent | No ads, no account, zero data upload — safe for students |
 | Developer | Complete Compose + Chaquopy reference implementation, MIT-licensed |
@@ -172,7 +180,7 @@ Each tier unlocks a new title + neon achievement wall. Complete every course to 
 
 - 🏆 **Six Tiers** — Script Kiddie → Data Ghost → Network Ronin → Cyber Hacker → Street Legend → System Architect
 - ⚡ **Daily Quests / XP / Streak** — a goal every day, feedback on every run
-- 📦 **Content Hub** — course pack system: Built-in Function Tour bonus + DSA Basics/Mastery packs (10 lessons), download and learn on demand
+- 📦 **Content Hub** — course pack system: Built-in Function Tour bonus + DSA Basics/Mastery + JavaScript Kickoff language pack (17 lessons total), download and learn on demand
 - 🎓 **Graduation Certificate** — neon certification page unlocked upon completing all courses, screenshot to share
 
 ### 🧩 Engineering Quality
@@ -279,7 +287,7 @@ See the [How It Runs](#-how-it-runs-fully-offline) architecture diagram above fo
 - [x] v0.2.1 Content Hub: online course-pack download (client-cloud), first pack "Built-in Function Tour"
 - [x] v0.3 milestone: DSA bonus packs ×2 (10 lessons), L0 offline rule coach, mistake book + spaced repetition, UI readability cleanup
 - [ ] v0.3 remaining: turtle canvas · matplotlib output · runtime variable animation
-- [x] v0.3.8 multi-language runtime: `LanguageRuntime` abstraction + JavaScript pack (Rhino backend) + language filter/switch UI · web client parity (Pyodide 0.29.5) · CI on GitHub Actions + GitCode Actions
+- [x] Multi-language runtime landed on `main` (unreleased — next version tag): `LanguageRuntime` abstraction + JavaScript pack (Rhino backend) + language filter/switch UI · web client parity (Pyodide 0.29.5) · CI on GitHub Actions + GitCode Actions
 - [ ] v0.4 on-device AI tutor (online LLM) · QuickJS backend (ES6+) · tablet layout
 - [ ] v1.0 full app-store distribution
 

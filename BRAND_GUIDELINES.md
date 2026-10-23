@@ -154,7 +154,7 @@
 🚀 Mashang v0.3 just dropped!
 
 ✓ Embedded CPython 3.13
-✓ 30 gamified Python lessons
+✓ 38 gamified lessons (Python + JavaScript)
 ✓ Fully offline - no internet needed
 ✓ Cyberpunk neon UI
 
@@ -167,7 +167,7 @@ Download: [link]
 Excited to share Mashang v0.3 - an open-source Android app that teaches Python programming completely offline.
 
 Built with Kotlin, Jetpack Compose, and Chaquopy (embedded CPython 3.13), it features:
-• 30 interactive lessons from basics to decorators
+• 38 interactive lessons from basics to decorators, plus 17 extension lessons
 • Auto-grading with assert statements
 • Unique variable visualization panel
 • Gamified progression system
@@ -217,5 +217,5 @@ Trademark: Mashang name and logo are project identity markers
 
 ---
 
-*Last updated: 2026-08-29*
+*Last updated: 2026-10-22*
 *Version: 1.0*

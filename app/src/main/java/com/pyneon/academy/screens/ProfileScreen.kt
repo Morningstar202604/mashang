@@ -190,8 +190,20 @@ fun ProfileScreen(
                                 )
                                 Spacer(Modifier.size(8.dp))
                                 Column {
-                                    Text(ach.title, style = MaterialTheme.typography.labelLarge, color = if (got) TextHi else TextDim)
-                                    Text(ach.desc, style = MaterialTheme.typography.bodySmall, color = TextDim)
+                                    Text(
+                                        ach.title,
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = if (got) TextHi else TextDim,
+                                        maxLines = 1,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                                    )
+                                    Text(
+                                        ach.desc,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = TextDim,
+                                        maxLines = 2,
+                                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                                    )
                                 }
                             }
                         }
@@ -372,6 +384,11 @@ fun ProfileScreen(
                         singleLine = true,
                         label = { Text("主色（#RRGGBB）", style = MaterialTheme.typography.labelMedium) },
                         isError = customError != null,
+                        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                            keyboardType = androidx.compose.ui.text.input.KeyboardType.Password,
+                            capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.None,
+                            autoCorrect = false
+                        ),
                         modifier = Modifier.fillMaxWidth()
                     )
                     customError?.let {

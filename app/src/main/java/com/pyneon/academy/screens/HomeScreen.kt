@@ -72,13 +72,16 @@ fun HomeScreen(
     val context = LocalContext.current
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
     val lessons = remember { LessonRepository.lessons(context) }
+    // 首页进度只统计内置主线（Python）。下载的语言包/增补包属于扩展内容，
+    // 若一并计入会出现「课程体系 38 讲」与「课程进度 x/44」自相矛盾（实测）。
+    val coreLessons = remember(lessons) { lessons.filter { it.lang == "python" } }
     val runtime = remember { LanguageRegistry.current(context) }
     val pythonVersion = remember { runtime.version }
 
     val continueTarget = remember(progress.completedLessons) {
         lessons.firstOrNull { it.id !in progress.completedLessons }?.id ?: lessons.firstOrNull()?.id
     }
-    val doneCount = lessons.count { it.id in progress.completedLessons }
+    val doneCount = coreLessons.count { it.id in progress.completedLessons }
 
     Column(
         Modifier
@@ -94,7 +97,7 @@ fun HomeScreen(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 GlitchText("码上", style = MaterialTheme.typography.headlineMedium, color = NeonCyan)
-                Text("码上 · 编程学院 v${AppConstants.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = TextDim)
+                Text("编程学院 v${AppConstants.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = TextDim)
             }
             // 运行时名可能很长（如 "JavaScript Rhino 1.7.15 (ES5/部分 ES6)"），
             // 不限制宽度会把左侧品牌名与版本号挤成两行，因此限宽 + 单行省略。
@@ -126,7 +129,7 @@ fun HomeScreen(
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     StatLine(Icons.Outlined.Bolt, "连击 ${progress.streakDays} 天", NeonYellow)
-                    StatLine(Icons.Outlined.CheckCircle, "课程进度 $doneCount/${lessons.size}", NeonGreen)
+                    StatLine(Icons.Outlined.CheckCircle, "课程进度 $doneCount/${coreLessons.size}", NeonGreen)
                     val next = Ranks.next(progress.xpTotal)
                     Text(
                         if (next != null) "距「${next.name}」还需 ${next.minXp - progress.xpTotal} XP"
@@ -216,7 +219,7 @@ fun HomeScreen(
                 onClick = onOpenArena,
                 modifier = Modifier.weight(1f),
                 accent = NeonYellow,
-                leadingIcon = Icons.Outlined.Person
+                leadingIcon = Icons.Outlined.LocalFireDepartment
             )
         }
 

@@ -31,7 +31,7 @@ object Ranks {
 enum class Achievement(val title: String, val desc: String) {
     CODE_RUNNER("执行者", "第一次成功运行代码"),
     FIRST_BLOOD("初次连接", "完成第 1 节课程"),
-    NIGHT_OWL("暗夜行者", "在凌晨 0-5 点运行过代码"),
+    NIGHT_OWL("暗夜行者", "凌晨 0-5 点运行过代码"),
     STREAK_3("三连脉冲", "连续 3 天保持学习连击"),
     EXERCISE_5("调试专家", "累计通过 5 个练习或挑战"),
     GRADUATE("毕业典礼", "完成全部课程"),
