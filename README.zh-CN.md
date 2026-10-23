@@ -191,8 +191,9 @@ flowchart LR
 ## 📥 下载安装
 
 > ⚡ **最快路径** → 🌐 [在线下载页](https://badhope.github.io/mashang/)：扫码或点链接，含宣传片、截图与安装引导。
-> 🛰 **GitHub Pages 镜像** → [x33834.github.io/mashang](https://x33834.github.io/mashang/)（同款页面 + 内核可视化图解）
-> 📦 **仓库（并列同步，任选其一）** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
+> ⭐ **主仓库** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（9 star，含 Pages 与 Releases 镜像）
+> 🛰 **Pages 镜像** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
+> 📦 **仓库（并列同步，任选其一）** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24），arm64-v8a 单架构（面向 64 位 ARM 真机）；release 构建已开启 R8 混淆压缩。
 

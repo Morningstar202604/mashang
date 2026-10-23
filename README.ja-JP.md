@@ -191,8 +191,9 @@ flowchart LR
 ## 📥 ダウンロードとインストール
 
 > ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang/)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
-> 🛰 **GitHub Pages ミラー** → [x33834.github.io/mashang](https://x33834.github.io/mashang/)（同ページ + アーキテクチャ図解付き）
-> 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
+> ⭐ **メインリポジトリ** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（9 star・Pages・Releases ミラー）
+> 🛰 **Pages ミラー** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
+> 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24）、arm64-v8a（64bit ARM 実機向け）。Release ビルドは R8 難読化済み。
 

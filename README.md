@@ -192,8 +192,9 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 ## 📥 Download & Install
 
 > ⚡ **Fastest path** → 🌐 [Online download page](https://badhope.github.io/mashang/): scan or tap, with trailer, screenshots and install guide.
-> 🛰 **GitHub Pages mirror** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) (same page + architecture visuals)
-> 📦 **Repos (parallel sync, pick any)** → [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
+> ⭐ **Main repo** → [github.com/badhope/mashang](https://github.com/badhope/mashang) (9 stars, Pages, Releases mirror)
+> 🛰 **Pages mirrors** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
+> 📦 **Repos (parallel sync, pick any)** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+ (minSdk 24), arm64-v8a (this build targets 64-bit ARM devices). Release builds are R8-minified.
 
