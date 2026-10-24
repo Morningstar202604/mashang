@@ -20,3 +20,20 @@
 # 字节码，但 Rhino 部分路径仍引用该包，R8 裁剪会导致运行时 NoClassDefFoundError
 -keep class org.mozilla.** { *; }
 -dontwarn org.mozilla.**
+
+# ===== LuaJ（Lua 运行时）=====
+# LuaJ 附带的 javax.script 适配器在 Android 上不存在（Android 没有 JSR-223），
+# 我们只用 org.luaj.vm2.* 解释器本体，不走 ScriptEngine 路径。
+# R8 会在 minifyRelease 时因缺类直接失败（2026-10-24 CI 实测），
+# 因此 keep 解释器核心并忽略脚本引擎包的缺失警告。
+-keep class org.luaj.vm2.** { *; }
+-keep class org.luaj.vm2.lib.** { *; }
+-keep class org.luaj.vm2.compiler.** { *; }
+-dontwarn org.luaj.vm2.script.**
+-dontwarn javax.script.**
+
+# luajc 是 LuaJ 的「AOT 转 JVM 字节码」编译器，依赖 BCEL（org.apache.bcel），
+# 而 BCEL 未随依赖引入、Android 上也不可用。我们只用解释执行路径，
+# 直接忽略这门编译器相关的缺失类（与 javax.script 同理）。
+-dontwarn org.apache.bcel.**
+-dontwarn org.luaj.vm2.luajc.**
