@@ -114,7 +114,7 @@ object LessonRepository {
 
     /**
      * 主线课程 = APK 内置的 38 讲 Python（id 形如 l01..l38）。
-     * 不能用 lang=="python" 判断：内容中心下载的 DSA / 彩蛋包同样是 python，
+     * 不能用 lang=="python" 判断：语言中心下载的 DSA / 彩蛋包同样是 python，
      * 会把「课程进度 x/38」变成 x/49，毕业口径随之失真（实测）。
      */
     fun mainline(context: Context): List<Lesson> =

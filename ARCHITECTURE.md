@@ -115,6 +115,16 @@ flowchart TB
 4. 下载校验：HTTPS 200、响应 ≤5MB、id 白名单 `^[a-zA-Z0-9_-]+$`、目标路径 canonical 越界检查、包 SHA-256。
 5. 按需下载门禁：课程包未下载前不进入课程列表；包声明的 `lang` 无对应运行时则显示「缺运行时，暂不可下载」，不提供下载按钮。
 
+工具清单：
+
+| 工具 | 职责 |
+| --- | --- |
+| `tools/gen_language_packs.py` | 生成 Lua / SQL 课程包（`content_packs/lua-basics.json`、`sql-basics.json`），幂等；改课程后重跑并重算 catalog |
+| `tools/update_catalog.py` | 重算 catalog 顶层自签名与 `packs[].sha256` |
+| `tools/sync_pages_assets.py` | 镜像 catalog / 内容包 / web 到 `docs/` 并逐字节校验 |
+| `tools/check_links.py` | 检查官网 5 个页面的本地链接 |
+| `tools/ci_apk_probe.py` | 校验 APK 内含 runner.py / sql_runner.py / 语法资源 / 清单 |
+
 ## 7. CI / 发布
 
 | 平台 | 触发 | 职责 |

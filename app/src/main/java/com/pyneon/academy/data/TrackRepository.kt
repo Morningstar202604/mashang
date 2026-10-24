@@ -6,7 +6,7 @@ import com.pyneon.academy.lang.LanguageIds
 enum class TrackStatus { READY, NOT_INSTALLED }
 
 /**
- * 技术栈路线：只列真实存在的内容（内置主线 + 内容中心课程包）。
+ * 技术栈路线：只列真实存在的内容（内置主线 + 语言中心课程包）。
  *
  * 旧实现维护了 Java / React / 机器学习 等 20 条「开发中 5%」的占位轨道，
  * 进度百分比是编的、点进去只有一张「建设中」页 —— 属于虚假功能，已删除。
@@ -20,7 +20,7 @@ data class Track(
     val accentArgb: Long,
     val lessonCount: Int = 0,
     val doneCount: Int = 0,
-    /** 内容中心包 id；null 表示 APK 内置 */
+    /** 语言中心课程包 id；null 表示 APK 内置 */
     val packId: String? = null,
     val lang: String = LanguageIds.PYTHON
 ) {
@@ -29,7 +29,7 @@ data class Track(
 
     val progressHint: String
         get() = when {
-            status == TrackStatus.NOT_INSTALLED -> "$lessonCount 讲 · 需在内容中心下载"
+            status == TrackStatus.NOT_INSTALLED -> "$lessonCount 讲 · 需在语言中心下载"
             else -> "$lessonCount 讲 · 已完成 $doneCount"
         }
 }
