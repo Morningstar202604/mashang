@@ -70,7 +70,7 @@ flowchart TD
     class OUT pink;
 ```
 
-> 联网**只**在「内容中心」手动拉取课程包时发生（sha256 校验、不携带任何个人数据）。学习、写码、判题 100% 离线。
+> 联网**只**在「语言中心」手动拉取课程包时发生（sha256 校验、不携带任何个人数据）。学习、写码、判题 100% 离线。
 
 ## 🔁 学习闭环 · 教会你为止
 
@@ -131,11 +131,11 @@ flowchart LR
 |:--:|:--:|:--:|
 | ![判题通过](demo/app/judge_pass.png) | ![判题失败](demo/app/judge_fail.png) | ![路线](demo/app/tracks.png) |
 
-| 内容中心 | 系统设置 | JS 课程 |
+| 语言中心 | 系统设置 | JS 课程 |
 |:--:|:--:|:--:|
-| ![内容中心](demo/app/contenthub.png) | ![设置](demo/app/settings.png) | ![JS 课程](demo/app/lessons_js.png) |
+| ![语言中心](demo/app/contenthub.png) | ![设置](demo/app/settings.png) | ![JS 课程](demo/app/lessons_js.png) |
 
-> 16 张截图全部来自 v0.4.0 实机（1080×2400，API 35 模拟器）：判题通过 +140 XP、失败面板给出 `TestFailed` 与首个失败用例、路线页只列真实内容、内容中心经 HTTPS 下载并做 SHA-256 校验。
+> 16 张截图全部来自 v0.4.0 实机（1080×2400，API 35 模拟器）：判题通过 +140 XP、失败面板给出 `TestFailed` 与首个失败用例、路线页只列真实内容、语言中心经 HTTPS 下载并做 SHA-256 校验。
 
 > 以上全部是实装包的真实输出：`sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`，`sum(nums)/len(nums)` → `3.875`；JS 标签运行在 Rhino 1.7.15（`10 21`）；练习编辑器在填答案前真实报出 `NameError`；霓虹计数器为 150 XP 规格。
 
@@ -203,7 +203,7 @@ flowchart LR
 
 ### 🔥 引擎硬核 —— 离线也能跑
 
-- 🔌 **全离线 CPython 3.13** —— Chaquopy 内嵌真解释器；联网仅用于「内容中心」拉取课程包（sha256 校验，不携带任何个人数据）
+- 🔌 **全离线 CPython 3.13** —— Chaquopy 内嵌真解释器；联网仅用于「语言中心」拉取课程包（sha256 校验，不携带任何个人数据）
 - 🛡 **安全沙箱** —— 死循环看门狗强制中断、输入队列接管 `input()`、异常友好汉化
 - 🎹 **代码编辑器** —— Python 语法霓虹高亮、智能缩进（`:` 自动进一层）、Tab 补空格
 - 🖥 **神经接口 REPL** —— 有状态会话、↑↓ 历史、多行块、一键重置
@@ -213,7 +213,7 @@ flowchart LR
 
 - 🏆 **六段位成长** —— 脚本小子 → 数据幽灵 → 网络浪人 → 义体黑客 → 街头传奇 → 系统架构师
 - ⚡ **每日任务 / XP / 连击** —— 每天有目标，每次运行有反馈
-- 📦 **内容中心** —— 课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶 + 语言包·JavaScript / Lua / SQL 启程（共 29 讲），一键下载即学
+- 📦 **语言中心** —— 运行时与课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶 + 语言包·JavaScript / Lua / SQL 启程（共 29 讲），一键下载即学
 - 🎓 **毕业证书** —— 通关全部课程解锁霓虹认证页，截图即分享
 
 ### 🧩 工程品质
@@ -244,7 +244,7 @@ python tests/validate_content.py      # 课程×参考答案 全量校验
 ## ❓ FAQ
 
 **Q: 真的完全离线？联网权限用来干嘛？**
-学习、写码、判题 100% 离线。联网仅在「内容中心」手动检查/下载新课程包时发生，且不携带任何个人数据。
+学习、写码、判题 100% 离线。联网仅在「语言中心」手动检查/下载新课程包时发生，且不携带任何个人数据。
 
 **Q: 和 Pydroid3 这类 IDE 有什么区别？**
 Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲配判题实战与成长体系，目标是教会你，而不是给你一个空白编辑器。
@@ -293,7 +293,7 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 </details>
 
 <details>
-<summary><b>语言扩展包 · 内容中心下载</b></summary>
+<summary><b>语言扩展包 · 语言中心下载</b></summary>
 
 彩蛋课·内置函数巡礼（1 讲）· 增补包·DSA 算法基础（5 讲）· 增补包·DSA 算法进阶（5 讲）· 语言包·JavaScript 启程（6 讲）· 语言包·Lua 启程（6 讲）· 语言包·SQL 启程（6 讲）
 
@@ -308,7 +308,7 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 Kotlin + Jetpack Compose (Material3 赛博定制主题)
         │  LanguageRuntime 统一契约（JSON 载荷）
 PyBridge(Chaquopy) ──► CPython 3.13 (runner.py / repl.py)
-JsBridge(Rhino)    ──► JavaScript（语言包课程经内容中心下载）
+JsBridge(Rhino)    ──► JavaScript（语言包课程经语言中心下载）
 LuaBridge(LuaJ)    ──► Lua（沙箱：无 io/os/require）
 SqlBridge(sqlite3) ──► SQL（内存库，ATTACH 被拒）
 DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮器
@@ -331,7 +331,7 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 
 | 门禁 | 命令 | 证明什么 |
 |---|---|---|
-| Python 引擎 + 内容 | `python -m unittest discover -s tests` | 149 条桌面测试：沙箱、超时、判题、内容结构、文档口径 |
+| Python 引擎 + 内容 | `python -m unittest discover -s tests` | 161 条桌面测试：沙箱、超时、判题、内容结构、文档口径 |
 | 课程 × 参考答案 | `python tests/validate_content.py` | 55 个 Python 判题项、201 条用例端到端跑通 |
 | JS 课程 | `python -m unittest discover -s tests -k test_js_lessons` | 每个 JS 代码块与练习用 Node 真实执行 |
 | 网页/App 同源 | `python -m unittest discover -s tests -k test_web_sync` | `data.js` / `engine.js` 可重现、逐字节一致 |

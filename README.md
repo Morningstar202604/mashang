@@ -71,7 +71,7 @@ flowchart TD
     class OUT pink;
 ```
 
-> Network is used **only** when you manually fetch course packs in "Content Hub" (sha256-verified, zero personal data). Learning, coding, and grading are 100% offline.
+> Network is used **only** when you manually fetch course packs in "Language Center" (sha256-verified, zero personal data). Learning, coding, and grading are 100% offline.
 
 ## 🔁 The Learning Loop — Until You Can Code It
 
@@ -132,9 +132,9 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 |:--:|:--:|:--:|
 | ![Judge Pass](demo/app/judge_pass.png) | ![Judge Fail](demo/app/judge_fail.png) | ![Tracks](demo/app/tracks.png) |
 
-| Content Hub | Settings | JS Lessons |
+| Language Center | Settings | JS Lessons |
 |:--:|:--:|:--:|
-| ![Content Hub](demo/app/contenthub.png) | ![Settings](demo/app/settings.png) | ![JS Lessons](demo/app/lessons_js.png) |
+| ![Language Center](demo/app/contenthub.png) | ![Settings](demo/app/settings.png) | ![JS Lessons](demo/app/lessons_js.png) |
 
 > All 16 screenshots are real captures from the v0.4.0 build (1080×2400, API 35 emulator): passing a judge awards +140 XP, the failure panel reports `TestFailed` with the failing case, the routes page lists only content that actually ships, and the content hub downloads packs over HTTPS with SHA-256 verification.
 
@@ -204,7 +204,7 @@ A second client runs the **same course JSON and the same `runner.py`** in the br
 
 ### 🔥 Hardcore Engine — Runs Fully Offline
 
-- 🔌 **Offline CPython 3.13** — Chaquopy-embedded real interpreter; network only for Content Hub course packs (sha256 verified, zero personal data)
+- 🔌 **Offline CPython 3.13** — Chaquopy-embedded real interpreter; network only for Language Center course packs (sha256 verified, zero personal data)
 - 🛡 **Sandbox Security** — dead-loop watchdog force-interrupt, input queue takeover for `input()`, friendly localized exceptions
 - 🎹 **Code Editor** — neon Python syntax highlighting, smart indentation (`:` auto-indent), Tab-to-space
 - 🖥 **Neural Interface REPL** — stateful session, ↑↓ history, multi-line blocks, one-tap reset
@@ -214,7 +214,7 @@ A second client runs the **same course JSON and the same `runner.py`** in the br
 
 - 🏆 **Six Tiers** — Script Kiddie → Data Ghost → Network Ronin → Cyber Hacker → Street Legend → System Architect
 - ⚡ **Daily Quests / XP / Streak** — a goal every day, feedback on every run
-- 📦 **Content Hub** — course pack system: Built-in Function Tour bonus + DSA Basics/Mastery + JavaScript / Lua / SQL Kickoff packs (29 lessons total), download and learn on demand
+- 📦 **Language Center** — runtimes and course packs: Built-in Function Tour bonus + DSA Basics/Mastery + JavaScript / Lua / SQL Kickoff packs (29 lessons total), download and learn on demand
 - 🎓 **Graduation Certificate** — neon certification page unlocked upon completing all courses, screenshot to share
 
 ### 🧩 Engineering Quality
@@ -245,7 +245,7 @@ python tests/validate_content.py      # Full curriculum × answer key validation
 ## ❓ FAQ
 
 **Q: Is it really fully offline? What's the network permission for?**
-Learning, coding, and grading are 100% offline. Network is only used when manually checking/downloading new course packs in "Content Hub", with zero personal data transmitted.
+Learning, coding, and grading are 100% offline. Network is only used when manually checking/downloading new course packs in "Language Center", with zero personal data transmitted.
 
 **Q: How is this different from Pydroid3 or other IDEs?**
 Pydroid is a development tool; we're a "curriculum-as-code" learning terminal—each lesson comes with graded challenges and a growth system. Our goal is to teach you, not just give you a blank editor.
@@ -294,7 +294,7 @@ Yes. The project is open-sourced under the **MIT License** — free to use, modi
 </details>
 
 <details>
-<summary><b>Language Packs · Content Hub (downloadable)</b></summary>
+<summary><b>Language Packs · Language Center (downloadable)</b></summary>
 
 Easter Egg · Built-in Function Tour (1 lesson) · DSA Algorithm Basics (5 lessons: complexity intuition / two pointers / hash tables / stacks & queues / recursion memoization) · DSA Algorithm Mastery (5 lessons: hand-written sorting / binary search / greedy change-making / linked-list thinking / maximum subarray) · Language Pack · JavaScript Kickoff (6 lessons, requires the built-in JS runtime — bundled since this version)
 
@@ -309,7 +309,9 @@ Plus 8 Arena challenges: Neon Counter / Palindrome Detector / Password Strength 
 Kotlin + Jetpack Compose (Material3 Cyber Custom Theme)
         │  LanguageRuntime contract (JSON payloads)
 PyBridge(Chaquopy) ──► CPython 3.13 (runner.py sandbox / repl.py session)
-JsBridge(Rhino)    ──► JavaScript (language-pack lessons via Content Hub)
+JsBridge(Rhino)    ──► JavaScript (language-pack lessons via Language Center)
+LuaBridge(LuaJ)    ──► Lua (sandbox: no io/os/require)
+SqlBridge(sqlite3) ──► SQL (in-memory DB, ATTACH denied)
 DataStore Progress │ Navigation Single-Activity Five-Tab │ Custom Syntax Highlighter
 ```
 

@@ -23,7 +23,7 @@ Chaquopy **17.0.0** 与 AGP **8.13.2**、Kotlin **2.4.10**、Gradle **9.5.0** �
 ## 本地验证
 
 ```bash
-# Python 引擎 + 内容（140 条，必须全绿）
+# Python 引擎 + 内容（161 条，必须全绿）
 python -m unittest discover -s tests -v
 python tests/validate_content.py
 
@@ -43,6 +43,8 @@ git diff --exit-code -- web/data.js web/engine.js docs/web docs/catalog.json
 3. 运行 `python tests/validate_content.py`，必须 **55 个判题项、201 条用例全 PASS、0 结构问题**
 4. 练习 `tests` 使用 assert；**禁止只断言变量存在** —— 需要验证输出时用 `__stdout__`（例如 `assert name in __stdout__`）
 5. 内容包修改后必须重算 `catalog.json`：`python tools/update_catalog.py` 并提交新的 sha256
+6. 新增语言包：课程 JSON 写入 `content_packs/<id>.json`，`catalog.json` 的 `packs[]` 必须带 `kind` / `lang` / `sha256`；Lua / SQL 课程内容可用 `python tools/gen_language_packs.py` 重新生成（幂等）
+7. 新增语言运行时：实现 `LanguageRuntime` 并在 `PyNeonApp.onCreate` 注册，补 `assets/syntaxes/<lang>.tmLanguage.json`；`tests/test_multilang_content.py` 的 `IMPLEMENTED_LANGS` 必须同步
 
 ## 代码约定
 

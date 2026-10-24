@@ -40,7 +40,7 @@ flowchart TB
 
 - **判题语义单一实现**。`runner.py` 是唯一判题引擎；Android 通过 Chaquopy 调用，网页端通过 Pyodide 执行同一份源码（`web/gen_data.py` 内联，`tests/test_web_sync.py` 逐字节校验）。
 - **运行时抽象**。`LanguageRuntime` 接口（`app/src/main/java/com/pyneon/academy/lang/LanguageRuntime.kt`）定义 `runCode / checkExercise / replStart / replPush / version / warmup / ensureStarted`；`PyBridge` 与 `JsBridge` 是两个实现，UI 只依赖接口与 `LanguageRegistry`。
-- **离线优先**。学习、运行、判题不触网；只有「内容中心」手动检查/下载课程包时联网，走三级源 + SHA-256。
+- **离线优先**。学习、运行、判题不触网；只有「语言中心」手动检查/下载课程包时联网，走三级源 + SHA-256。
 
 ## 2. 执行与沙箱
 
@@ -90,7 +90,7 @@ flowchart TB
 | `blocks[]` | 14 种块 | heading/text/tip/warn/task/steps/diagram/output/table/code/quiz/order/practice/fill + exercise |
 | `exercise.tests[]` | string[] | Python 为 assert 语句；JS 为 `assert(cond, msg)` |
 
-内容包（`content_packs/*.json`）由内容中心下载到 `filesDir/courses/<id>.v<N>.json`；`catalog.json` 顶层 `sha256` 为「剥离自身 sha256 字段后的文本」哈希，包内 `sha256` 逐包校验。
+内容包（`content_packs/*.json`）由语言中心下载到 `filesDir/courses/<id>.v<N>.json`；`catalog.json` 顶层 `sha256` 为「剥离自身 sha256 字段后的文本」哈希，包内 `sha256` 逐包校验。
 
 ## 4. 进度与数据
 
@@ -103,16 +103,17 @@ flowchart TB
 ## 5. 导航与界面
 
 - 单 Activity（`MainActivity`）+ Compose Navigation（`nav/AppNav.kt`），五 Tab：首页 / 课程 / 终端 / 挑战 / 我的。
-- 次级路由：lesson、challenge、tracks、contenthub、backup、certificate、streak、review、history、settings、mistakes、privacy、help、about。
+- 次级路由：lesson、challenge、tracks、contenthub（兼容入口）、langcenter、backup、certificate、streak、review、history、settings、mistakes、privacy、help、about。
 - `tests/test_ui_static.py::NavigationRouteTests` 扫描全仓 `navigate("x")`，任何未注册路由直接测试失败（历史 bug：`backup` 点击闪退）。
 - 主题：`AppThemes` 7 套 + 自定义主色，`ThemePreference` 持久化，`MainActivity` 监听 SharedPreferences 即时切换。
 
-## 6. 内容中心与发布链路
+## 6. 语言中心与发布链路
 
-1. `catalog.json`（仓库根）登记包 id/version/description/sha256，自身用 `sha256` 字段签名。
+1. `catalog.json`（仓库根）登记包 id/version/description/sha256/kind/lang，自身用 `sha256` 字段签名。`kind` 固定为 `course`，`lang` 指明课程所属语言（python/javascript/lua/sql）。
 2. `tools/sync_pages_assets.py` 把 catalog、`content_packs/`、`web/` 镜像到 `docs/`（GitHub Pages），并逐字节校验。
 3. App 端 `ContentCenter.CATALOG_URLS` 三级回退：Pages → GitHub raw → GitCode API。
 4. 下载校验：HTTPS 200、响应 ≤5MB、id 白名单 `^[a-zA-Z0-9_-]+$`、目标路径 canonical 越界检查、包 SHA-256。
+5. 按需下载门禁：课程包未下载前不进入课程列表；包声明的 `lang` 无对应运行时则显示「缺运行时，暂不可下载」，不提供下载按钮。
 
 ## 7. CI / 发布
 
@@ -133,6 +134,8 @@ tests/
   test_engine_coverage_gaps.py
   test_refactor_regression.py # 判题共享状态、快照顺序
   test_multilang_content.py   # lang 字段、运行时契约、UI 不得直接依赖 PyBridge
+  test_sql_lessons.py         # SQL 课程包真执行（sqlite3）
+  test_docs_claims.py         # 文档数字/能力声明/版本串与仓库事实一致
   test_js_lessons.py          # Node 真实执行 JS 课程与判题
   test_js_sandbox.py          # Rhino 静态契约
   test_web_sync.py            # web 与 App 同源 + 品牌资产指纹
@@ -140,12 +143,12 @@ tests/
   test_update_catalog.py      # catalog 签名与包哈希
   test_ci_workflows.py        # workflow 严格 YAML + 门禁在位
   test_apk_probe.py           # APK 探针自测（假绿防护）
-  validate_content.py         # 55 Python 判题项 × 201 用例端到端
+  validate_content.py         # 55 Python 判题项 × 201 用例端到端（JS/Lua/SQL 由各自门禁执行）
 ```
 
 ## 9. 课程路线与更新检查
 
-- **课程路线页**（`TrackRepository.kt`）只列真实内容：Python 主线 38 讲（`l01..l38`）、JavaScript 启程 6 讲（`js-basics` 包）、DSA 基础/进阶各 5 讲、彩蛋 1 讲。未下载的包显示「可下载」并跳内容中心；没有任何硬编码的「开发中 x%」占位轨道。
+- **课程路线页**（`TrackRepository.kt`）只列真实内容：Python 主线 38 讲（`l01..l38`）、JavaScript / Lua / SQL 启程各 6 讲、DSA 基础/进阶各 5 讲、彩蛋 1 讲。未下载的包显示「可下载」并跳语言中心；没有任何硬编码的「开发中 x%」占位轨道。
 - **进度口径**：`LessonRepository.mainline()` 用 id 正则 `^l\d{2}$` 取内置 38 讲，避免下载的 DSA 包把「x/38」变成「x/49」。
 - **检查更新**（`utils/UpdateChecker.kt`）：只请求 GitHub Releases 的公开 latest 接口，语义化比较版本号；不自动下载、不申请安装权限。失败静默降级为「无法检查」，不影响离线学习。
 

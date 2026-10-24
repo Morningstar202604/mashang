@@ -23,11 +23,11 @@
 - 版本 0.4.1 → **0.5.0**（versionCode 16 → 17）
 - `LanguageIds.PLANNED` 移除 `sql`（已实现），保留 Java / C++ / Go / Rust
 - 首页 / 路线页 / 终端语言切换自动包含 Lua 与 SQL
-- 文档口径：测试 161 条、判题项 75 个 / 用例 262 条、源程序 64 文件 11,685 行
+- 文档口径：测试 161 条、判题项 75 个 / 用例 262 条、源程序 64 文件 11,528 行；三语 README / FAQ / CONTRIBUTING / ARCHITECTURE 同步多语言与「语言中心」术语
 - README 三语 + FAQ + ARCHITECTURE：GitCode 流水线改为「需手动开通、push 不自动触发」的事实描述
 
 ### Fixed
-- 课程包下载 UI 与「语言中心」重复维护的问题：`ContentHubScreen` 收敛为 `LanguageCenterScreen` 的兼容入口
+- 课程包下载 UI 与「语言中心」重复维护的问题：`ContentHubScreen` 收敛为 12 行转发入口（原 177 行旧 UI 已删除），帮助中心/隐私政策/README 的「内容中心」文案同步更名
 
 ## [0.4.1] - 2026-10-24
 
