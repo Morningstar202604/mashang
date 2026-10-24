@@ -42,13 +42,31 @@ runner_src = (PY / "runner.py").read_text(encoding="utf-8")
 # 仅在网页端使用的有状态 REPL 助手：复用 runner 的沙箱与快照。
 repl_helper = r'''
 import json as _json
+
 _REPL_NS = {"__name__": "__main__"}
+_REPL_WRAPPER = (
+    "try:\n"
+    "    __repl_value__ = eval(compile(__repl_src__, '<repl>', 'eval'))\n"
+    "except SyntaxError:\n"
+    "    exec(compile(__repl_src__, '<repl>', 'exec'))\n"
+    "else:\n"
+    "    if __repl_value__ is not None:\n"
+    "        print(repr(__repl_value__))\n"
+)
 
 def repl_exec_json(payload_json):
-    """在持久命名空间里执行一行/一段 REPL 代码，返回与 run_code 同构的结果。"""
+    """在持久命名空间里执行一行/一段 REPL 代码，返回与 run_code 同构的结果。
+
+    表达式模式（1+1 / 'a'.upper()）回显 repr，语句模式按 exec 执行；
+    两者都走 _run_protected 的看门狗与输出捕获。
+    """
     p = _json.loads(payload_json)
-    code = p.get("code", "")
-    res = _run_protected(code, _REPL_NS, p.get("stdin") or [], float(p.get("timeout", DEFAULT_TIMEOUT)))
+    src = p.get("code", "")
+    ns = dict(_REPL_NS)
+    ns["__repl_src__"] = src
+    res = _run_protected(_REPL_WRAPPER, ns, p.get("stdin") or [], float(p.get("timeout", DEFAULT_TIMEOUT)))
+    _REPL_NS.clear()
+    _REPL_NS.update({k: v for k, v in ns.items() if not k.startswith("__repl_")})
     r = dict(res)
     r["ok"] = res["error"] is None
     r["variables"] = _snapshot(_REPL_NS)

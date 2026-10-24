@@ -100,12 +100,14 @@ fun ConsoleResult(
                     }
                 }
                 
-                // Smart error message with user-friendly explanation
-                Spacer(Modifier.height(10.dp))
-                SmartErrorMessage(
-                    errorText = "${errType}: ${r.errorMessage ?: ""}",
-                    suggestion = null
-                )
+                // 判题失败已在上面用 TestFailed 面板表达，不再叠一层「代码运行出错」
+                if (errType != "TestFailed") {
+                    Spacer(Modifier.height(10.dp))
+                    SmartErrorMessage(
+                        errorText = "${errType}: ${r.errorMessage ?: ""}",
+                        suggestion = null
+                    )
+                }
             } else if (!running && r.stdout.isEmpty() && r.passed == null) {
                 Text("(无输出)", style = MaterialTheme.typography.bodySmall, color = TextDim)
             }

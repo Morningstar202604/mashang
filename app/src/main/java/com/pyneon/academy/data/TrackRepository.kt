@@ -1,7 +1,16 @@
 package com.pyneon.academy.data
 
-enum class TrackStatus { READY, DEVELOPING }
+import android.content.Context
+import com.pyneon.academy.lang.LanguageIds
 
+enum class TrackStatus { READY, NOT_INSTALLED }
+
+/**
+ * 技术栈路线：只列真实存在的内容（内置主线 + 内容中心课程包）。
+ *
+ * 旧实现维护了 Java / React / 机器学习 等 20 条「开发中 5%」的占位轨道，
+ * 进度百分比是编的、点进去只有一张「建设中」页 —— 属于虚假功能，已删除。
+ */
 data class Track(
     val id: String,
     val title: String,
@@ -10,14 +19,22 @@ data class Track(
     val status: TrackStatus,
     val accentArgb: Long,
     val lessonCount: Int = 0,
-    val progressHint: String = "",
-    val progressPercent: Int = 0
-)
+    val doneCount: Int = 0,
+    /** 内容中心包 id；null 表示 APK 内置 */
+    val packId: String? = null,
+    val lang: String = LanguageIds.PYTHON
+) {
+    val progressPercent: Int
+        get() = if (lessonCount <= 0) 0 else (doneCount * 100 / lessonCount).coerceIn(0, 100)
 
-data class TrackCategory(
-    val name: String,
-    val tracks: List<Track>
-)
+    val progressHint: String
+        get() = when {
+            status == TrackStatus.NOT_INSTALLED -> "$lessonCount 讲 · 需在内容中心下载"
+            else -> "$lessonCount 讲 · 已完成 $doneCount"
+        }
+}
+
+data class TrackCategory(val name: String, val tracks: List<Track>)
 
 object TrackRepository {
 
@@ -27,79 +44,77 @@ object TrackRepository {
     private const val GREEN = 0xFF00FF9C
     private const val PURPLE = 0xFFB537F2
 
-    private val python = Track(
-        id = "python",
-        title = "Python",
-        subtitle = "从语法到高级应用的完整主线",
-        category = "编程语言",
-        status = TrackStatus.READY,
-        accentArgb = CYAN,
-        // 讲数与 assets 中 Python 课程数一致（lessons_*.json 合计 38 讲）。
-        // 这里只用于首页「课程体系」卡片的展示；真实进度以 LessonRepository 为准。
-        lessonCount = 38,
-        progressHint = "38 讲 · 判题实战 · REPL 终端",
-        progressPercent = 100
-    )
+    private data class Spec(
+        val id: String,
+        val title: String,
+        val subtitle: String,
+        val category: String,
+        val accent: Long,
+        val packId: String?,
+        val lang: String,
+        val ids: Set<String>
+    ) {
+        val expectedCount: Int get() = ids.size
+    }
 
-    val categories: List<TrackCategory> = listOf(
-        TrackCategory(
-            name = "编程语言",
-            tracks = listOf(
-                python,
-                Track("java", "Java", "企业级后端主力语言", "编程语言", TrackStatus.DEVELOPING, MAGENTA, progressPercent = 20),
-                Track("kotlin", "Kotlin", "安卓与多平台新宠", "编程语言", TrackStatus.DEVELOPING, PURPLE, progressPercent = 8),
-                Track("typescript", "TypeScript", "带类型的 JavaScript", "编程语言", TrackStatus.DEVELOPING, YELLOW, progressPercent = 15)
-            )
+    private val specs = listOf(
+        Spec(
+            "python", "Python 主线", "38 讲：print 到异步协程，内置判题实战",
+            "编程语言", CYAN, null, LanguageIds.PYTHON,
+            (1..38).map { "l%02d".format(it) }.toSet()
         ),
-        TrackCategory(
-            name = "前端开发",
-            tracks = listOf(
-                Track("html_css", "HTML/CSS", "网页结构与样式", "前端开发", TrackStatus.DEVELOPING, MAGENTA, progressPercent = 30),
-                Track("javascript", "JavaScript", "网页交互脚本", "前端开发", TrackStatus.DEVELOPING, YELLOW, progressPercent = 12),
-                Track("react", "React", "组件化前端框架", "前端开发", TrackStatus.DEVELOPING, CYAN, progressPercent = 5),
-                Track("vue", "Vue", "渐进式前端框架", "前端开发", TrackStatus.DEVELOPING, GREEN, progressPercent = 5)
-            )
+        Spec(
+            "js", "JavaScript 启程", "6 讲：console.log 到对象统计，Rhino 运行时",
+            "编程语言", YELLOW, "js-basics", LanguageIds.JAVASCRIPT,
+            (1..6).map { "js%02d".format(it) }.toSet()
         ),
-        TrackCategory(
-            name = "后端开发",
-            tracks = listOf(
-                Track("flask", "Flask/Django", "Python Web 后端", "后端开发", TrackStatus.DEVELOPING, GREEN, progressPercent = 10),
-                Track("springboot", "Spring Boot", "Java 全家桶后端", "后端开发", TrackStatus.DEVELOPING, CYAN, progressPercent = 5),
-                Track("nodejs", "Node.js", "JavaScript 后端运行时", "后端开发", TrackStatus.DEVELOPING, GREEN, progressPercent = 10),
-                Track("go", "Go", "高并发后端语言", "后端开发", TrackStatus.DEVELOPING, YELLOW, progressPercent = 8)
-            )
+        Spec(
+            "dsa-basics", "DSA 算法基础", "5 讲：复杂度 / 双指针 / 哈希 / 栈队列 / 递归",
+            "算法与数据结构", GREEN, "dsa-basics", LanguageIds.PYTHON,
+            (1..5).map { "dsa%02d".format(it) }.toSet()
         ),
-        TrackCategory(
-            name = "数据库",
-            tracks = listOf(
-                Track("sql", "SQL", "关系型查询语言", "数据库", TrackStatus.DEVELOPING, MAGENTA, progressPercent = 25),
-                Track("mysql", "MySQL", "最流行的关系型数据库", "数据库", TrackStatus.DEVELOPING, YELLOW, progressPercent = 10),
-                Track("redis", "Redis", "高速内存缓存", "数据库", TrackStatus.DEVELOPING, GREEN, progressPercent = 10)
-            )
+        Spec(
+            "dsa-mastery", "DSA 算法进阶", "5 讲：排序 / 二分 / 贪心 / 链表 / 最大子段和",
+            "算法与数据结构", MAGENTA, "dsa-mastery", LanguageIds.PYTHON,
+            (6..10).map { "dsa%02d".format(it) }.toSet()
         ),
-        TrackCategory(
-            name = "人工智能",
-            tracks = listOf(
-                Track("ml", "机器学习", "让程序从数据中学习", "人工智能", TrackStatus.DEVELOPING, PURPLE, progressPercent = 5),
-                Track("dl", "深度学习", "神经网络与图像识别", "人工智能", TrackStatus.DEVELOPING, MAGENTA, progressPercent = 5),
-                Track("data_analysis", "数据分析", "数据结构化总结与洞察", "人工智能", TrackStatus.DEVELOPING, CYAN, progressPercent = 15)
-            )
-        ),
-        TrackCategory(
-            name = "工程与运维",
-            tracks = listOf(
-                Track("git", "Git", "版本控制与协作", "工程与运维", TrackStatus.DEVELOPING, MAGENTA, progressPercent = 40),
-                Track("docker", "Docker", "容器化部署", "工程与运维", TrackStatus.DEVELOPING, CYAN, progressPercent = 12),
-                Track("linux", "Linux", "服务器操作系统", "工程与运维", TrackStatus.DEVELOPING, YELLOW, progressPercent = 18)
-            )
+        Spec(
+            "bonus-builtin", "彩蛋 · 内置函数巡礼", "1 讲：len / sorted / enumerate / zip / any / all",
+            "语言扩展", PURPLE, "bonus-builtin", LanguageIds.PYTHON,
+            setOf("bonus-27")
         )
     )
 
-    fun readyTrack(): Track? = categories
-        .flatMap { it.tracks }
-        .firstOrNull { it.status == TrackStatus.READY }
+    /** 只统计真实已装载的课程；done 为该用户的通关集合。 */
+    fun tracks(context: Context, done: Set<String> = emptySet()): List<Track> {
+        val installed = ContentCenter().installedVersions(context)
+        val all = LessonRepository.lessons(context)
+        return specs.mapNotNull { s ->
+            val present = all.filter { it.id in s.ids }
+            val available = s.packId == null || s.packId in installed
+            // 未下载的内容包也列出（可下载状态），否则路线页在全新安装时只剩一行
+            if (present.isEmpty() && available) return@mapNotNull null
+            Track(
+                id = s.id,
+                title = s.title,
+                subtitle = s.subtitle,
+                category = s.category,
+                status = if (available) TrackStatus.READY else TrackStatus.NOT_INSTALLED,
+                accentArgb = s.accent,
+                lessonCount = if (present.isEmpty()) s.expectedCount else present.size,
+                doneCount = present.count { it.id in done },
+                packId = s.packId,
+                lang = s.lang
+            )
+        }
+    }
 
-    fun findById(id: String): Track? = categories
-        .flatMap { it.tracks }
-        .firstOrNull { it.id == id }
+    fun categories(context: Context, done: Set<String> = emptySet()): List<TrackCategory> =
+        tracks(context, done).groupBy { it.category }.map { (name, list) -> TrackCategory(name, list) }
+
+    fun readyTrack(context: Context, done: Set<String> = emptySet()): Track? =
+        tracks(context, done).firstOrNull { it.id == "python" }
+
+    fun findById(context: Context, id: String, done: Set<String> = emptySet()): Track? =
+        tracks(context, done).firstOrNull { it.id == id }
 }

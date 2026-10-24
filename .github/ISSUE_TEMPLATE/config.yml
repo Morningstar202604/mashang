@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全问题（私密报告）
+    url: https://github.com/badhope/mashang/security/advisories/new
+    about: 请勿公开披露漏洞细节；用私密安全公告或邮件联系维护者。
+  - name: 使用问题 / 先看 FAQ
+    url: https://github.com/badhope/mashang/blob/main/FAQ.md
+    about: 安装、离线、备份、判题等常见问题先看 FAQ，能省一轮往返。
+  - name: 在线下载页与网页版
+    url: https://badhope.github.io/mashang/
+    about: 下载最新 APK、查看实拍截图与网页版入口。

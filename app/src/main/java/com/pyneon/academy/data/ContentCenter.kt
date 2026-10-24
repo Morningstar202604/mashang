@@ -34,8 +34,11 @@ class ContentCenter {
         // C3: 包 id 白名单，仅允许安全文件名字符，杜绝路径穿越
         private val SAFE_ID_REGEX = Regex("""^[a-zA-Z0-9_-]+$""")
 
+        // 三级回退：GitHub Pages（CDN，最快）→ GitHub raw（主仓）→ GitCode OpenAPI。
+        // 三个源都指向同一份 catalog.json（Pages 的副本由 tools/sync_pages_assets.py 生成并校验）。
         private val CATALOG_URLS = listOf(
-            // GitCode OpenAPI raw（公开免鉴权；原 raw.gitcode.com 对 .json 不可用）
+            "https://badhope.github.io/mashang/catalog.json",
+            "https://raw.githubusercontent.com/badhope/mashang/main/catalog.json",
             "https://api.gitcode.com/api/v5/repos/badhope/mashang/raw/catalog.json"
         )
     }

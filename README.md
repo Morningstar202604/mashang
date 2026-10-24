@@ -94,7 +94,7 @@ pie title Content Scale (lessons / items)
     "38 Built-in Lessons" : 38
     "17 Language-Pack Lessons" : 17
     "8 Arena Challenges" : 8
-    "55 assert Graders" : 55
+    "63 assert judge items" : 63
 ```
 
 ## 🏆 Six-Tier Progression
@@ -128,7 +128,41 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 |:--:|
 | ![Challenge](demo/app/challenge.png) |
 
+| Judge Passed | Judge Failed | Course Routes |
+|:--:|:--:|:--:|
+| ![Judge Pass](demo/app/judge_pass.png) | ![Judge Fail](demo/app/judge_fail.png) | ![Tracks](demo/app/tracks.png) |
+
+| Content Hub | Settings | JS Lessons |
+|:--:|:--:|:--:|
+| ![Content Hub](demo/app/contenthub.png) | ![Settings](demo/app/settings.png) | ![JS Lessons](demo/app/lessons_js.png) |
+
+> All 16 screenshots are real captures from the v0.4.0 build (1080×2400, API 35 emulator): passing a judge awards +140 XP, the failure panel reports `TestFailed` with the failing case, the routes page lists only content that actually ships, and the content hub downloads packs over HTTPS with SHA-256 verification.
+
+
 > Everything above is real output from the shipping build: `sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`, `sum(nums) / len(nums)` → `3.875`, the JS tab running on Rhino 1.7.15 (`10 21`), the practice editor failing with `NameError` before the answer is filled in, and the Neon Counter challenge with its 150 XP spec.
+## 🎥 Web client demo · 28s
+
+<p align="center">
+  <video src="demo/web-demo.mp4" poster="demo/web-demo-poster.jpg" controls width="640"></video>
+  <br/>
+  <a href="demo/web-demo.mp4"><img src="demo/web-demo-poster.jpg" width="620" alt="▶ Watch the web demo"/></a>
+  <br/>
+  <sub>▶ Recorded from the real web client (1280×800, Chromium): run a lesson block, pass a judge, watch XP persist, then use the REPL.</sub>
+</p>
+
+## 🌐 Web client (browser)
+
+A second client runs the **same course JSON and the same `runner.py`** in the browser via Pyodide 0.29.5 (CPython 3.13.2):
+
+| Home | Lesson & Judge | Terminal |
+|:--:|:--:|:--:|
+| ![Web Home](docs/assets/web-home.jpg) | ![Web Lesson](docs/assets/web-lesson.jpg) | ![Web Terminal](docs/assets/web-terminal.jpg) |
+
+- 🔗 Play online: <https://badhope.github.io/mashang/web/>
+- 🧵 Execution runs in a Web Worker (15 s hard timeout, tab never freezes); progress is stored in `localStorage`, hash routes survive refresh
+- 🧩 Scope: 38 Python lessons, 6 Python challenges, full REPL; the 2 JavaScript challenges stay App-only
+
+
 
 ## 🎥 Usage Demo · 100s Hands-on
 
@@ -165,7 +199,7 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 - ✅ **Assert Grading** — must pass test cases to advance, preventing "understood but can't code"
 - ✍️ **Fill-in-the-Blank + 🧩 Code Sorting** — Mimo-style low-barrier exercises: type missing fragments / sort shuffled lines into a correct program
 - 🧭 **L0 Rule Coach** — on-error guidance: offline rules give "diagnosis → 3 steps → fix example"; hints never write the code for you
-- 📖 **Mistake Book + Spaced Repetition** — wrong answers auto-collected; reviewed on a day/1d/3d/7d… schedule
+- 📖 **Mistake Book + Spaced Repetition** — wrong answers auto-collected; SM-2 scheduling (1 day → 6 days → ease-based growth)
 - 🧭 **Hand-holding Guidance** — each lesson: life analogy → ASCII diagram → TASK follow-along → PRACTICE hands-on → STEPS thinking card
 
 ### 🔥 Hardcore Engine — Runs Fully Offline
@@ -192,18 +226,18 @@ Captured on a real Android emulator (API 35, 1080×2400) from the shipping build
 ## 📥 Download & Install
 
 > ⚡ **Fastest path** → 🌐 [Online download page](https://badhope.github.io/mashang/): scan or tap, with trailer, screenshots and install guide.
-> ⭐ **Main repo** → [github.com/badhope/mashang](https://github.com/badhope/mashang) (9 stars, Pages, Releases mirror)
+> ⭐ **Main repo** → [github.com/badhope/mashang](https://github.com/badhope/mashang) (Pages + Releases; live badge at top)
 > 🛰 **Pages mirrors** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
 > 📦 **Repos (parallel sync, pick any)** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+ (minSdk 24), arm64-v8a (this build targets 64-bit ARM devices). Release builds are R8-minified.
 
-- ⭐ Recommended: download the latest `mashang-*.apk` from [GitHub Releases](https://github.com/badhope/mashang/releases) (direct APK: [mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk))
+- ⭐ Recommended: download the latest `mashang-*.apk` from [GitHub Releases](https://github.com/badhope/mashang/releases/latest)
 - Build yourself:
 
 ```bash
 ./gradlew :app:assembleDebug        # Debug build
-./gradlew :app:bundleRelease        # Store AAB (requires keystore.properties)
+./gradlew :app:assembleRelease     # signed APK via KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
 python tests/test_engine_desktop.py   # Engine unit tests
 python tests/validate_content.py      # Full curriculum × answer key validation
 ```
@@ -267,7 +301,7 @@ Easter Egg · Built-in Function Tour (1 lesson) · DSA Algorithm Basics (5 lesso
 </details>
 
 Each lesson includes: **Runnable Example + OUTPUT Preview + Diagram/Table + QUIZ Pop Question + Assert Grading Challenge**
-Plus Arena 6 Major Challenges: Neon Counter / Palindrome Detector / Password Strength Firewall / Bracket Firewall / Run-Length Compressor / Inventory Manager.
+Plus 8 Arena challenges: Neon Counter / Palindrome Detector / Password Strength Firewall / Bracket Firewall / Run-Length Compressor / Inventory Manager (6 Python) + Neon Counter & Bracket Firewall in JavaScript.
 
 ## 🧱 Tech Stack
 
@@ -288,9 +322,21 @@ See the [How It Runs](#-how-it-runs-fully-offline) architecture diagram above fo
 - [x] v0.2.1 Content Hub: online course-pack download (client-cloud), first pack "Built-in Function Tour"
 - [x] v0.3 milestone: DSA bonus packs ×2 (10 lessons), L0 offline rule coach, mistake book + spaced repetition, UI readability cleanup
 - [ ] v0.3 remaining: turtle canvas · matplotlib output · runtime variable animation
-- [x] Multi-language runtime landed on `main` (unreleased — next version tag): `LanguageRuntime` abstraction + JavaScript pack (Rhino backend) + language filter/switch UI · web client parity (Pyodide 0.29.5) · CI on GitHub Actions + GitCode Actions
-- [ ] v0.4 on-device AI tutor (online LLM) · QuickJS backend (ES6+) · tablet layout
+- [x] v0.4.0: `LanguageRuntime` abstraction + JavaScript pack (Rhino) + language filter/switch UI · web client (Pyodide 0.29.5, same engine) · in-app update check · real course-route page
+- [ ] v0.5: turtle canvas · matplotlib chart output · tablet layout · QuickJS backend (ES6+)
 - [ ] v1.0 full app-store distribution
+
+## 🧪 Testing & quality gates
+
+| Gate | Command | What it proves |
+|---|---|---|
+| Python engine + content | `python -m unittest discover -s tests` | 128 desktop tests: sandbox, timeouts, judging, content schema |
+| Curriculum × answers | `python tests/validate_content.py` | 55 Python lessons/packs judged end-to-end, 201 cases |
+| JS lessons | `python -m unittest discover -s tests -k test_js_lessons` | Every JS lesson code block + exercise executed with Node |
+| Web/App same-source | `python -m unittest discover -s tests -k test_web_sync` | `data.js`/`engine.js` regenerate byte-identically |
+| Android lint + unit | `./gradlew :app:lintDebug :app:testDebugUnitTest` | 0 lint errors, JVM unit tests (version compare, file IO) |
+| APK probe | `python tests/ci_apk_probe.py <apk>` | runner.py, assets, JS grammar and manifest inside the APK |
+| Pages assets | `python tools/sync_pages_assets.py` | catalog / course packs / web client copies are byte-identical |
 
 ## 🤝 Contributing
 
@@ -305,7 +351,7 @@ This repository is published under the **MIT License** — free to use, modify, 
 - ✅ No warranty is provided; use at your own risk.
 - ™ "Mashang" / "码上" names and logos remain reserved trademarks.
 
-Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (Apache-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
+Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (MPL-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
 
 **CI/CD**: [GitHub Actions](https://github.com/badhope/mashang/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos). GitCode Actions runs the engine/content/web gates (its hosted runners cannot reach Google's Android SDK CDN, so Android build stays on GitHub).
 

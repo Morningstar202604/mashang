@@ -52,6 +52,19 @@ jobs:
           set -euo pipefail
           PY=$(command -v python || command -v python3)
           "$PY" tests/validate_content.py
+      - name: Pages assets sync
+        run: |
+          set -euo pipefail
+          PY=$(command -v python || command -v python3)
+          "$PY" tools/sync_pages_assets.py
+          git diff --exit-code -- docs/catalog.json docs/content_packs docs/web
+
+      - name: Page link check
+        run: |
+          set -euo pipefail
+          PY=$(command -v python || command -v python3)
+          "$PY" tools/check_links.py
+
       - name: Web artifacts reproducible
         run: |
           set -euo pipefail

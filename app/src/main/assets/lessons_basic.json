@@ -97,7 +97,8 @@
       "hint": "布尔值直接写 True（首字母大写），不需要引号。",
       "tests": [
         "assert isinstance(hacker_name, str) and len(hacker_name) > 0",
-        "assert online is True"
+        "assert online is True",
+        "assert hacker_name in __stdout__, '请用 print 输出 hacker_name 的值'"
       ],
       "stdin": [],
       "xp": 80

@@ -67,14 +67,15 @@ fun HomeScreen(
     onOpenLesson: (String) -> Unit,
     onOpenTerminal: () -> Unit,
     onOpenArena: () -> Unit,
-    onOpenLessons: () -> Unit
+    onOpenLessons: () -> Unit,
+    onOpenTracks: () -> Unit
 ) {
     val context = LocalContext.current
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
     val lessons = remember { LessonRepository.lessons(context) }
     // 首页进度只统计内置主线（Python）。下载的语言包/增补包属于扩展内容，
     // 若一并计入会出现「课程体系 38 讲」与「课程进度 x/44」自相矛盾（实测）。
-    val coreLessons = remember(lessons) { lessons.filter { it.lang == "python" } }
+    val coreLessons = remember(lessons) { LessonRepository.mainline(context) }
     val runtime = remember { LanguageRegistry.current(context) }
     val pythonVersion = remember { runtime.version }
 
@@ -101,8 +102,11 @@ fun HomeScreen(
             }
             // 运行时名可能很长（如 "JavaScript Rhino 1.7.15 (ES5/部分 ES6)"），
             // 不限制宽度会把左侧品牌名与版本号挤成两行，因此限宽 + 单行省略。
+            // 首页只报「当前运行时是否就绪」：JS 的完整版本串（Rhino 1.7.15 (ES5/部分 ES6)）
+            // 在 200dp 里会被截成 "ES5/部…"，完整版本留给终端页展示。
             Text(
-                "${runtime.displayName} $pythonVersion 就绪",
+                if (runtime.id == "python") "${runtime.displayName} $pythonVersion 就绪"
+                else "${runtime.displayName} 就绪",
                 style = MaterialTheme.typography.labelSmall,
                 color = NeonGreen.copy(alpha = 0.8f),
                 maxLines = 1,
@@ -164,9 +168,9 @@ fun HomeScreen(
         }
 
         SectionHeader("课程体系")
-        val readyTrack = TrackRepository.readyTrack()
+        val readyTrack = TrackRepository.readyTrack(context, progress.completedLessons)
         if (readyTrack != null) {
-            NeonCard(accent = NeonCyan, filled = true, onClick = onOpenLessons) {
+            NeonCard(accent = NeonCyan, filled = true, onClick = onOpenTracks) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         Modifier
@@ -179,7 +183,7 @@ fun HomeScreen(
                     Spacer(Modifier.size(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(readyTrack.title, style = MaterialTheme.typography.titleMedium, color = NeonCyan)
-                        Text("${readyTrack.progressHint} · 点击进入", style = MaterialTheme.typography.bodySmall, color = TextMid)
+                        Text("${readyTrack.progressHint} · 查看全部路线", style = MaterialTheme.typography.bodySmall, color = TextMid)
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = NeonGreen, modifier = Modifier.size(14.dp))

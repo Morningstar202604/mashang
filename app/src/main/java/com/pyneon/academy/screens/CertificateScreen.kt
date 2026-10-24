@@ -54,7 +54,7 @@ import java.util.Locale
 fun CertificateScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val progress by ProgressStore.flow(context).collectAsState(initial = Progress())
-    val lessons = remember { LessonRepository.lessons(context) }
+    val lessons = remember { LessonRepository.mainline(context) }
     val unlocked = remember(progress, lessons.size) { unlockedAchievements(progress, lessons.size) }
     val rank = Ranks.forXp(progress.xpTotal)
     val dateText = remember { SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()) }
@@ -95,7 +95,7 @@ fun CertificateScreen(onBack: () -> Unit) {
                 Text("码上 · 毕业认证", style = MaterialTheme.typography.titleMedium, color = TextMid)
                 Box(Modifier.fillMaxWidth().height(1.dp).background(NeonYellow.copy(alpha = 0.4f)))
                 Spacer(Modifier.height(4.dp))
-                Text("兹证明 接入者「NEO」", style = MaterialTheme.typography.bodyLarge, color = TextMid)
+                Text("兹证明 本机学习者", style = MaterialTheme.typography.bodyLarge, color = TextMid)
                 Text("已完成全部课程闯关并通过判题实战", style = MaterialTheme.typography.bodyLarge, color = TextHi)
                 Text("特此授予 毕业成就认证", style = MaterialTheme.typography.bodyLarge, color = TextMid)
                 Spacer(Modifier.height(6.dp))
@@ -123,8 +123,11 @@ fun CertificateScreen(onBack: () -> Unit) {
 
         Spacer(Modifier.height(12.dp))
         CertificatePoster.GenerateCertificatePosterButton { success, msg ->
-            // Toast or snackbar would be better, but keeping it simple
-            // TODO: Show feedback
+            android.widget.Toast.makeText(
+                context,
+                if (success) "分享海报已保存到相册" else "生成失败：${msg ?: "未知错误"}",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

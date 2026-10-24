@@ -65,13 +65,24 @@ class EditorThemeTests(unittest.TestCase):
 
 class CopyCountTests(unittest.TestCase):
     def test_home_track_lesson_count_matches_assets(self):
+        """首页主线卡片的讲数由 TrackRepository 的 spec 定义，必须与 assets 一致。"""
         text = _read(JAVA, "data", "TrackRepository.kt")
-        m = re.search(r'progressHint = "(\d+) 讲', text)
-        self.assertIsNotNone(m, "TrackRepository 缺少 progressHint 讲数")
+        m = re.search(r'"python", "Python 主线".*?\(1\.\.(\d+)\)', text, re.S)
+        self.assertIsNotNone(m, "TrackRepository 缺少 Python 主线课程 id 区间")
         self.assertEqual(
             int(m.group(1)), _python_lesson_count(),
             "首页课程卡片讲数与 assets 不一致",
         )
+
+    def test_tracks_only_lists_real_content(self):
+        """路线页不得再有「开发中 x%」这类没有实现的占位轨道。"""
+        text = _read(JAVA, "data", "TrackRepository.kt")
+        self.assertNotIn("DEVELOPING", text, "TrackRepository 仍有占位轨道状态")
+        for fake in ("Java", "React", "机器学习", "Docker"):
+            self.assertNotIn(f'"{fake}"', text, f"TrackRepository 仍列出未实现路线：{fake}")
+        screen = _read(JAVA, "screens", "TracksScreen.kt")
+        self.assertIn("NOT_INSTALLED", screen, "未下载的内容包应显示为可下载")
+        self.assertIn("onOpenContentHub", screen, "未装载路线应引导到内容中心")
 
     def test_help_challenge_count_is_dynamic(self):
         """帮助中心的挑战数必须从 challenges.json 读取，不能硬编码。

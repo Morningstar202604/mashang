@@ -110,7 +110,8 @@ fun LessonDetailScreen(lessonId: String, onBack: () -> Unit, onNextLesson: ((Str
     // 进度口径必须按【当前课程所属语言】统计：全部课程是混合列表（Python 38 + JS 6），
     // 直接用它会让 JS 第 1 讲显示「39 / 44 · 88%」，与用户认知完全不符。
     val allLessons = remember(lessonId) {
-        LessonRepository.lessonsByLang(context, lesson?.lang ?: "python")
+        if ((lesson?.lang ?: "python") == "python") LessonRepository.mainline(context)
+        else LessonRepository.lessonsByLang(context, lesson?.lang ?: "python")
     }
     val lessonIdx = allLessons.indexOfFirst { it.id == lessonId }
     // 完成度按已通关讲数统计（而不是「当前是第几讲」），与「我的」页口径一致

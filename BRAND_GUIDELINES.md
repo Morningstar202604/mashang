@@ -38,9 +38,9 @@
 | Neon Green | `#00FF9C` | `rgb(0, 255, 156)` | Success states, Python branding |
 | Neon Magenta | `#FF2D78` | `rgb(255, 45, 120)` | Warnings, errors, secondary accent |
 | Neon Yellow | `#F7FF00` | `rgb(247, 255, 0)` | Badges, important callouts |
-| Background Dark | `#0A0E17` | `rgb(10, 14, 23)` | Primary background |
-| Background Medium | `#111827` | `rgb(17, 24, 39)` | Secondary background, cards |
-| Text Dim | `#6B7280` | `rgb(107, 114, 128)` | Secondary text, labels |
+| Background Dark | `#0E1420` | `rgb(14, 20, 32)` | Primary background（与 `Color.kt` 的 `bg0` 一致） |
+| Background Medium | `#111827` | `rgb(17, 24, 39)` | Secondary background, cards（`bg1`） |
+| Text Dim | `#93A3B8` | `rgb(147, 163, 184)` | Secondary text, labels（深色主题；对比度 ≥ 4.5:1） |
 | Text Bright | `#F9FAFB` | `rgb(249, 250, 251)` | Primary text |
 
 ### Typography
@@ -58,7 +58,7 @@
 
 #### Primary Logo
 - Location: `docs/logo.svg`
-- Dimensions: Width 720px (scalable SVG)
+- Dimensions: 1200×300 viewBox（可缩放 SVG，页面按容器宽度等比渲染）
 - Clear space: Minimum 20px around all sides
 - Minimum size: 120px width for legibility
 
@@ -182,7 +182,7 @@ Check it out: [GitHub link]
 ## Community Guidelines
 
 ### Contributor Recognition
-- List contributors in `CONTRIBUTORS.md`
+- 贡献者名单由 GitHub 贡献图与 Release Notes 体现（不单独维护 `CONTRIBUTORS.md`）
 - Mention significant PRs in release notes
 - Add "Contributors" badge to README when count grows
 
@@ -194,9 +194,8 @@ Check it out: [GitHub link]
 - Follow project coding standards
 
 ### Support Channels
-- GitHub Issues: Bug reports and feature requests
-- GitHub Discussions: Questions and community chat
-- Email: For security vulnerabilities (if applicable)
+- GitHub Issues：Bug reports and feature requests（模板见 `.github/ISSUE_TEMPLATE/`）
+- Email：安全漏洞走私密渠道，见 `SECURITY.md`
 
 ## Merchandise & Extensions (Future)
 

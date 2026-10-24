@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # GitHub Actions：保持 action 版本不落伍（ci.yml 里固定了 major 版本）
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "ci"
+    labels: ["dependencies", "ci"]
+    open-pull-requests-limit: 3
+
+  # Gradle：Android 依赖与 Kotlin/AGP 升级。Chaquopy 与 AGP/Kotlin/Gradle
+  # 是精确匹配的组合（见 AGENTS.md），升级必须一起验证，因此单独分组。
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    labels: ["dependencies", "android"]
+    open-pull-requests-limit: 3
+    groups:
+      android-toolchain:
+        patterns: ["com.android.*", "org.jetbrains.kotlin*", "com.chaquo.*"]
+      androidx:
+        patterns: ["androidx.*", "com.google.android.*"]

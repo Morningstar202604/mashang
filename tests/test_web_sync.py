@@ -16,8 +16,8 @@ import unittest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 # 2026-10-22 重建的品牌图指纹（banner 2560x800 / poster 1080x1920）
-BANNER_SHA = "d590a55ac42db2fdb3275b2a055b2d0b4ed3449cefb036f92be1c4744e33fbbd"
-POSTER_SHA = "3423b7d76e7244bbda2291a82e3cf323b77f5e13580a205cd4670cc08f9efd1e"
+BANNER_SHA = "a1d43a9a2ded3e0c33c8c066fa2295e39c04a4ce55f9f684a03335b7cfd23628"
+POSTER_SHA = "7e3bd891f9c838d14367305fd2d4fb09ce971d1d76cb9e962ec12111551a8897"
 ASSETS = os.path.join(ROOT, "app", "src", "main", "assets")
 WEB = os.path.join(ROOT, "web")
 
@@ -193,7 +193,8 @@ class TestBrandResidue(unittest.TestCase):
             os.path.join(ROOT, "demo", "promo-poster.jpg"): POSTER_SHA,
         }
         for path, want in expected.items():
-            digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+            with open(path, "rb") as fh:
+                digest = hashlib.sha256(fh.read()).hexdigest()
             self.assertEqual(digest, want, f"{path} 不是重建后的品牌图（可能被旧图覆盖）")
 
 
@@ -232,6 +233,66 @@ class TestResetClearsAll(unittest.TestCase):
         seg = text[text.index("确认格式化？"):][:700]
         self.assertIn("错题本", seg, "重置弹窗文案未提及错题本")
         self.assertIn("复习卡", seg, "重置弹窗文案未提及复习卡")
+
+
+class TestWebClientStatic(unittest.TestCase):
+    """网页端静态契约：XSS 防回归 + 关键功能分支必须在位。"""
+
+    def test_no_innerhtml_with_user_data(self):
+        """用户/课程文本必须走 textContent；el() 的第三个参数不得拼 HTML。"""
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertNotIn(".innerHTML", text, "app.js 不得给 innerHTML 赋值（DOM XSS 面）")
+        self.assertIn("textContent", text)
+
+    def test_fill_block_is_rendered(self):
+        """fill 块必须有渲染分支（2026-10 审计发现 13 个块在网页端显示「未知块类型」）。"""
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertIn('case "fill"', text, "app.js 缺少 fill 块渲染")
+        self.assertIn("renderFill", text)
+
+    def test_execution_runs_in_worker_with_terminate(self):
+        """死循环防护：执行必须在 Worker 内，且超时会 terminate。"""
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertIn("new Worker(", text, "app.js 未使用 Web Worker")
+        self.assertIn("worker.terminate()", text, "app.js 超时未终止 Worker")
+
+    def test_progress_persisted_and_routed(self):
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertIn("localStorage.setItem(STORAGE_KEY", text)
+        self.assertIn("hashchange", text)
+        m = re.search(r"function parseRoute", text)
+        self.assertIsNotNone(m, "缺少 hash 路由")
+
+    def test_reset_control_has_confirm(self):
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertIn("window.confirm(", text, "重置进度必须二次确认")
+
+    def test_engine_failure_offers_browse_mode(self):
+        text = _read(os.path.join(WEB, "app.js"))
+        self.assertIn("仅浏览模式", text, "引擎失败后应允许只读浏览")
+        self.assertIn("boot-retry", text)
+
+
+class TestPagesAssets(unittest.TestCase):
+    def test_pages_copies_match_sources(self):
+        """docs/web 与 docs/content_packs 必须与源文件逐字节一致。"""
+        import filecmp
+        for name in ("index.html", "app.js", "style.css", "data.js", "engine.js"):
+            a = os.path.join(WEB, name)
+            b = os.path.join(ROOT, "docs", "web", name)
+            self.assertTrue(os.path.exists(b), f"docs/web/{name} 缺失（需运行 tools/sync_pages_assets.py）")
+            self.assertTrue(filecmp.cmp(a, b, shallow=False), f"docs/web/{name} 与 web/{name} 不一致")
+        import glob
+        for src in glob.glob(os.path.join(ROOT, "content_packs", "*.json")):
+            dst = os.path.join(ROOT, "docs", "content_packs", os.path.basename(src))
+            self.assertTrue(filecmp.cmp(src, dst, shallow=False), f"docs/content_packs 与 {src} 不一致")
+
+    def test_privacy_and_terms_pages_exist(self):
+        for page in ("privacy", "terms"):
+            path = os.path.join(ROOT, "docs", page, "index.html")
+            self.assertTrue(os.path.exists(path), f"缺少 docs/{page}/index.html")
+            text = _read(path)
+            self.assertIn("码上", text)
 
 
 if __name__ == "__main__":

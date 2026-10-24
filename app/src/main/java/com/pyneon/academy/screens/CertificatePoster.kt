@@ -249,7 +249,7 @@ object CertificatePoster {
             textAlign = Paint.Align.CENTER
         }
         canvas.drawText("码上 · 离线优先 · 零上传", WIDTH / 2f, (HEIGHT - MARGIN - 40).toFloat(), footerPaint)
-        canvas.drawText("gitcode.com/badhope/mashang", WIDTH / 2f, (HEIGHT - MARGIN - 15).toFloat(), footerPaint)
+        canvas.drawText("github.com/badhope/mashang", WIDTH / 2f, (HEIGHT - MARGIN - 15).toFloat(), footerPaint)
 
         // Glitch accent lines
         val glitchPaint = Paint().apply {

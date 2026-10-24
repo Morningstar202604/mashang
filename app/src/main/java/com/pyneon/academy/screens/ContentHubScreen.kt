@@ -56,7 +56,7 @@ fun ContentHubScreen(onBack: () -> Unit) {
     var loading by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var installed by remember { mutableStateOf(center.installedVersions(context)) }
-    val packCount = remember { LessonRepository.lessons(context).size }
+    var lessonCount by remember { mutableStateOf(LessonRepository.lessons(context).size) }
 
     fun refresh() {
         scope.launch {
@@ -95,7 +95,7 @@ fun ContentHubScreen(onBack: () -> Unit) {
             NeonCard(accent = NeonGreen, filled = true) {
                 Text("本地课程包", style = MaterialTheme.typography.labelMedium, color = NeonGreen)
                 Text(
-                    "已装载 $packCount 讲 · 全部离线可用",
+                    "已装载 $lessonCount 讲 · 全部离线可用",
                     style = MaterialTheme.typography.bodyLarge,
                     color = TextHi,
                     modifier = Modifier.padding(top = 2.dp)
@@ -146,6 +146,7 @@ fun ContentHubScreen(onBack: () -> Unit) {
                                                 withContext(Dispatchers.IO) { center.download(context, pack, catalogBase) }
                                                 installed = center.installedVersions(context)
                                                 LessonRepository.invalidateCache()
+                                                lessonCount = LessonRepository.lessons(context).size
                                                 message = "安装完成，课程列表已刷新"
                                             } catch (e: Exception) {
                                                 message = "下载失败：${e.message?.take(50)}"

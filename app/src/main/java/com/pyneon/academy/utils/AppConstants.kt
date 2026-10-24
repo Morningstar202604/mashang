@@ -17,8 +17,9 @@ object AppConstants {
     const val APP_NAME_CN = "Mashang"
     const val APP_NAME_EN = "Mashang"
     
-    // 项目主页（GitCode 主仓）
-    const val REPO_URL = "https://gitcode.com/badhope/mashang"
+    // 项目主页（GitHub 主仓，含 Releases 与 Pages；GitCode / Gitee 为镜像）
+    const val REPO_URL = "https://github.com/badhope/mashang"
+    const val SITE_URL = "https://badhope.github.io/mashang/"
 
     // 分享标签（2026-10 品牌重塑：PY_NOW 已退役，统一为「码上 / Mashang」）
     const val SHARE_HASHTAG = "#码上 #Mashang #编程学习"
@@ -32,9 +33,9 @@ object AppConstants {
 
     // 注：开发者地址/客服信息在华为开发者后台填写并公开展示，无需在本仓库硬编码。
 
-    // 隐私政策与用户协议（托管于 GitCode 主仓，可作为应用市场隐私政策 URL）
+    // 隐私政策与用户协议（托管于 GitHub 主仓 raw，可作应用市场隐私政策 URL）
     const val PRIVACY_POLICY_URL =
-        "https://gitcode.com/badhope/mashang/blob/main/PRIVACY_POLICY.md"
+        "https://badhope.github.io/mashang/privacy/"
     const val TERMS_URL =
-        "https://gitcode.com/badhope/mashang/blob/main/TERMS_OF_SERVICE.md"
+        "https://badhope.github.io/mashang/terms/"
 }

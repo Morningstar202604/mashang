@@ -6,6 +6,21 @@
 <title>码上 · Mashang — 装进口袋的赛博朋克编程学习终端</title>
 <meta name="description" content="码上 · Mashang：内嵌真实语言运行时的离线编程学习终端。38 讲闯关、assert 自动判题、变量可视化、六段位成长。Android 7.0+ 免费下载，MIT 开源。">
 <meta name="theme-color" content="#07090F">
+<meta name="author" content="badhope">
+<link rel="canonical" href="https://badhope.github.io/mashang/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="码上 · Mashang">
+<meta property="og:title" content="码上 · Mashang — 装进口袋的赛博朋克编程学习终端">
+<meta property="og:description" content="内嵌 CPython 3.13 与 JavaScript 运行时的离线编程学习终端：38 讲闯关、assert 判题、变量快照、六段位成长。Android 7.0+，MIT 开源。">
+<meta property="og:url" content="https://badhope.github.io/mashang/">
+<meta property="og:image" content="https://badhope.github.io/mashang/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="码上 · Mashang — 离线编程学习终端">
+<meta name="twitter:description" content="CPython 3.13 装进口袋：38 讲课程 + assert 判题 + 变量快照，全离线。">
+<meta name="twitter:image" content="https://badhope.github.io/mashang/banner.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"码上 Mashang","operatingSystem":"Android 7.0+","applicationCategory":"EducationalApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"license":"https://opensource.org/licenses/MIT","downloadUrl":"https://github.com/badhope/mashang/releases/latest","codeRepository":"https://github.com/badhope/mashang","description":"内嵌 CPython 3.13 与 JavaScript 运行时的离线编程学习终端，38 讲课程、assert 自动判题、变量快照与六段位成长。"}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2307090F'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='%2300E5FF' text-anchor='middle'%3E%E7%A0%81%3C/text%3E%3Crect x='6' y='25' width='20' height='2.5' fill='%2300FF9C'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -81,10 +96,31 @@ nav .wrap{height:100%;display:flex;align-items:center;gap:34px}
   transition:all .25s;white-space:nowrap;flex:none}
 .nav-cta:hover{background:rgba(0,255,156,.16);box-shadow:0 0 22px rgba(0,255,156,.25)}
 .nav-cta:active{transform:scale(.96)}
+.nav-toggle{display:none;width:42px;height:42px;margin-left:auto;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--line2);border-radius:8px;color:var(--cyan);
+  font-size:18px;cursor:pointer;flex:none}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--cyan);color:#04121a;
+  padding:10px 16px;font-weight:700;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+.glitch-wrap{display:block;text-align:center}
+.glitch-wrap svg{display:block;width:min(760px,92vw);height:auto;margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:860px){
-  .nav-links{display:none}
-  .nav-cta{margin-left:auto;padding:8px 14px;font-size:12px}
-  nav .wrap{gap:14px}
+  .nav-toggle{display:inline-flex}
+  .nav-links{display:none;position:absolute;top:var(--nav-h);left:0;right:0;
+    flex-direction:column;gap:0;margin:0;padding:8px 18px 14px;
+    background:rgba(7,9,15,.97);border-bottom:1px solid var(--line2)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px 4px;border-bottom:1px solid rgba(38,50,68,.6);font-size:13px}
+  .nav-links a:last-child{border-bottom:none}
+  .nav-cta{margin-left:10px;padding:8px 14px;font-size:12px}
+  nav .wrap{gap:10px}
+  .bar-row{grid-template-columns:1fr auto;gap:6px 12px}
+  .bar-row .bl{white-space:normal;grid-column:1/-1}
+  .bar-track{grid-column:1/2}
+  .bar-row .bv{grid-column:2/3;grid-row:2/3}
+  .bar-row .bl{grid-row:1/2}
 }
 
 /* ===== hero ===== */
@@ -115,7 +151,8 @@ nav .wrap{height:100%;display:flex;align-items:center;gap:34px}
 #boot .caret{display:inline-block;width:7px;height:13px;background:var(--green);vertical-align:-2px;
   animation:blink 1s steps(1) infinite;box-shadow:0 0 8px var(--green)}
 @keyframes blink{50%{opacity:0}}
-@media(max-width:1020px){#boot{display:none}.wm{opacity:.45}}
+@media(max-width:1500px){#boot{display:none}}
+@media(max-width:1020px){.wm{opacity:.45}}
 
 .hero-inner{position:relative;text-align:center;z-index:2;width:100%}
 .hero-logo{width:min(620px,88vw);margin:0 auto 8px;display:block;
@@ -166,7 +203,7 @@ nav .wrap{height:100%;display:flex;align-items:center;gap:34px}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ===== sections ===== */
-section{padding:clamp(70px,11vw,110px) 0;scroll-margin-top:calc(var(--nav-h) + 12px)}
+section{padding:clamp(70px,11vw,110px) 0;scroll-margin-top:calc(var(--nav-h) + 28px)}
 .sec-head{margin-bottom:clamp(36px,6vw,56px)}
 .sec-id{font-family:var(--mono);font-size:12.5px;letter-spacing:3px;margin-bottom:14px}
 .sec-id b{font-weight:700}
@@ -280,6 +317,14 @@ h2 small{display:block;font-family:var(--mono);font-size:clamp(10.5px,2.6vw,13px
 .curr-foot{margin-top:26px;font-size:14px;color:var(--dim2);line-height:2}
 .curr-foot b{color:var(--hi)}
 
+.web-demo{max-width:760px;margin:26px auto 0}
+.web-demo video{display:block;width:100%;height:auto}
+.web-shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin-top:22px}
+.web-shots figure{margin:0;border:1px solid var(--line2);border-radius:12px;overflow:hidden;background:var(--bg1)}
+.web-shots img{display:block;width:100%;height:auto}
+.web-shots figcaption{padding:10px 14px;font-family:var(--mono);font-size:11.5px;color:var(--dim);
+  letter-spacing:1px;border-top:1px solid var(--line)}
+@media(max-width:760px){.web-shots{grid-template-columns:1fr}}
 /* ---- download ---- */
 .dl-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:0;
   border:1px solid var(--line2);border-radius:16px;overflow:hidden;
@@ -422,23 +467,26 @@ footer .fine b{color:var(--dim)}
 </style>
 </head>
 <body>
+<a class="skip" href="#hero">跳到主要内容</a>
 
-<div id="noise"></div><div id="scan"></div><div id="vig"></div>
-<div id="prog"></div>
+<div id="noise" aria-hidden="true"></div><div id="scan" aria-hidden="true"></div><div id="vig" aria-hidden="true"></div>
+<div id="prog" aria-hidden="true"></div>
 
 <nav id="nav">
   <div class="wrap">
     <a class="nav-logo" href="#hero">码上<span style="color:var(--green)">_</span></a>
-    <div class="nav-links">
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="打开导航">☰</button>
+    <div class="nav-links" id="navLinks">
       <a href="#shots"><i>01</i>实拍</a>
       <a href="#demo"><i>02</i>演示</a>
       <a href="#features"><i>03</i>模块</a>
       <a href="#system"><i>04</i>内核</a>
       <a href="#curriculum"><i>05</i>课程</a>
       <a href="#download"><i>06</i>下载</a>
-      <a href="#faq"><i>07</i>FAQ</a>
+      <a href="#web"><i>07</i>网页版</a>
+      <a href="#faq"><i>08</i>FAQ</a>
     </div>
-    <a class="nav-cta" href="https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk" target="_blank" rel="noopener">⬇ 下载 APK</a>
+    <a class="nav-cta" href="https://github.com/badhope/mashang/releases/latest" target="_blank" rel="noopener">⬇ 下载 APK</a>
   </div>
 </nav>
 
@@ -486,12 +534,13 @@ footer .fine b{color:var(--dim)}
 
   <rect x="0" y="288" width="1200" height="12" fill="#00E5FF" opacity="0.25"/>
 </svg></div>
+    <h1 class="sr-only">码上 Mashang — 离线编程学习终端</h1>
     <div class="hero-tag">码上，<em>就是马上。</em></div>
-    <div class="hero-tag-en">CODE NOW · MASTER ANY LANGUAGE · LEARN OFFLINE, ANYWHERE</div>
-    <div class="hero-sub">装进口袋的赛博朋克编程学习终端 —— 内嵌真·<b>CPython 3.13</b> 与 <b>JavaScript</b> 运行时，<b>零网络</b>写码、运行、判题通关</div>
+    <div class="hero-tag-en">CODE NOW · PYTHON + JAVASCRIPT · LEARN OFFLINE, ANYWHERE</div>
+    <div class="hero-sub">装进口袋的赛博朋克编程学习终端 —— 内嵌真·<b>CPython 3.13</b> 与 <b>JavaScript</b> 运行时，<b>核心学习零网络</b>：写码、运行、判题全在本机；另有同源<b>网页版</b>可直接试玩</div>
 
     <div class="hero-cta">
-      <a class="btn btn-primary" href="https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk" target="_blank" rel="noopener">
+      <a class="btn btn-primary" href="https://github.com/badhope/mashang/releases/latest" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
         下载 APK · Android 7.0+
       </a>
@@ -499,16 +548,16 @@ footer .fine b{color:var(--dim)}
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         观看演示视频
       </a>
-      <a class="btn btn-dim" href="https://gitcode.com/badhope/mashang" target="_blank" rel="noopener">
+      <a class="btn btn-dim" href="web/">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-        查看源码
+        网页版试玩
       </a>
     </div>
 
     <div class="hero-stats">
       <span><b>38</b> 讲闯关</span><span class="sep">//</span>
       <span><b>CPython 3.13</b> 内置</span><span class="sep">//</span>
-      <span><b>0</b> 核心学习网络依赖</span><span class="sep">//</span>
+      <span><b>63</b> 项判题 · <b>230</b> 用例</span><span class="sep">//</span>
       <span><b>assert</b> 自动判题</span><span class="sep">//</span>
       <span><b>7</b> 套主题</span><span class="sep">//</span>
       <span><b>6</b> 级段位</span><span class="sep">//</span>
@@ -524,19 +573,19 @@ footer .fine b{color:var(--dim)}
   <div class="wrap">
     <div class="sec-head rv">
       <div class="sec-id sec-mag"><span class="bar"></span><b>01</b> // ON-DEVICE</div>
-      <h2>装机实拍<small>REAL SCREENS · 1080×1920</small></h2>
+      <h2>装机实拍<small>REAL SCREENS · 1080×2400 · EMULATOR API 35</small></h2>
     </div>
     <div class="phone-row" id="phoneRow">
       <div class="phone p1 rv">
-        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/ph_home.jpg" alt="指挥台首页" width="600" height="1067"></div></div>
+        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/app/home.jpg" alt="指挥台首页" width="1080" height="2400"></div></div>
         <div class="phone-cap"><b style="color:var(--cyan)">指挥台 · HOME</b>XP / 连击 / 每日任务</div>
       </div>
       <div class="phone p2 rv">
-        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/ph_console.jpg" alt="课程练习与判题" width="600" height="1067"></div></div>
-        <div class="phone-cap"><b style="color:var(--green)">练习判题 · EXERCISE</b>姓名档案 · NameError 实战</div>
+        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/app/lesson_exercise.jpg" alt="课程练习与判题" width="1080" height="2400"></div></div>
+        <div class="phone-cap"><b style="color:var(--green)">练习判题 · EXERCISE</b>变量快照 · assert 判题</div>
       </div>
       <div class="phone p3 rv">
-        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/ph_toast.jpg" alt="课程讲解与图示" width="600" height="1067"></div></div>
+        <div class="frame"><div class="notch"></div><div class="screen"><img src="assets/app/lesson_steps.jpg" alt="课程讲解与图示" width="1080" height="2400"></div></div>
         <div class="phone-cap"><b style="color:var(--yel)">课程讲解 · LESSON</b>图示对照 · 运行输出</div>
       </div>
     </div>
@@ -549,12 +598,12 @@ footer .fine b{color:var(--dim)}
   <div class="wrap">
     <div class="sec-head rv" style="text-align:center">
       <div class="sec-id sec-cyan"><span class="bar"></span><b>02</b> // USAGE DEMO</div>
-      <h2>100 秒看完整个使用流<small>BOOT → 闯关 → 判题 → 终端 → 段位</small></h2>
+      <h2>57 秒看完整个使用流<small>BOOT → 闯关 → 判题 → 终端 → 段位</small></h2>
     </div>
     <div class="demo-wrap rv">
       <div class="term">
-        <div class="term-bar"><i></i><i></i><i></i><span class="tt">usage-video.mp4 — 720×1600 · 30fps · H.264</span></div>
-        <video controls preload="metadata" playsinline webkit-playsinline poster="assets/poster.jpg">
+        <div class="term-bar"><i></i><i></i><i></i><span class="tt">mashang-usage-demo.mp4 — 720×1280 · 30fps · H.264</span></div>
+        <video controls preload="none" playsinline webkit-playsinline poster="assets/app/lesson_exercise.jpg">
           <source src="usage-video.mp4" type="video/mp4">
           您的浏览器不支持视频播放 — 可使用下方链接下载观看。
         </video>
@@ -562,7 +611,7 @@ footer .fine b{color:var(--dim)}
       <div class="demo-note">
         <span>播放卡顿或无法加载？</span>
         <span><a href="usage-video.mp4" download="mashang-usage-demo.mp4">下载原片</a>
-        &nbsp;·&nbsp; <a href="https://gitcode.com/badhope/mashang/blob/main/demo/usage-video.mp4" target="_blank" rel="noopener">仓库内查看</a></span>
+        &nbsp;·&nbsp; <a href="https://github.com/badhope/mashang/blob/main/demo/usage-video.mp4" target="_blank" rel="noopener">仓库内查看</a></span>
       </div>
     </div>
   </div>
@@ -573,7 +622,7 @@ footer .fine b{color:var(--dim)}
   <div class="wrap">
     <div class="sec-head rv">
       <div class="sec-id sec-green"><span class="bar"></span><b>03</b> // MODULES</div>
-      <h2>核心模块<small>8 MODULES LOADED · ALL OFFLINE</small></h2>
+      <h2>核心模块<small>8 MODULES · CORE LEARNING OFFLINE</small></h2>
     </div>
     <div class="mods" id="modGrid">
       <div class="mod rv" style="--ac:var(--cyan);--ac-soft:rgba(0,229,255,.16);--ac-soft2:rgba(0,229,255,.5)">
@@ -584,7 +633,7 @@ footer .fine b{color:var(--dim)}
       <div class="mod rv" style="--ac:var(--green);--ac-soft:rgba(0,255,156,.16);--ac-soft2:rgba(0,255,156,.5)">
         <div class="top"><span class="id">MOD-02</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
         <h3>assert 判题</h3>
-        <p><b>必须通过测试用例</b>才能解锁下一讲，治好「看懂了但写不出」的通病。</p>
+        <p><b>必须通过测试用例</b>才能解锁下一讲（App 内）；网页版可自由练习，进度本地存档。</p>
       </div>
       <div class="mod rv" style="--ac:var(--mag);--ac-soft:rgba(255,45,120,.16);--ac-soft2:rgba(255,45,120,.5)">
         <div class="top"><span class="id">MOD-03</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/></svg></div>
@@ -599,22 +648,22 @@ footer .fine b{color:var(--dim)}
       <div class="mod rv" style="--ac:var(--mag);--ac-soft:rgba(255,45,120,.16);--ac-soft2:rgba(255,45,120,.5)">
         <div class="top"><span class="id">MOD-05</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
         <h3>错题本</h3>
-        <p>错题自动收录，按 <b>1 / 3 / 7 天</b>间隔复习，遗忘曲线由它盯着。</p>
+        <p>错题自动收录，按 <b>SM-2 间隔重复</b>（1 天 → 6 天 → 按难度自适应增长）安排复习。</p>
       </div>
       <div class="mod rv" style="--ac:var(--cyan);--ac-soft:rgba(0,229,255,.16);--ac-soft2:rgba(0,229,255,.5)">
         <div class="top"><span class="id">MOD-06</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/></svg></div>
         <h3>内容中枢</h3>
-        <p>课程包按需下载：<b>内建函数巡礼 + DSA 基础/进阶 + JavaScript 启程</b>（+17 讲），GitCode 源 · SHA-256 校验。</p>
+        <p>课程包按需下载：<b>内建函数巡礼 + DSA 基础/进阶 + JavaScript 启程</b>（+17 讲），GitHub Pages / GitHub raw / GitCode 三级源 · SHA-256 校验。</p>
       </div>
       <div class="mod rv" style="--ac:var(--yel);--ac-soft:rgba(247,255,0,.14);--ac-soft2:rgba(247,255,0,.45)">
         <div class="top"><span class="id">MOD-07</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18z" fill="currentColor" stroke="none" opacity=".8"/></svg></div>
         <h3>七套主题</h3>
-        <p>赛博霓虹 / 深空灰 / 极光绿 / 暮紫 / 暮橙 / 纸白，<b>即切即用</b>不重启。</p>
+        <p>赛博霓虹 / 深空灰 / 极光绿 / 暮光紫 / 暮光橙 / 柔光护眼 / 白纸模式，外加<b>自定义主色</b>，即切即用不重启。</p>
       </div>
       <div class="mod rv" style="--ac:var(--green);--ac-soft:rgba(0,255,156,.16);--ac-soft2:rgba(0,255,156,.5)">
         <div class="top"><span class="id">MOD-08</span><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 20V9m6 11V4m6 16v-7"/></svg></div>
         <h3>六段位成长</h3>
-        <p><b>脚本小子 → 数据幽灵 → 网络浪人 → 赛博黑客 → 街头传奇 → 系统架构师</b>，XP 驱动。</p>
+        <p><b>脚本小子 → 数据幽灵 → 网络浪人 → 义体黑客 → 街头传奇 → 系统架构师</b>，XP 驱动。</p>
       </div>
     </div>
   </div>
@@ -676,12 +725,12 @@ footer .fine b{color:var(--dim)}
 
     <div class="viz rv">
       <div class="vtag">// CONTENT SCALE</div>
-      <h3>内容规模<small>UNIT: LESSON / ITEM</small></h3>
+      <h3>内容规模<small>63 JUDGE ITEMS · 230 CASES · UNIT: LESSON / ITEM</small></h3>
       <div class="bars">
-        <div class="bar-row"><span class="bl">55 道 assert 判题（200 用例）</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bv">55</span></div>
-        <div class="bar-row"><span class="bl">38 讲内置课程</span><div class="bar-track"><div class="bar-fill" style="width:64%"></div></div><span class="bv">38</span></div>
-        <div class="bar-row"><span class="bl">17 讲扩展包</span><div class="bar-track"><div class="bar-fill" style="width:31%"></div></div><span class="bv">17</span></div>
-        <div class="bar-row"><span class="bl">8 大角斗场挑战</span><div class="bar-track"><div class="bar-fill" style="width:15%"></div></div><span class="bv">8</span></div>
+        <div class="bar-row"><span class="bl">63 项 assert 判题（230 用例）</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bv">63</span></div>
+        <div class="bar-row"><span class="bl">38 讲内置课程</span><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><span class="bv">38</span></div>
+        <div class="bar-row"><span class="bl">17 讲扩展包</span><div class="bar-track"><div class="bar-fill" style="width:27%"></div></div><span class="bv">17</span></div>
+        <div class="bar-row"><span class="bl">8 大角斗场挑战</span><div class="bar-track"><div class="bar-fill" style="width:13%"></div></div><span class="bv">8</span></div>
       </div>
     </div>
   </div>
@@ -703,7 +752,7 @@ footer .fine b{color:var(--dim)}
         <div class="act"><span class="tag a3">第三幕 · 高阶义体</span><span class="rng">19-26</span><span class="desc">魔术方法 → 生成器引擎 → 装饰器 → 标准库实战</span></div>
         <div class="act"><span class="tag fin">第四幕 · 边界之外</span><span class="rng">27-30</span><span class="desc">资源管家 → 文件 IO → 自定义异常 → __main__ 守卫</span></div>
         <div class="act"><span class="tag plus">第五幕 · 生产实战</span><span class="rng">31-38</span><span class="desc">正则 → 类型提示 → 并发/异步 → 测试与工程化</span></div>
-        <div class="act"><span class="tag plus">+ 角斗场 ARENA</span><span class="desc">8 大限时挑战（6 Python + 2 JavaScript）· 霓虹计数器 / 回文侦测 / 密码防火墙…</span></div>
+        <div class="act"><span class="tag plus">+ 角斗场 ARENA</span><span class="desc">8 大挑战（6 Python + 2 JavaScript，App 内可跑）· 霓虹计数器 / 回文侦测 / 密码防火墙…</span></div>
         <div class="act"><span class="tag plus">+ 内容中枢 HUB</span><span class="desc">内建函数巡礼 1 讲 · DSA 基础/进阶各 5 讲 · JavaScript 启程 6 讲（共 +17 讲）</span></div>
       </div>
     </div>
@@ -711,11 +760,71 @@ footer .fine b{color:var(--dim)}
   </div>
 </section>
 
+
+<!-- ================= WEB CLIENT ================= -->
+<section id="web" style="padding-top:clamp(20px,4vw,40px)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="sec-id sec-cyan"><span class="bar"></span><b>06</b> // WEB CLIENT</div>
+      <h2>不装 App 也能学<small>BROWSER-NATIVE CPYTHON 3.13 · SAME COURSES, SAME ENGINE</small></h2>
+    </div>
+    <div class="dl-card rv">
+      <div class="dl-left">
+        <h3>网页版 · 在线试玩</h3>
+        <div class="sub">PYODIDE 0.29.5 · CPYTHON 3.13.2 · 无需注册</div>
+        <ul class="spec">
+          <li>与手机端<b>同一套课程 JSON</b>与<b>同一份 runner.py</b></li>
+          <li>执行在 <b>Web Worker</b> 内，死循环可强制终止，不冻结页面</li>
+          <li>进度 / XP 存本机 <b>localStorage</b>，刷新与深链可恢复</li>
+          <li>首屏需联网下载约 12 MB WASM 内核（浏览器缓存后复用）</li>
+          <li>需要现代浏览器 <b>Chrome / Edge / Firefox / Safari 16.4+</b></li>
+        </ul>
+        <a class="dl-btn-big" href="web/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          打开网页版
+        </a>
+        <div class="dl-alt">网页版是 App 的<b>子集</b>：6 道 Python 挑战可判题，2 道 JavaScript 挑战请在 App 内体验；成就 / 连击 / 证书等 Android 专属功能不在网页端。</div>
+      </div>
+      <div class="dl-right">
+        <div class="lbl">// SAME ENGINE, TWO RUNTIMES</div>
+        <div class="codeblk"><span class="cm"># Android: CPython 3.13 via Chaquopy</span>
+<span class="c1">./gradlew</span> :app:assembleDebug
+
+<span class="cm"># Web: same runner.py in Pyodide</span>
+<span class="c1">cd</span> web
+<span class="c1">python</span> -m http.server 8765
+
+<span class="cm"># 两端课程同源校验</span>
+<span class="c1">python</span> tests/validate_content.py</div>
+        <p class="note"><b>为什么同源很重要：</b>判题语义只在 <code>runner.py</code> 里写一次，App 与网页端行为一致；课程 JSON 只维护一份，避免「网页讲的和手机讲的不一样」。</p>
+      </div>
+    </div>
+
+    <div class="web-demo rv">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span class="tt">mashang-web-demo.mp4 — 1280×800 · 28s · Chromium</span></div>
+        <video controls preload="none" playsinline poster="assets/web-demo-poster.jpg">
+          <source src="assets/web-demo.mp4" type="video/mp4">
+          您的浏览器不支持视频播放 — <a href="assets/web-demo.mp4">下载观看</a>。
+        </video>
+      </div>
+      <p class="demo-note"><span>真实网页端录屏：运行课程代码 → 判题通过 → XP 落盘 → REPL 交互</span></p>
+    </div>
+
+    <div class="web-shots rv">
+      <figure><img src="assets/web-home.jpg" alt="网页版首页" loading="lazy" width="1440" height="980"><figcaption>指挥台 · 进度存档</figcaption></figure>
+      <figure><img src="assets/web-lesson.jpg" alt="网页版课程与判题" loading="lazy" width="1440" height="980"><figcaption>课程详情 · 判题编辑器</figcaption></figure>
+      <figure><img src="assets/web-terminal.jpg" alt="网页版终端" loading="lazy" width="1440" height="980"><figcaption>终端 · 有状态 REPL</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= 05 DOWNLOAD ================= -->
 <section id="download" style="padding-top:clamp(20px,4vw,40px)">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="sec-id sec-green"><span class="bar"></span><b>06</b> // DOWNLOAD</div>
+      <div class="sec-id sec-green"><span class="bar"></span><b>07</b> // DOWNLOAD</div>
       <h2>获取 码上<small>FREE · OPEN SOURCE · NO SIGN-UP</small></h2>
     </div>
     <div class="dl-card rv">
@@ -725,15 +834,15 @@ footer .fine b{color:var(--dim)}
         <ul class="spec">
           <li>系统要求 <b>Android 7.0+</b>（minSdk 24）</li>
           <li>架构 <b>arm64-v8a</b>（64 位 ARM 真机）</li>
-          <li>构建 <b>R8 混淆</b> Release 版</li>
+          <li>构建 <b>R8 混淆</b> Release 版 · 签名证书 CN=Mashang</li>
           <li>协议 <b>MIT License</b> · 可商用</li>
           <li>隐私 <b>零数据上传</b> · 无账号体系</li>
         </ul>
-        <a class="dl-btn-big" href="https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk" target="_blank" rel="noopener">
+        <a class="dl-btn-big" href="https://github.com/badhope/mashang/releases/latest" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
-          下载 APK v0.3.8
+          下载最新 APK
         </a>
-        <div class="dl-alt">应用内暂未内置自动更新；新版本请从 <a href="https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk" target="_blank" rel="noopener">Releases</a> 下载后覆盖安装，学习数据不受影响。</div>
+        <div class="dl-alt">应用内暂未内置自动更新；新版本请从 <a href="https://github.com/badhope/mashang/releases/latest" target="_blank" rel="noopener">Releases</a> 下载后覆盖安装，学习数据不受影响。</div>
       </div>
       <div class="dl-right">
         <div class="lbl">// BUILD FROM SOURCE</div>
@@ -756,7 +865,7 @@ python tests/validate_content.py</div>
 <section id="faq" style="padding-top:clamp(16px,3vw,30px)">
   <div class="wrap">
     <div class="sec-head rv" style="text-align:center">
-      <div class="sec-id sec-mag"><span class="bar"></span><b>07</b> // FAQ</div>
+      <div class="sec-id sec-mag"><span class="bar"></span><b>08</b> // FAQ</div>
       <h2>常见疑问<small>BEFORE YOU ASK</small></h2>
     </div>
     <div class="faq" id="faqList">
@@ -783,51 +892,50 @@ python tests/validate_content.py</div>
 <!-- ================= FOOTER ================= -->
 <footer>
   <div class="wrap foot-center">
-    <div class="rv"><div style="width:min(340px,80vw);margin:0 auto"><svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+    <div class="rv foot-logo"><svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="码上 Mashang">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#07090F"/>
       <stop offset="1" stop-color="#0B1220"/>
     </linearGradient>
-    <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="fglowCyan" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="6" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="glowGreen" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="fglowGreen" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+    <pattern id="fgrid" width="48" height="48" patternUnits="userSpaceOnUse">
       <path d="M48 0H0V48" fill="none" stroke="#00E5FF" stroke-opacity="0.07"/>
     </pattern>
   </defs>
-
-  <rect width="1200" height="300" fill="url(#bg)"/>
-  <rect width="1200" height="300" fill="url(#grid)"/>
-
-  <g filter="url(#glowCyan)">
+  <rect width="1200" height="300" fill="url(#fbg)"/>
+  <rect width="1200" height="300" fill="url(#fgrid)"/>
+  <g filter="url(#fglowCyan)">
     <path d="M150 90 L215 150 L150 210" fill="none" stroke="#00E5FF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <g filter="url(#glowGreen)">
+  <g filter="url(#fglowGreen)">
     <path d="M245 196 L330 196" fill="none" stroke="#00FF9C" stroke-width="16" stroke-linecap="round"/>
   </g>
-
   <text x="380" y="150" font-family="Consolas, Menlo, monospace" font-size="84" font-weight="bold" fill="#E6F1FF">码上</text>
   <text x="384" y="212" font-family="Consolas, Menlo, monospace" font-size="34" font-weight="bold" fill="#FF2D78">MASHANG</text>
   <text x="580" y="212" font-family="Consolas, Menlo, monospace" font-size="26" fill="#8FA3BF">offline · cyberpunk · assert-judged</text>
-
   <rect x="0" y="288" width="1200" height="12" fill="#00E5FF" opacity="0.25"/>
-</svg></div></div>
-    <div class="tag">CODE NOW · MASTER ANY LANGUAGE · LEARN OFFLINE, ANYWHERE</div>
+</svg></div>
+    <div class="tag">CODE NOW · PYTHON + JAVASCRIPT · LEARN OFFLINE, ANYWHERE</div>
     <div class="foot-links">
-      <a href="https://gitcode.com/badhope/mashang" target="_blank" rel="noopener">源码仓库</a>
-      <a href="https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk" target="_blank" rel="noopener">Releases</a>
-      <a href="https://gitcode.com/badhope/mashang/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
-      <a href="https://gitcode.com/badhope/mashang/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener">隐私政策</a>
+      <a href="https://github.com/badhope/mashang" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://gitcode.com/badhope/mashang" target="_blank" rel="noopener">GitCode</a>
+      <a href="https://gitee.com/badhope/mashang" target="_blank" rel="noopener">Gitee</a>
+      <a href="https://github.com/badhope/mashang/releases/latest" target="_blank" rel="noopener">Releases</a>
+      <a href="web/">网页版</a>
+      <a href="https://github.com/badhope/mashang/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      <a href="https://github.com/badhope/mashang/blob/main/PRIVACY_POLICY.md" target="_blank" rel="noopener">隐私政策</a>
     </div>
     <div class="fine">
       <b>码上</b> · Mashang — 装进口袋的赛博朋克编程学习终端<br>
-      badhope / mashang · GITCODE · © 2026 · BUILT WITH NEON &amp; CAFFEINE
+      badhope / mashang · © 2026 · MIT · BUILT WITH NEON &amp; CAFFEINE
     </div>
   </div>
 </footer>
@@ -843,12 +951,12 @@ python tests/validate_content.py</div>
 
   /* ---- boot log typing ---- */
   const BOOT=[
-    ['> 码上 BOOT SEQUENCE v3.13.9','c'],
+    ['> 码上 BOOT SEQUENCE v0.4.0','c'],
     ['> mounting /dev/python ............ <b>OK</b>',''],
     ['> curriculum: 38 lessons .......... <b>LOADED</b>',''],
     ['> assert judge .................... <b>ARMED</b>',''],
     ['> variable snapshot ............... <b>READY</b>',''],
-    ['> network ......................... <b style="color:#FF2D78">DISABLED</b>','']
+    ['> network ......................... <b style="color:#00FF9C">OPTIONAL</b>','']
   ];
   (async()=>{
     const box=document.getElementById('boot'); if(!box) return;
@@ -860,6 +968,21 @@ python tests/validate_content.py</div>
     }
     const c=document.createElement('i'); c.className='caret'; box.appendChild(c);
   })();
+
+  /* ---- mobile nav ---- */
+  const navToggle=document.getElementById('navToggle'), navLinks=document.getElementById('navLinks');
+  if(navToggle&&navLinks){
+    navToggle.addEventListener('click',()=>{
+      const open=navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open?'true':'false');
+      navToggle.textContent=open?'✕':'☰';
+    });
+    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded','false');
+      navToggle.textContent='☰';
+    }));
+  }
 
   /* ---- scroll reveal with stagger ---- */
   document.querySelectorAll('.mods, .phone-row, .faq').forEach(g=>{

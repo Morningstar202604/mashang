@@ -239,6 +239,10 @@ def check_exercise(code, tests, stdin_lines=None):
     #     真正定义的内容；
     #   - 用户代码定义的函数/类通过浅拷贝对测试可见（copy 共享引用）。
     test_ns = namespace.copy()
+    # 判题契约：把用户代码的 stdout 暴露给用例，允许 assert 输出内容，
+    # 防止「只赋值不打印」也能过关（l01 实测漏洞）。stderr 同理。
+    test_ns["__stdout__"] = core["stdout"]
+    test_ns["__stderr__"] = core["stderr"]
     for index, test in enumerate(tests, start=1):
         test_state = {"finished": False, "error": None}
         test_out = io.StringIO()

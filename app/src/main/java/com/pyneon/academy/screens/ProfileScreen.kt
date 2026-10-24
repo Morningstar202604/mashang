@@ -99,7 +99,7 @@ fun ProfileScreen(
     val lessons = remember { LessonRepository.lessons(context) }
     // 「我的」页的课程统计与毕业口径都只看内置主线（Python），
     // 下载的扩展包不计入，避免通关主线后仍显示未毕业。
-    val coreLessons = remember(lessons) { lessons.filter { it.lang == "python" } }
+    val coreLessons = remember(lessons) { LessonRepository.mainline(context) }
     val unlocked = remember(progress, coreLessons.size) {
         unlockedAchievements(progress, coreLessons.size)
     }

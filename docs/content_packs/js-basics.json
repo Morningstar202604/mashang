@@ -1,0 +1,559 @@
+[
+  {
+    "id": "js01",
+    "order": 300,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "第一次握手",
+    "subtitle": "console.log() 与你的第一行 JS",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "让浏览器开口说话"
+      },
+      {
+        "type": "text",
+        "text": "Python 用 print() 输出，JavaScript 的标准输出叫 console.log()。它来自浏览器与 Node.js 共同遵守的 Console 标准，是这门语言最常用的调试出口。"
+      },
+      {
+        "type": "code",
+        "code": "var hackerName = 'V';\nvar online = true;\n\nconsole.log(hackerName, online);\nconsole.log('HELLO, ' + hackerName);",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "V true\nHELLO, V"
+      },
+      {
+        "type": "task",
+        "text": "把 hackerName 换成你自己的代号，运行看看输出有什么变化。"
+      },
+      {
+        "type": "tip",
+        "text": "JS 里加号 (+) 既能做加法也能拼接字符串。字符串 + 任何东西都会变成字符串拼接，这是初学者最常见的「惊喜」。"
+      },
+      {
+        "type": "quiz",
+        "question": "console.log('1' + 1) 会输出什么？",
+        "options": [
+          "2",
+          "'11'",
+          "报错",
+          "NaN"
+        ],
+        "answer": 1,
+        "explain": "字符串 '1' 加数字 1，JS 把数字转成字符串拼在一起，得到 '11'。想让它们相加要先 Number('1')。"
+      },
+      {
+        "type": "warn",
+        "text": "本包课程先用 var 声明变量入门；现代 JS 的 let/const、箭头函数与 async 将在后续版本跟进。"
+      },
+      {
+        "type": "order",
+        "title": "把代码排成正确的执行顺序（先声明，后使用，最后输出）",
+        "lines": [
+          "var level = 66;",
+          "level = level + 1;",
+          "console.log(level);"
+        ]
+      },
+      {
+        "type": "practice",
+        "title": "拼接自我介绍",
+        "code": "var name = 'judy';\nvar city = 'night city';\n\nconsole.log(name + ' @ ' + city);",
+        "output": "judy @ night city",
+        "hint": "用 + 把三个片段连起来，别忘了空格。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "var 声明一个变量并赋值",
+          "用 console.log() 打印它",
+          "试着改变量名再运行，观察报错信息",
+          "报错会直接告诉你是哪个标识符未定义"
+        ]
+      },
+      {
+        "type": "code",
+        "code": "var a = 7;\nvar b = 3;\n\nconsole.log(a + b);\nconsole.log(a * b);\nconsole.log(a % b);",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "10\n21\n1"
+      }
+    ],
+    "exercise": {
+      "title": "生成入网代号",
+      "brief": "实现 greet(name)：返回 'HELLO, ' 拼上 name 的字符串。greet('v') 应返回 'HELLO, v'。",
+      "starterCode": "function greet(name) {\n  // 返回拼接后的字符串\n\n}\n\nconsole.log(greet('v'));",
+      "hint": "return 'HELLO, ' + name; —— 注意 HELLO 后面的逗号和空格都在字符串里。",
+      "tests": [
+        "assert(greet('v') === 'HELLO, v', 'greet(\"v\") 应为 HELLO, v')",
+        "assert(greet('judy') === 'HELLO, judy', 'greet(\"judy\") 应为 HELLO, judy')",
+        "assert(greet('') === 'HELLO, ', '空名字也要能拼接')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function greet(name) {\n  return 'HELLO, ' + name;\n}\n\nconsole.log(greet('v'));\nconsole.log(greet('judy'));"
+    }
+  },
+  {
+    "id": "js02",
+    "order": 301,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "数字的脾气",
+    "subtitle": "Math 对象与取整",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "数值运算与 Math 工具箱"
+      },
+      {
+        "type": "text",
+        "text": "JS 只有一种数字类型（64 位浮点）。整数运算要小心取整，Math 对象提供了 floor / ceil / round / sqrt 等工具。"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "运算",
+          "JS 写法",
+          "示例"
+        ],
+        "rows": [
+          [
+            "平方根",
+            "Math.sqrt(x)",
+            "Math.sqrt(25) → 5"
+          ],
+          [
+            "向下取整",
+            "Math.floor(x)",
+            "Math.floor(6.9) → 6"
+          ],
+          [
+            "向上取整",
+            "Math.ceil(x)",
+            "Math.ceil(0.1) → 1"
+          ],
+          [
+            "取余数",
+            "a % b",
+            "7 % 3 → 1"
+          ]
+        ]
+      },
+      {
+        "type": "code",
+        "code": "var energy = 9000;\nvar half = energy / 2;\n\nconsole.log(half);\nconsole.log(Math.sqrt(81));\nconsole.log(Math.floor(6.9), Math.ceil(0.1));",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "4500\n9\n6 1"
+      },
+      {
+        "type": "text",
+        "text": "Python 里 9 // 2 是整除得 4；JS 没有整除运算符，惯用写法是 Math.floor(9 / 2)。"
+      },
+      {
+        "type": "quiz",
+        "question": "Math.floor(7 / 2) 的结果是？",
+        "options": [
+          "3.5",
+          "3",
+          "4",
+          "报错"
+        ],
+        "answer": 1,
+        "explain": "7/2 = 3.5，Math.floor 向下取整得 3。"
+      },
+      {
+        "type": "fill",
+        "goal": "把 9 除以 2 后向下取整，填出正确写法",
+        "code": "var x = Math.____(9 / 2);",
+        "answer": "floor",
+        "explain": "floor 是地板，永远向下；ceil 是天花板，永远向上。"
+      },
+      {
+        "type": "practice",
+        "title": "伤害速算",
+        "code": "function rough(atk) {\n  return Math.floor(Math.sqrt(atk));\n}\n\nconsole.log(rough(100));",
+        "output": "10",
+        "hint": "先开方再向下取整，100 的平方根正好是 10。"
+      }
+    ],
+    "exercise": {
+      "title": "伤害公式移植",
+      "brief": "把 Python 版伤害公式移植过来：damage(attack, defense) 返回 Math.floor(Math.sqrt(attack)) - Math.floor(defense / 2)。damage(25, 6) 应返回 2。",
+      "starterCode": "function damage(attack, defense) {\n\n}\n\nconsole.log(damage(25, 6));",
+      "hint": "sqrt 开方后 floor 一次，defense/2 再 floor 一次，两者相减。",
+      "tests": [
+        "assert(damage(25, 6) === 2, '25,6 应为 2')",
+        "assert(damage(100, 10) === 5, '100,10 应为 5')",
+        "assert(damage(1, 100) === -49, '防御过高应为负数')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function damage(attack, defense) {\n  return Math.floor(Math.sqrt(attack)) - Math.floor(defense / 2);\n}\n\nconsole.log(damage(25, 6));\nconsole.log(damage(100, 10));"
+    }
+  },
+  {
+    "id": "js03",
+    "order": 302,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "字符串手术刀",
+    "subtitle": "slice / split / join / toUpperCase",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "字符串方法速查"
+      },
+      {
+        "type": "text",
+        "text": "JS 的字符串是不可变的：所有方法都返回新字符串，原变量不变。这与 Python 的切片哲学一致，只是函数名不同。"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "目的",
+          "Python",
+          "JavaScript"
+        ],
+        "rows": [
+          [
+            "取片段",
+            "s[0:3]",
+            "s.slice(0, 3)"
+          ],
+          [
+            "全大写",
+            "s.upper()",
+            "s.toUpperCase()"
+          ],
+          [
+            "分割",
+            "s.split('-')",
+            "s.split('-')"
+          ],
+          [
+            "连接",
+            "'-'.join(arr)",
+            "arr.join('-')"
+          ],
+          [
+            "长度",
+            "len(s)",
+            "s.length"
+          ]
+        ]
+      },
+      {
+        "type": "code",
+        "code": "var base = 'cyberpunk';\n\nconsole.log(base.slice(0, 5));\nconsole.log(base.toUpperCase());\nconsole.log(base.length);",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "cyber\nCYBERPUNK\n9"
+      },
+      {
+        "type": "code",
+        "code": "var tags = 'neon;rain;city'.split(';');\n\nconsole.log(tags);\nconsole.log(tags.join(' | '));",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "[\"neon\", \"rain\", \"city\"]\nneon | rain | city"
+      },
+      {
+        "type": "tip",
+        "text": "slice 支持负索引：base.slice(-4) 取最后 4 个字符，等价于 Python 的 base[-4:]。"
+      },
+      {
+        "type": "order",
+        "title": "把数组变成字符串的正确步骤排序",
+        "lines": [
+          "先有数组",
+          "用分隔符连接数组元素",
+          "得到结果字符串"
+        ]
+      },
+      {
+        "type": "practice",
+        "title": "生成日志标签",
+        "code": "var line = 'error:disk:full';\nvar parts = line.split(':');\n\nconsole.log(parts[0]);\nconsole.log(parts.length);",
+        "output": "error\n3",
+        "hint": "split 按 : 切开，得到三个片段。"
+      }
+    ],
+    "exercise": {
+      "title": "生成 URL 代号",
+      "brief": "实现 slugify(title)：转小写、把空格换成 -。slugify('Neon City') 应返回 'neon-city'。",
+      "starterCode": "function slugify(title) {\n\n}\n\nconsole.log(slugify('Neon City'));",
+      "hint": "链式调用：toLowerCase() 先转小写，split(' ').join('-') 完成替换。",
+      "tests": [
+        "assert(slugify('Neon City') === 'neon-city', '普通短语')",
+        "assert(slugify('HELLO WORLD') === 'hello-world', '全大写输入')",
+        "assert(slugify('a  b') === 'a--b', '连续空格会保留，不必特殊处理')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function slugify(title) {\n  return title.toLowerCase().split(' ').join('-');\n}\n\nconsole.log(slugify('Neon City'));"
+    }
+  },
+  {
+    "id": "js04",
+    "order": 303,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "分支与守卫",
+    "subtitle": "if / else if / else 与严格相等",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "让程序学会选择"
+      },
+      {
+        "type": "text",
+        "text": "JS 的分支与 Python 逻辑相同，但条件必须写在小括号里，else if 是两个词（Python 是 elif）。"
+      },
+      {
+        "type": "diagram",
+        "text": "if (条件) {\n  ...\n} else if (条件) {\n  ...\n} else {\n  ...\n}"
+      },
+      {
+        "type": "code",
+        "code": "function access(level) {\n  if (level >= 100) {\n    return 'ROOT';\n  } else if (level >= 50) {\n    return 'OPERATOR';\n  } else {\n    return 'GUEST';\n  }\n}\n\nconsole.log(access(120));\nconsole.log(access(66));\nconsole.log(access(3));",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "ROOT\nOPERATOR\nGUEST"
+      },
+      {
+        "type": "text",
+        "text": "JS 有两套相等：== 会先转型再比较（'1' == 1 为 true），=== 要求类型也相同（'1' === 1 为 false）。课程与判题一律使用 ===，这是现代 JS 的共识。"
+      },
+      {
+        "type": "warn",
+        "text": "永远优先使用 === 和 !==。== 的隐式转换规则复杂到连资深工程师都背不全。"
+      },
+      {
+        "type": "quiz",
+        "question": "'1' === 1 的结果是？",
+        "options": [
+          "true",
+          "false",
+          "报错",
+          "undefined"
+        ],
+        "answer": 1,
+        "explain": "=== 要求类型相同，字符串与数字类型不同，直接 false。"
+      },
+      {
+        "type": "fill",
+        "goal": "补全守卫条件：x 不是数字时提前返回",
+        "code": "function guard(x) {\n  if (____(x)) return 'bad input';\n  return 'ok';\n}",
+        "answer": "isNaN",
+        "explain": "isNaN(x) 为 true 说明 x 不是有效数字。"
+      },
+      {
+        "type": "practice",
+        "title": "等级速查",
+        "code": "function badge(score) {\n  if (score >= 90) return 'S';\n  if (score >= 60) return 'A';\n  return 'F';\n}\n\nconsole.log(badge(95), badge(60), badge(59));",
+        "output": "S A F",
+        "hint": "多个 if 从高到低排列，命中即 return，不需要 else。"
+      }
+    ],
+    "exercise": {
+      "title": "权限分级器",
+      "brief": "实现 access(level)：≥100 返回 'ROOT'，≥50 返回 'OPERATOR'，其余返回 'GUEST'。",
+      "starterCode": "function access(level) {\n\n}\n\nconsole.log(access(120));",
+      "hint": "从高往低判断，先 return 再写下一个分支。",
+      "tests": [
+        "assert(access(120) === 'ROOT', '120 应为 ROOT')",
+        "assert(access(100) === 'ROOT', '边界值 100 应为 ROOT')",
+        "assert(access(66) === 'OPERATOR', '66 应为 OPERATOR')",
+        "assert(access(3) === 'GUEST', '3 应为 GUEST')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function access(level) {\n  if (level >= 100) return 'ROOT';\n  if (level >= 50) return 'OPERATOR';\n  return 'GUEST';\n}\n\nconsole.log(access(120));\nconsole.log(access(66));\nconsole.log(access(3));"
+    }
+  },
+  {
+    "id": "js05",
+    "order": 304,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "数组的循环",
+    "subtitle": "for 循环与空数组守卫",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "遍历与聚合"
+      },
+      {
+        "type": "text",
+        "text": "JS 的 for 循环长得像 C：三段式（初始化; 条件; 步进）。数组用 .length 取长度，用 [i] 按下标访问。"
+      },
+      {
+        "type": "code",
+        "code": "var scores = [88, 92, 79];\n\nfor (var i = 0; i < scores.length; i++) {\n  console.log(i, scores[i]);\n}",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "0 88\n1 92\n2 79"
+      },
+      {
+        "type": "text",
+        "text": "求最大值的套路与 Python 完全一致：先假设第一个是最大，再逐个比较替换。"
+      },
+      {
+        "type": "code",
+        "code": "function peak(values) {\n  if (values.length === 0) {\n    return null;\n  }\n  var best = values[0];\n  for (var i = 1; i < values.length; i++) {\n    if (values[i] > best) {\n      best = values[i];\n    }\n  }\n  return best;\n}\n\nconsole.log(peak([88, 92, 79]));\nconsole.log(peak([]));",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "92\nnull"
+      },
+      {
+        "type": "tip",
+        "text": "空数组要先守卫再访问 values[0]，否则 best 会是 undefined。JS 里 undefined 不是报错，而是「没这个东西」的标记。"
+      },
+      {
+        "type": "quiz",
+        "question": "peak([]) 返回 null 而不是报错，靠的是哪一行？",
+        "options": [
+          "var best = values[0]",
+          "if (values.length === 0)",
+          "return best",
+          "for 循环"
+        ],
+        "answer": 1,
+        "explain": "开头的空数组守卫拦住了后续所有下标访问。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "先处理空数组边界",
+          "用第一个元素初始化 best",
+          "从下标 1 开始循环比较",
+          "返回 best"
+        ]
+      }
+    ],
+    "exercise": {
+      "title": "峰值探测器",
+      "brief": "实现 peak(values)：返回数组最大值，空数组返回 null。",
+      "starterCode": "function peak(values) {\n\n}\n\nconsole.log(peak([88, 92, 79]));",
+      "hint": "先守卫空数组，再初始化 best 为 values[0]，循环从 1 开始。",
+      "tests": [
+        "assert(peak([88, 92, 79]) === 92, '最大值 92')",
+        "assert(peak([5]) === 5, '单元素数组')",
+        "assert(peak([]) === null, '空数组应为 null')",
+        "assert(peak([-3, -1, -7]) === -1, '负数也能比')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function peak(values) {\n  if (values.length === 0) return null;\n  var best = values[0];\n  for (var i = 1; i < values.length; i++) {\n    if (values[i] > best) best = values[i];\n  }\n  return best;\n}\n\nconsole.log(peak([88, 92, 79]));\nconsole.log(peak([]));"
+    }
+  },
+  {
+    "id": "js06",
+    "order": 305,
+    "chapter": 21,
+    "chapterName": "语言扩展包 · JavaScript 启程",
+    "lang": "javascript",
+    "title": "对象即字典",
+    "subtitle": "用 {} 统计字符频率",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "JS 的对象 = Python 的字典"
+      },
+      {
+        "type": "text",
+        "text": "JS 用花括号对象承担 Python 字典的角色。取值用 obj.key 或 obj['key']，判断键是否存在用 'key' in obj。"
+      },
+      {
+        "type": "code",
+        "code": "var agent = { name: 'V', level: 66 };\n\nconsole.log(agent.name);\nconsole.log(agent['level']);\nconsole.log('name' in agent);",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "V\n66\ntrue"
+      },
+      {
+        "type": "text",
+        "text": "统计字符频率的三步：遍历字符串、没有就置 1、有就加一。Python 用 dict.get(ch, 0) + 1，JS 用中括号访问配合 in 判断。"
+      },
+      {
+        "type": "code",
+        "code": "function freq(text) {\n  var counts = {};\n  for (var i = 0; i < text.length; i++) {\n    var ch = text[i];\n    if (counts[ch] === undefined) {\n      counts[ch] = 1;\n    } else {\n      counts[ch] = counts[ch] + 1;\n    }\n  }\n  return counts;\n}\n\nconsole.log(freq('aab'));",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "{\"a\": 2, \"b\": 1}"
+      },
+      {
+        "type": "fill",
+        "goal": "补全计数逻辑：第一次见到该字符时",
+        "code": "if (counts[ch] === ____) {\n  counts[ch] = 1;\n}",
+        "answer": "undefined",
+        "explain": "对象里不存在的键读出来是 undefined，用它当「第一次见面」的信号。"
+      },
+      {
+        "type": "quiz",
+        "question": "counts['z'] 在 counts 里没有 'z' 键时读出什么？",
+        "options": [
+          "0",
+          "null",
+          "undefined",
+          "报错"
+        ],
+        "answer": 2,
+        "explain": "JS 读不存在的键不报错，返回 undefined —— 和 Python 的 KeyError 行为不同。"
+      },
+      {
+        "type": "practice",
+        "title": "计数器起步",
+        "code": "var counts = {};\ncounts.a = 1;\ncounts.a = counts.a + 1;\n\nconsole.log(counts.a);",
+        "output": "2",
+        "hint": "同一个键反复赋值就是累加。"
+      }
+    ],
+    "exercise": {
+      "title": "字符频率统计",
+      "brief": "实现 freq(text)：返回每个字符出现次数的对象。freq('aab') 应得到 {a: 2, b: 1}。",
+      "starterCode": "function freq(text) {\n\n}\n\nconsole.log(freq('aab'));",
+      "hint": "for 循环遍历 text，用 counts[ch] 累加，undefined 时置 1。",
+      "tests": [
+        "var c1 = freq('aab');\nassert(c1.a === 2, 'a 应出现 2 次')",
+        "assert(c1.b === 1, 'b 应出现 1 次')",
+        "var c2 = freq('');\nassert(c2.a === undefined, '空串统计结果为空对象')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function freq(text) {\n  var counts = {};\n  for (var i = 0; i < text.length; i++) {\n    var ch = text[i];\n    if (counts[ch] === undefined) counts[ch] = 1;\n    else counts[ch] = counts[ch] + 1;\n  }\n  return counts;\n}\n\nconsole.log(freq('aab'));"
+    }
+  }
+]

@@ -101,6 +101,11 @@ fun SmartErrorMessage(
  */
 private fun parseError(errorText: String): Pair<String, String?> {
     return when {
+        // 判题未通过（不是运行时错误：用户代码跑完了，只是断言没过）
+        errorText.contains("TestFailed") -> {
+            "判题未通过" to "按用例提示修正逻辑后重新判题；需要思路可点「问教练」，不会直接给答案"
+        }
+
         // 语法错误
         errorText.contains("SyntaxError") -> {
             val line = extractLineNumber(errorText)

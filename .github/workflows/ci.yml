@@ -61,6 +61,20 @@ jobs:
       - name: 课程内容校验（55 讲 / 8 挑战 / all judge cases）
         run: python tests/validate_content.py
 
+      - name: Pages 资产同步（catalog / 课程包 / 网页端副本，必须可复现）
+        run: |
+          python tools/sync_pages_assets.py
+          git diff --exit-code -- docs/catalog.json docs/content_packs docs/web
+
+      - name: 页面链接检查（docs / web 相对链接与锚点）
+        run: python tools/check_links.py
+
+      - name: 网页端语法门禁（node --check）
+        run: |
+          node --check web/app.js
+          node --check web/data.js
+          node --check web/engine.js
+
       - name: web 数据与引擎同源校验（含生成产物可复现）
         run: |
           python web/gen_data.py

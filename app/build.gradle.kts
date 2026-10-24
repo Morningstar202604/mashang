@@ -14,8 +14,8 @@ android {
         applicationId = "com.pyneon.academy"
         minSdk = 24
         targetSdk = 35
-        versionCode = 14
-        versionName = "0.3.8"
+        versionCode = 15
+        versionName = "0.4.0"
         // 版本号单一来源：BuildConfig.VERSION_NAME / VERSION_CODE
         buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
         buildConfigField("int", "VERSION_CODE", "$versionCode")

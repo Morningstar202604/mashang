@@ -12,12 +12,12 @@
 [![Android](https://img.shields.io/badge/Android-7.0%2B-00E5FF.svg)]()
 [![Python](https://img.shields.io/badge/CPython-3.13--offline-00FF9C.svg)]()
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-FF2D78.svg)]()
-[![Lessons](https://img.shields.io/badge/%E8%AC%9B%E5%BA%A7-30%E8%AC%9B-F7FF00.svg)](#-カリキュラム30-講--4-幕)
+[![Lessons](https://img.shields.io/badge/%E8%AC%9B%E5%BA%A7-38%E8%AC%9B-F7FF00.svg)](#-カリキュラム38-講--5-幕)
 [![Download Page](https://img.shields.io/badge/%F0%9F%8C%90-%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9A%E3%83%BC%E3%82%B8-FF2D78.svg)](https://badhope.github.io/mashang/)
 
 🌐 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja-JP.md)
 
-[🎬 予告編](#-予告編50-秒) · [⚡ TL;DR](#-tldr30-秒) · [📊 仕組み](#-なぜオフラインで動くのか) · [📥 ダウンロード](#-ダウンロードとインストール) · [カリキュラム](#-カリキュラム30-講--4-幕) · [⭐ Star](../../stargazers)
+[🎬 予告編](#-予告編50-秒) · [⚡ TL;DR](#-tldr30-秒) · [📊 仕組み](#-なぜオフラインで動くのか) · [📥 ダウンロード](#-ダウンロードとインストール) · [カリキュラム](#-カリキュラム38-講--5-幕) · [⭐ Star](../../stargazers)
 
 </div>
 
@@ -90,10 +90,10 @@ flowchart LR
 
 ```mermaid
 pie title コンテンツ規模（講 / 件）
-    "内置 38 講" : 38
+    "内蔵 38 講" : 38
     "拡張パック 17 講" : 17
     "アリーナ 8 挑戦" : 8
-    "assert 採点 55 項目" : 55
+    "assert 採点 63 項目" : 63
 ```
 
 ## 🏆 6 段階ランク成長
@@ -127,6 +127,39 @@ flowchart LR
 |:--:|
 | ![チャレンジ](demo/app/challenge.png) |
 
+| 判定成功 | 判定失敗 | コースルート |
+|:--:|:--:|:--:|
+| ![判定成功](demo/app/judge_pass.png) | ![判定失敗](demo/app/judge_fail.png) | ![ルート](demo/app/tracks.png) |
+
+| コンテンツハブ | 設定 | JS レッスン |
+|:--:|:--:|:--:|
+| ![コンテンツハブ](demo/app/contenthub.png) | ![設定](demo/app/settings.png) | ![JS レッスン](demo/app/lessons_js.png) |
+
+> 16 枚のスクリーンショットはすべて v0.4.0 実機（1080×2400、API 35 エミュレータ）撮影：判定成功で +140 XP、失敗パネルは `TestFailed` と最初の失敗ケースを表示、ルート画面は実在するコンテンツのみ、コンテンツハブは HTTPS + SHA-256 で検証します。
+
+## 🎥 Web 版デモ · 28 秒
+
+<p align="center">
+  <video src="demo/web-demo.mp4" poster="demo/web-demo-poster.jpg" controls width="640"></video>
+  <br/>
+  <a href="demo/web-demo.mp4"><img src="demo/web-demo-poster.jpg" width="620" alt="▶ Web デモを見る"/></a>
+  <br/>
+  <sub>▶ 実際の Web クライアントで録画（1280×800、Chromium）：講座コード実行、判定合格、XP 保存、REPL 操作。</sub>
+</p>
+
+## 🌐 Web 版（ブラウザ）
+
+2 つ目のクライアントは Pyodide 0.29.5（CPython 3.13.2）で**同じ講座 JSON と同じ `runner.py`** をブラウザ内で実行します：
+
+| ホーム | レッスンと判定 | ターミナル |
+|:--:|:--:|:--:|
+| ![Web ホーム](docs/assets/web-home.jpg) | ![Web レッスン](docs/assets/web-lesson.jpg) | ![Web ターミナル](docs/assets/web-terminal.jpg) |
+
+- 🔗 オンラインで試す：<https://badhope.github.io/mashang/web/>
+- 🧵 実行は Web Worker（15 秒で強制終了、タブは固まらない）、進捗は `localStorage`、hash ルートでリロード復元
+- 🧩 範囲：Python 38 講、Python チャレンジ 6 問、REPL 完備。JavaScript チャレンジ 2 問は App 専用
+
+
 > いずれも出荷ビルドの実際の出力です：`sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`、`sum(nums)/len(nums)` → `3.875`、JS タブは Rhino 1.7.15（`10 21`）。練習エディタは未回答時に実際に `NameError` を表示し、ネオンカウンターは 150 XP の仕様です。
 
 ## 🎥 使用デモ · 100 秒
@@ -143,7 +176,7 @@ flowchart LR
 
 | あなたは | 得られるもの |
 |---|---|
-| 初学者 / キャリアチェンジャー | `print` からデコレーターまで、38 講の日本語ナラティブ講座 |
+| 初学者 / キャリアチェンジャー | `print` からデコレーターまで、38 講の中国語ナラティブ講座（本文は中国語、UI は日本語 README で解説） |
 | 通勤・隙間時間学習者 | 完全オフライン、地下鉄のトンネルでもコード実行 |
 | 教師 / 保護者 | 広告なし・アカウント不要・データ送信ゼロ、生徒に安心 |
 | 開発者 | Compose + Chaquopy の完全リファレンス実装、MIT |
@@ -191,18 +224,18 @@ flowchart LR
 ## 📥 ダウンロードとインストール
 
 > ⚡ **最速ルート** → 🌐 [オンラインダウンロードページ](https://badhope.github.io/mashang/)：QR コードをスキャンまたはタップ。予告編・スクショ・インストールガイド付き。
-> ⭐ **メインリポジトリ** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（9 star・Pages・Releases ミラー）
+> ⭐ **メインリポジトリ** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（Pages・Releases ミラー）
 > 🛰 **Pages ミラー** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
 > 📦 **リポジトリ（並列同期、どれでも）** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24）、arm64-v8a（64bit ARM 実機向け）。Release ビルドは R8 難読化済み。
 
-- ⭐ おすすめ：[GitHub Releases](https://github.com/badhope/mashang/releases) からダウンロード（直リンク：[mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk)）
+- ⭐ おすすめ：[GitHub Releases](https://github.com/badhope/mashang/releases/latest) から最新の `mashang-*.apk` をダウンロード
 - 自分でビルド：
 
 ```bash
 ./gradlew :app:assembleDebug        # Debug ビルド
-./gradlew :app:bundleRelease        # ストア用 AAB（keystore.properties が必要）
+./gradlew :app:assembleRelease     # signed APK via KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
 python tests/test_engine_desktop.py   # エンジン単体テスト
 python tests/validate_content.py      # 講座 × 解答キー全量検証
 ```
@@ -302,7 +335,7 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 - ✅ 「現状有姿」で提供、いかなる保証もなし。リスクは自己責任。
 - ™ 「Mashang」/「マシャン」の名称とロゴは商標として保持されます。
 
-サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
+サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (MPL-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
 **CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）。GitCode Actions はエンジン/コンテンツ/同源ゲートを担当（ホスト Runner から Google の Android SDK 配布元へ到達できず、Android ビルドは GitHub 側）。
 

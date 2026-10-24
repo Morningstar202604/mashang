@@ -49,6 +49,7 @@ import com.pyneon.academy.ui.theme.TextMid
 import com.pyneon.academy.ui.theme.NeonYellow
 import com.pyneon.academy.utils.AppConstants
 import com.pyneon.academy.utils.ShareHelper
+import com.pyneon.academy.utils.UpdateChecker
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,6 +57,9 @@ fun SettingsScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var confirmClearHistory by remember { mutableStateOf(false) }
+    var checkingUpdate by remember { mutableStateOf(false) }
+    var updateMessage by remember { mutableStateOf<String?>(null) }
+    var pendingRelease by remember { mutableStateOf<UpdateChecker.ReleaseInfo?>(null) }
 
     Column(
         Modifier
@@ -98,10 +102,46 @@ fun SettingsScreen(onBack: () -> Unit) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 InfoRow("当前版本", "v${AppConstants.VERSION_NAME} (code ${AppConstants.VERSION_CODE})")
                 Text(
-                    "本应用暂未内置自动更新。新版本将通过应用商店或重新安装获得，离线课程与学习数据不受影响。",
+                    "检查更新只读取 GitHub Releases 的公开版本号（不发送设备信息、不自动下载）。新版本从 Releases 下载覆盖安装，学习数据不丢失。",
                     style = MaterialTheme.typography.bodySmall,
                     color = TextDim
                 )
+                NeonButton(
+                    label = when {
+                        checkingUpdate -> "检查中…"
+                        else -> "检查更新"
+                    },
+                    accent = NeonYellow,
+                    enabled = !checkingUpdate,
+                    onClick = {
+                        checkingUpdate = true
+                        scope.launch {
+                            val result = UpdateChecker.fetchLatest()
+                            checkingUpdate = false
+                            updateMessage = result.fold(
+                                onSuccess = { info ->
+                                    if (UpdateChecker.isNewer(info.version, AppConstants.VERSION_NAME)) {
+                                        pendingRelease = info
+                                        "发现新版本 v${info.version}（当前 v${AppConstants.VERSION_NAME}）"
+                                    } else {
+                                        "已是最新版本（v${AppConstants.VERSION_NAME}）"
+                                    }
+                                },
+                                onFailure = { "检查失败：网络不可用或无发布记录（不影响离线学习）" }
+                            )
+                        }
+                    }
+                )
+                updateMessage?.let {
+                    Text(it, style = MaterialTheme.typography.bodySmall, color = NeonCyan)
+                }
+                pendingRelease?.let { info ->
+                    NeonButton(
+                        label = "打开发布页",
+                        accent = NeonGreen,
+                        onClick = { ShareHelper.openUrl(context, info.url) }
+                    )
+                }
             }
         }
 

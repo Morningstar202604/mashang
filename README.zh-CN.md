@@ -93,7 +93,7 @@ pie title 内容规模（讲 / 项）
     "38 讲内置课程" : 38
     "17 讲扩展包" : 17
     "8 大角斗场挑战" : 8
-    "55 道 assert 判题" : 55
+    "63 项 assert 判题" : 63
 ```
 
 ## 🏆 六段位成长体系
@@ -127,7 +127,41 @@ flowchart LR
 |:--:|
 | ![挑战](demo/app/challenge.png) |
 
+| 判题通过 | 判题失败 | 课程路线 |
+|:--:|:--:|:--:|
+| ![判题通过](demo/app/judge_pass.png) | ![判题失败](demo/app/judge_fail.png) | ![路线](demo/app/tracks.png) |
+
+| 内容中心 | 系统设置 | JS 课程 |
+|:--:|:--:|:--:|
+| ![内容中心](demo/app/contenthub.png) | ![设置](demo/app/settings.png) | ![JS 课程](demo/app/lessons_js.png) |
+
+> 16 张截图全部来自 v0.4.0 实机（1080×2400，API 35 模拟器）：判题通过 +140 XP、失败面板给出 `TestFailed` 与首个失败用例、路线页只列真实内容、内容中心经 HTTPS 下载并做 SHA-256 校验。
+
 > 以上全部是实装包的真实输出：`sorted(nums)` → `[1, 1, 2, 3, 4, 5, 6, 9]`，`sum(nums)/len(nums)` → `3.875`；JS 标签运行在 Rhino 1.7.15（`10 21`）；练习编辑器在填答案前真实报出 `NameError`；霓虹计数器为 150 XP 规格。
+
+## 🎥 网页版演示 · 28 秒
+
+<p align="center">
+  <video src="demo/web-demo.mp4" poster="demo/web-demo-poster.jpg" controls width="640"></video>
+  <br/>
+  <a href="demo/web-demo.mp4"><img src="demo/web-demo-poster.jpg" width="620" alt="▶ 观看网页版演示"/></a>
+  <br/>
+  <sub>▶ 真实网页端录制（1280×800，Chromium）：运行课程代码、通过判题、XP 落盘、REPL 交互。</sub>
+</p>
+
+## 🌐 网页版（浏览器）
+
+第二个客户端用 Pyodide 0.29.5（CPython 3.13.2）在浏览器里跑**同一套课程 JSON 与同一份 `runner.py`**：
+
+| 指挥台 | 课程与判题 | 终端 |
+|:--:|:--:|:--:|
+| ![网页版首页](docs/assets/web-home.jpg) | ![网页版课程](docs/assets/web-lesson.jpg) | ![网页版终端](docs/assets/web-terminal.jpg) |
+
+- 🔗 在线试玩：<https://badhope.github.io/mashang/web/>
+- 🧵 执行在 Web Worker（15 秒硬超时，标签页不会冻结）；进度存 `localStorage`，hash 路由刷新不丢
+- 🧩 范围：38 讲 Python 课程、6 道 Python 挑战、完整 REPL；2 道 JavaScript 挑战仅 App 内可跑
+
+
 
 ## 🎥 使用演示 · 100 秒上手实拍
 
@@ -164,7 +198,7 @@ flowchart LR
 - ✅ **assert 自动判题** —— 通过测试用例才算过关，防止"看懂了但不会写"
 - ✍️ **填空题 + 🧩 代码排序** —— 对标 Mimo 的低门槛题型：只敲缺失片段 / 把打乱的代码行排成正确程序
 - 🧭 **L0 规则教练** —— 报错即辅导：离线规则引擎给出「诊断 → 三步引导 → 修复示例」，只提示不代写
-- 📖 **错题本 + 间隔复习** —— 答错自动进错题本，按时（当天/1 天/3 天/7 天…）滚动复习
+- 📖 **错题本 + 间隔复习** —— 答错自动进错题本，按 SM-2 调度（1 天 → 6 天 → 按熟练度自适应增长）
 - 🧭 **手把手引导** —— 每课标配：生活化比喻 → ASCII 图解 → TASK 跟改 → PRACTICE 跟练 → STEPS 思路卡
 
 ### 🔥 引擎硬核 —— 离线也能跑
@@ -191,18 +225,18 @@ flowchart LR
 ## 📥 下载安装
 
 > ⚡ **最快路径** → 🌐 [在线下载页](https://badhope.github.io/mashang/)：扫码或点链接，含宣传片、截图与安装引导。
-> ⭐ **主仓库** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（9 star，含 Pages 与 Releases 镜像）
+> ⭐ **主仓库** → [github.com/badhope/mashang](https://github.com/badhope/mashang)（含 Pages 与 Releases 镜像）
 > 🛰 **Pages 镜像** → [x33834.github.io/mashang](https://x33834.github.io/mashang/) · [morningstar202604.github.io/mashang](https://morningstar202604.github.io/mashang/)
 > 📦 **仓库（并列同步，任选其一）** → [GitHub/badhope](https://github.com/badhope/mashang) · [GitHub/x33834](https://github.com/x33834/mashang) · [GitCode](https://gitcode.com/badhope/mashang) · [Gitee](https://gitee.com/badhope/mashang)
 
 > Android 7.0+（minSdk 24），arm64-v8a 单架构（面向 64 位 ARM 真机）；release 构建已开启 R8 混淆压缩。
 
-- ⭐ 推荐：从 [GitHub Releases](https://github.com/badhope/mashang/releases) 下载（直链：[mashang-v0.3.8.apk](https://github.com/badhope/mashang/releases/download/v0.3.8/mashang-v0.3.8.apk)）
+- ⭐ 推荐：从 [GitHub Releases](https://github.com/badhope/mashang/releases/latest) 下载最新 `mashang-*.apk`
 - 开发者自行构建：
 
 ```bash
 ./gradlew :app:assembleDebug        # Debug 包
-./gradlew :app:bundleRelease        # 商店用 AAB（需配置 keystore.properties）
+./gradlew :app:assembleRelease     # signed APK via KEYSTORE_PATH / KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD
 python tests/test_engine_desktop.py   # 引擎单测
 python tests/validate_content.py      # 课程×参考答案 全量校验
 ```
@@ -287,9 +321,21 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 - [x] v0.2.1 内容中心：在线课程包下载（端云协同），首发包「内置函数巡礼」
 - [x] v0.3 阶段成果：DSA 增补包 ×2（10 讲）、L0 离线规则教练、错题本 + 间隔复习、UI 可读性整改（特效收敛、正文无衬线放大）
 - [ ] v0.3 剩余计划：turtle 海龟画布 · matplotlib 图表输出 · 执行过程变量动画
-- [x] 多语言架构已在 main 落地（尚未发版，下一版本号待定）：LanguageRuntime 抽象 + JavaScript 语言包（Rhino 后端）+ 语言过滤/切换 UI · 网页端对齐（Pyodide 0.29.5）· CI 落地 GitHub Actions + GitCode Actions
-- [ ] v0.4 端侧 AI 助教（线上大模型）· QuickJS 后端（ES6+）· 平板适配
+- [x] v0.4.0：LanguageRuntime 抽象 + JavaScript 语言包（Rhino）+ 语言过滤/切换 UI · 网页版（Pyodide 0.29.5，同一引擎）· 应用内检查更新 · 真实课程路线页
+- [ ] v0.5：turtle 海龟画布 · matplotlib 图表输出 · 平板适配 · QuickJS 后端（ES6+）
 - [ ] v1.0 应用商店全渠道上架
+
+## 🧪 测试与质量门禁
+
+| 门禁 | 命令 | 证明什么 |
+|---|---|---|
+| Python 引擎 + 内容 | `python -m unittest discover -s tests` | 128 条桌面测试：沙箱、超时、判题、内容结构 |
+| 课程 × 参考答案 | `python tests/validate_content.py` | 55 个 Python 判题项、201 条用例端到端跑通 |
+| JS 课程 | `python -m unittest discover -s tests -k test_js_lessons` | 每个 JS 代码块与练习用 Node 真实执行 |
+| 网页/App 同源 | `python -m unittest discover -s tests -k test_web_sync` | `data.js` / `engine.js` 可重现、逐字节一致 |
+| Android lint + 单测 | `./gradlew :app:lintDebug :app:testDebugUnitTest` | 0 lint error，JVM 单测（版本比较、文件 IO） |
+| APK 探针 | `python tests/ci_apk_probe.py <apk>` | APK 内 runner.py、assets、JS 语法、清单完整 |
+| Pages 资产 | `python tools/sync_pages_assets.py` | 目录 / 课程包 / 网页端副本逐字节一致 |
 
 ## 🤝 参与贡献
 
@@ -304,7 +350,7 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 - ✅ 按「原样」提供，不附带任何担保，风险自负。
 - ™ "码上" / "Mashang" 名称与标识为保留商标。
 
-第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (Apache-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
+第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (MPL-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
 **CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）。GitCode Actions 负责引擎/内容/同源门禁（其托管 Runner 无法访问 Google 的 Android SDK 源，Android 构建留在 GitHub）。
 

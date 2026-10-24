@@ -2,7 +2,7 @@
   {
     "id": "l31",
     "order": 31,
-    "chapter": 4,
+    "chapter": 5,
     "title": "正则表达式：文本挖掘",
     "subtitle": "re 模块 · 查找/提取/替换",
     "xp": 160,
@@ -101,12 +101,12 @@
       ],
       "xp": 190
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l32",
     "order": 32,
-    "chapter": 4,
+    "chapter": 5,
     "title": "类型提示与数据类",
     "subtitle": "typing · dataclass · 可读性",
     "xp": 150,
@@ -182,12 +182,12 @@
       ],
       "xp": 180
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l33",
     "order": 33,
-    "chapter": 4,
+    "chapter": 5,
     "title": "函数式工具箱",
     "subtitle": "itertools · functools · 少写循环",
     "xp": 160,
@@ -261,12 +261,12 @@
       ],
       "xp": 190
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l34",
     "order": 34,
-    "chapter": 4,
+    "chapter": 5,
     "title": "并发初探：线程与进程",
     "subtitle": "threading · GIL · 选型",
     "xp": 170,
@@ -327,12 +327,12 @@
       ],
       "xp": 200
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l35",
     "order": 35,
-    "chapter": 4,
+    "chapter": 5,
     "title": "异步协程 async/await",
     "subtitle": "asyncio · 单线程协作式并发",
     "xp": 180,
@@ -394,12 +394,12 @@
       ],
       "xp": 210
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l36",
     "order": 36,
-    "chapter": 4,
+    "chapter": 5,
     "title": "命令行工具箱",
     "subtitle": "sys.argv · argparse · CLI",
     "xp": 150,
@@ -465,12 +465,12 @@
       ],
       "xp": 180
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l37",
     "order": 37,
-    "chapter": 4,
+    "chapter": 5,
     "title": "调试与测试",
     "subtitle": "assert · unittest · TDD 习惯",
     "xp": 160,
@@ -528,12 +528,12 @@
       ],
       "xp": 190
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   },
   {
     "id": "l38",
     "order": 38,
-    "chapter": 4,
+    "chapter": 5,
     "title": "虚拟环境与工程化",
     "subtitle": "venv · pip · requirements",
     "xp": 150,
@@ -602,6 +602,6 @@
       ],
       "xp": 180
     },
-    "chapterName": "第四幕 · 生产实战"
+    "chapterName": "第五幕 · 生产实战"
   }
 ]

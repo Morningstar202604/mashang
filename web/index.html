@@ -2,17 +2,26 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>码上 · Mashang — 电脑端</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>码上 · Mashang — 网页版学习终端</title>
+  <meta name="description" content="码上 Mashang 网页版：浏览器内运行 CPython 3.13，38 讲课程、assert 自动判题、变量快照与进度存档。与 Android 端共用同一套课程与判题引擎。" />
+  <meta name="theme-color" content="#07090F" />
+  <meta property="og:title" content="码上 · Mashang — 网页版学习终端" />
+  <meta property="og:description" content="浏览器里跑 CPython 3.13：38 讲课程、assert 判题、变量快照、进度本地存档。" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2307090F'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='%2300E5FF' text-anchor='middle'%3E%E7%A0%81%3C/text%3E%3Crect x='6' y='25' width='20' height='2.5' fill='%2300FF9C'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="style.css" />
-  <!-- Pyodide：浏览器内 CPython（复用手机端同一套 runner.py 引擎）；主源，
-       失败时 app.js 的 PYODIDE_SOURCES 会依次切到 fastly / unpkg -->
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.js"></script>
+  <!-- Pyodide 主源；失败时 app.js 的 PYODIDE_SOURCES 依次切换 fastly / unpkg -->
+  <script defer src="https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.js"></script>
 </head>
 <body>
-  <div id="boot" class="boot">
+  <a class="skip" href="#view">跳到主要内容</a>
+
+  <div id="boot" class="boot" role="status" aria-live="polite">
     <div class="boot-box">
-      <pre class="boot-art">
+      <pre class="boot-art" aria-hidden="true">
 ███╗   ███╗ █████╗ ███████╗██╗  ██╗ █████╗ ███╗   ██╗ ██████╗
 ████╗ ████║██╔══██╗██╔════╝██║  ██║██╔══██╗████╗  ██║██╔════╝
 ██╔████╔██║███████║███████╗███████║███████║██╔██╗ ██║██║  ███╗
@@ -21,21 +30,44 @@
 ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝
       </pre>
       <div class="boot-line" id="boot-line">> 正在载入 CPython 内核…</div>
+      <div class="boot-actions" id="boot-actions" hidden>
+        <button type="button" class="btn-ghost" id="boot-retry">重试加载</button>
+        <button type="button" class="btn-ghost" id="boot-browse">仅浏览课程</button>
+      </div>
     </div>
   </div>
 
   <header class="hud-top">
-    <div class="logo">码上<span class="slash">_</span> <span class="logo-sub">Mashang · 电脑端</span></div>
-    <nav class="nav">
-      <button class="nav-btn active" data-tab="home">指挥台</button>
-      <button class="nav-btn" data-tab="repl">神经接口</button>
-      <button class="nav-btn" data-tab="arena">角斗场</button>
-      <a class="nav-btn nav-dl" href="https://badhope.github.io/mashang/" target="_blank" rel="noopener">📥 下载 App</a>
+    <a class="logo" href="#/home" aria-label="码上首页">码上<span class="slash">_</span> <span class="logo-sub">Mashang · 网页版</span></a>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="打开导航">☰</button>
+    <nav class="nav" id="main-nav" aria-label="主导航">
+      <a class="nav-btn" data-tab="home" href="#/home">指挥台</a>
+      <a class="nav-btn" data-tab="lessons" href="#/lessons">课程</a>
+      <a class="nav-btn" data-tab="terminal" href="#/terminal">终端</a>
+      <a class="nav-btn" data-tab="arena" href="#/arena">角斗场</a>
+      <a class="nav-btn nav-dl" href="https://github.com/badhope/mashang#download--install" target="_blank" rel="noopener">下载 App</a>
     </nav>
-    <div class="status"><span id="py-status" class="dot off"></span><span id="py-text">引擎离线</span></div>
+    <div class="status" title="浏览器内 Python 运行时">
+      <span id="py-status" class="dot off" aria-hidden="true"></span>
+      <span id="py-text">引擎离线</span>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
   </header>
 
-  <main id="view" class="view"></main>
+  <main id="view" class="view" tabindex="-1"></main>
+
+  <footer class="foot">
+    <div class="foot-row">
+      <span>码上 · Mashang — <b id="foot-version">v0.4.0</b> · MIT</span>
+      <span class="sep">/</span>
+      <a href="https://github.com/badhope/mashang" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://gitcode.com/badhope/mashang" target="_blank" rel="noopener">GitCode</a>
+      <a href="https://gitee.com/badhope/mashang" target="_blank" rel="noopener">Gitee</a>
+      <a href="https://badhope.github.io/mashang/" target="_blank" rel="noopener">官网 / 下载</a>
+      <button type="button" class="link-btn" id="reset-progress">重置本地进度</button>
+    </div>
+    <p class="fine">学习数据仅保存在本机浏览器 localStorage，不上传任何服务器。课程内容与 Android 端同源；判题引擎为同一份 runner.py。</p>
+  </footer>
 
   <div class="scanlines" aria-hidden="true"></div>
 

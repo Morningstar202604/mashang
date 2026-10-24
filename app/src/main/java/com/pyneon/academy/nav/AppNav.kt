@@ -45,7 +45,6 @@ import com.pyneon.academy.screens.ProfileScreen
 import com.pyneon.academy.screens.StreakScreen
 import com.pyneon.academy.screens.TerminalScreen
 import com.pyneon.academy.screens.TracksScreen
-import com.pyneon.academy.screens.TrackDevelopingScreen
 import com.pyneon.academy.screens.AboutScreen
 import com.pyneon.academy.screens.BackupScreen
 import com.pyneon.academy.screens.HelpScreen
@@ -171,19 +170,16 @@ fun AppRoot() {
                     onOpenLesson = { id -> navController.navigate("lesson/$id") },
                     onOpenTerminal = { navController.navigate("terminal") },
                     onOpenArena = { navController.navigate("arena") },
-                    onOpenLessons = { navController.navigate("lessons") }
+                    onOpenLessons = { navController.navigate("lessons") },
+                    onOpenTracks = { navController.navigate("tracks") }
                 )
             }
             composable("tracks") {
                 TracksScreen(
                     onBack = { navController.popBackStack() },
-                    onOpenTrack = { id -> navController.navigate("track/$id") },
-                    onOpenLessons = { navController.navigate("lessons") }
+                    onOpenLessons = { navController.navigate("lessons") },
+                    onOpenContentHub = { navController.navigate("contenthub") }
                 )
-            }
-            composable("track/{trackId}") { entry ->
-                val id = entry.arguments?.getString("trackId").orEmpty()
-                TrackDevelopingScreen(trackId = id, onBack = { navController.popBackStack() })
             }
             composable("lessons") {
                 LessonsScreen(openLesson = { id -> navController.navigate("lesson/$id") })
