@@ -4,8 +4,8 @@
 
 **码上，就是马上。Learn Python instantly — on your phone, fully offline.**
 
-一台装进口袋的赛博朋克编程学习终端：内嵌真实语言运行时（CPython 3.13 + JavaScript/Rhino），
-38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
+一台装进口袋的赛博朋克编程学习终端：内嵌真实语言运行时（Python / JavaScript / Lua / SQL），
+38 讲内置课程 + 29 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
@@ -43,7 +43,7 @@
 | **学完能算「会写」吗？** | ✅ **assert 自动判题** —— 测试用例不过就不放行，专治「看懂了但不会写」 |
 | **有广告 / 要注册吗？** | ✅ **零广告 · 零账号 · 零数据上传**，MIT 开源，教师可放心推给学生 |
 | **独门功能是什么？** | 🔬 **变量快照面板**（运行后整个命名空间可视化）· 六段位成长 · 每日任务 · 错题本间隔复习 |
-| **课程量多大？** | 📚 **38 讲内置 + 17 讲扩展包（共 55 讲）**，从 `print` 打到装饰器，另附角斗场 8 大挑战（6 Python + 2 JavaScript） |
+| **课程量多大？** | 📚 **38 讲内置 + 29 讲扩展包（共 67 讲）**，Python 主线之外还有 JavaScript / Lua / SQL 各 6 讲，另附角斗场 8 大挑战 |
 
 > 🎯 **一句话定位**：不是又一个「空白代码编辑器」，而是一台把 **CPython 解释器 + 判题引擎 + 游戏化成长** 全塞进手机的离线学习终端。
 
@@ -91,7 +91,7 @@ flowchart LR
 ```mermaid
 pie title 内容规模（讲 / 项）
     "38 讲内置课程" : 38
-    "17 讲扩展包" : 17
+    "29 讲扩展包" : 29
     "8 大角斗场挑战" : 8
     "63 项 assert 判题" : 63
 ```
@@ -213,7 +213,7 @@ flowchart LR
 
 - 🏆 **六段位成长** —— 脚本小子 → 数据幽灵 → 网络浪人 → 义体黑客 → 街头传奇 → 系统架构师
 - ⚡ **每日任务 / XP / 连击** —— 每天有目标，每次运行有反馈
-- 📦 **内容中心** —— 课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶 + 语言包·JavaScript 启程（共 17 讲），一键下载即学
+- 📦 **内容中心** —— 课程包体系：彩蛋课·内置函数巡礼 + 增补包·DSA 算法基础/进阶 + 语言包·JavaScript / Lua / SQL 启程（共 29 讲），一键下载即学
 - 🎓 **毕业证书** —— 通关全部课程解锁霓虹认证页，截图即分享
 
 ### 🧩 工程品质
@@ -295,7 +295,7 @@ Pydroid 是开发工具；我们是"课程即代码"的学习终端——每讲�
 <details>
 <summary><b>语言扩展包 · 内容中心下载</b></summary>
 
-彩蛋课·内置函数巡礼（1 讲）· 增补包·DSA 算法基础（5 讲）· 增补包·DSA 算法进阶（5 讲）· 语言包·JavaScript 启程（6 讲，需内置 JS 运行时，本版本已带）
+彩蛋课·内置函数巡礼（1 讲）· 增补包·DSA 算法基础（5 讲）· 增补包·DSA 算法进阶（5 讲）· 语言包·JavaScript 启程（6 讲）· 语言包·Lua 启程（6 讲）· 语言包·SQL 启程（6 讲）
 
 </details>
 
@@ -309,6 +309,8 @@ Kotlin + Jetpack Compose (Material3 赛博定制主题)
         │  LanguageRuntime 统一契约（JSON 载荷）
 PyBridge(Chaquopy) ──► CPython 3.13 (runner.py / repl.py)
 JsBridge(Rhino)    ──► JavaScript（语言包课程经内容中心下载）
+LuaBridge(LuaJ)    ──► Lua（沙箱：无 io/os/require）
+SqlBridge(sqlite3) ──► SQL（内存库，ATTACH 被拒）
 DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮器
 ```
 
@@ -352,6 +354,6 @@ Fork → 新建分支 → 提交 PR；课程内容请同步更新 `tests/validat
 
 第三方组件：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (MPL-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）。GitCode Actions 负责引擎/内容/同源门禁（其托管 Runner 无法访问 Google 的 Android SDK 源，Android 构建留在 GitHub）。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（测试 + lint + debug/release 构建 + APK 探针 + 签名发布，三仓镜像同步）是唯一实际执行并强制门禁的流水线。`.gitcode/workflows/ci.yml` 只是等价门禁的配置备份：GitCode 的代码化流水线需仓库手动开通，push 不会自动触发（2026-10-24 实测运行记录全部为手动触发，且未包含 Pages 同步/链接检查两步）。
 
 📄 [隐私政策](PRIVACY_POLICY.md) · [用户协议](TERMS_OF_SERVICE.md)

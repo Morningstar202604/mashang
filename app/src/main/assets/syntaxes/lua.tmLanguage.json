@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Lua (Mashang Lite)</string>
+	<key>scopeName</key>
+	<string>source.lua</string>
+	<key>fileTypes</key>
+	<array>
+		<string>lua</string>
+	</array>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>comment.line.double-dash.lua</string>
+			<key>match</key>
+			<string>--.*$</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>string.quoted.double.lua</string>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>string.quoted.single.lua</string>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>constant.numeric.lua</string>
+			<key>match</key>
+			<string>\b0[xX][0-9a-fA-F]+\b|\b\d+(\.\d+)?([eE][-+]?\d+)?\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>constant.language.lua</string>
+			<key>match</key>
+			<string>\b(true|false|nil)\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>keyword.control.lua</string>
+			<key>match</key>
+			<string>\b(and|break|do|else|elseif|end|for|function|goto|if|in|local|not|or|repeat|return|then|until|while)\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>support.function.lua</string>
+			<key>match</key>
+			<string>\b(print|type|tostring|tonumber|pairs|ipairs|next|select|assert|error|pcall|xpcall|setmetatable|getmetatable|rawget|rawset|rawlen|require|string|table|math|coroutine)\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>entity.name.function.lua</string>
+			<key>match</key>
+			<string>\b([a-zA-Z_][\w]*)\s*(?=\()</string>
+		</dict>
+	</array>
+</dict>
+</plist>

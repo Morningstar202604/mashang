@@ -1,34 +1,60 @@
 {
-  "updated_at": "2026-10-20",
-  "sha256": "f0aed7388561b02686e2731d843475cdf21946f3e626aa4b6a4e26594b0241d2",
+  "updated_at": "2026-10-24",
+  "sha256": "54d6f1a97dfc845a6261aa757b5dbefb2350009f501ea91a63c426e735cf9f01",
   "packs": [
     {
       "id": "bonus-builtin",
       "name": "彩蛋课 · 内置函数巡礼",
       "version": 1,
       "description": "把 Python 的城市公共服务一次逛完：len/sorted/enumerate/zip/any/all…附随堂一问与判题实战。",
-      "sha256": "6873777ff8eed32ef7bbc16df67385d6fbeffd45ed0431335c8cd6db2b1afc9d"
+      "sha256": "6873777ff8eed32ef7bbc16df67385d6fbeffd45ed0431335c8cd6db2b1afc9d",
+      "kind": "course",
+      "lang": "python"
     },
     {
       "id": "dsa-basics",
       "name": "增补包 · DSA 算法基础",
       "version": 1,
       "description": "复杂度直觉 / 双指针 / 哈希表 / 栈与队列 / 递归记忆化：5 讲原创算法入门，每讲含闯关判题。",
-      "sha256": "620c654af92761639dc13eb64c9d9cc904c7d6acc50fde10f0a4f6b6c142c92c"
+      "sha256": "620c654af92761639dc13eb64c9d9cc904c7d6acc50fde10f0a4f6b6c142c92c",
+      "kind": "course",
+      "lang": "python"
     },
     {
       "id": "dsa-mastery",
       "name": "增补包 · DSA 算法进阶",
       "version": 1,
       "description": "手写排序 / 二分查找 / 贪心找零 / 链表思维 / 最大子段和：5 讲原创算法进阶，对标竞赛入门。",
-      "sha256": "66d0d626bec7fa3dc0fc7f31a85590313ce8cc17ea5fe72918195a3638fa4c9b"
+      "sha256": "66d0d626bec7fa3dc0fc7f31a85590313ce8cc17ea5fe72918195a3638fa4c9b",
+      "kind": "course",
+      "lang": "python"
     },
     {
       "id": "js-basics",
       "name": "语言包 · JavaScript 启程",
       "version": 1,
       "description": "6 讲 JavaScript 入门：console.log / Math 取整 / 字符串方法 / 分支守卫 / 数组循环 / 对象统计。与 Python 课一一对照，需要「JavaScript 运行时」（本版本已内置）。",
-      "sha256": "4be5cc5499775c19cafda7afcc14231599b6f3db2a3be2af7f31208906ffc6ee"
+      "sha256": "4be5cc5499775c19cafda7afcc14231599b6f3db2a3be2af7f31208906ffc6ee",
+      "kind": "course",
+      "lang": "javascript"
+    },
+    {
+      "id": "lua-basics",
+      "name": "语言包 · Lua 启程",
+      "version": 1,
+      "description": "6 讲 Lua 入门：print / 变量类型 / 控制流 / table / 多返回值 / string 库，全部在设备端 LuaJ 运行时离线执行。",
+      "sha256": "657a4fba4a73dd46a196291a8260f86e79b86ee139ca7e58c5fbec71f61b13d3",
+      "kind": "course",
+      "lang": "lua"
+    },
+    {
+      "id": "sql-basics",
+      "name": "语言包 · SQL 启程",
+      "version": 1,
+      "description": "6 讲 SQL 入门：SELECT / WHERE 排序 / 聚合分组 / JOIN / 写入约束 / 子查询与 NULL，使用设备端 SQLite 内存库。",
+      "sha256": "fd2f8d7899b04b1cb4f5d9abc6f5b510ae4f9cf13be01e12abc50ad42aa03f00",
+      "kind": "course",
+      "lang": "sql"
     }
   ]
 }

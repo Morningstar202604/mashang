@@ -45,8 +45,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 兼容入口：旧导航名 contenthub 指向语言中心，避免两套下载 UI 各自维护。
+ * 2026-10-24 起课程包统一下载入口是 [LanguageCenterScreen]。
+ */
 @Composable
-fun ContentHubScreen(onBack: () -> Unit) {
+fun ContentHubScreen(onBack: () -> Unit) = LanguageCenterScreen(onBack = onBack)
+
+@Composable
+private fun LegacyContentHubScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val center = remember { ContentCenter() }

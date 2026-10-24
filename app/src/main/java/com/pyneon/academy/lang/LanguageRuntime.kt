@@ -11,15 +11,20 @@ import android.content.Context
 object LanguageIds {
     const val PYTHON = "python"
     const val JAVASCRIPT = "javascript"
+    const val LUA = "lua"
+    const val SQL = "sql"
 
     /** 内置默认语言：任何回落路径都指向它 */
     const val DEFAULT = PYTHON
 
     /**
-     * 已规划但尚未实现的语言：仅用于课程内容校验与显示名映射，
-     * 不得据此向用户承诺"可下载语言包"——当前版本没有运行时下载机制。
+     * 已规划但尚未实现的语言：仅用于课程内容校验与显示名映射。
+     *
+     * 这些语言需要编译器或原生工具链（JVM / NDK / Go toolchain），
+     * 无法以纯 JVM 或内嵌解释器方式随 APK 提供；UI 必须显示「暂不支持」，
+     * 不得出现下载入口。
      */
-    val PLANNED: List<String> = listOf("java", "cpp", "go", "rust", "sql")
+    val PLANNED: List<String> = listOf("java", "cpp", "go", "rust")
 
     /**
      * 显示名映射。注册表中没有对应运行时时也能给出可读名称。
@@ -27,11 +32,12 @@ object LanguageIds {
     fun displayNameOf(id: String): String = when (id) {
         PYTHON -> "Python"
         JAVASCRIPT -> "JavaScript"
+        LUA -> "Lua"
+        SQL -> "SQL"
         "java" -> "Java"
         "cpp" -> "C++"
         "go" -> "Go"
         "rust" -> "Rust"
-        "sql" -> "SQL"
         else -> id.replaceFirstChar { it.uppercase() }
     }
 }

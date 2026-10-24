@@ -17,7 +17,11 @@ data class ContentPack(
     val name: String,
     val version: Int,
     val description: String,
-    val sha256: String? = null
+    val sha256: String? = null,
+    /** 内容类型：course = 课程包（增补/语言），默认 course */
+    val kind: String = "course",
+    /** 该包课程所属语言 id；空表示不绑定语言（Python 增补包除外都应有值） */
+    val lang: String = ""
 )
 
 data class ContentCatalog(
@@ -88,7 +92,9 @@ class ContentCenter {
                             name = p.getString("name"),
                             version = p.getInt("version"),
                             description = p.optString("description"),
-                            sha256 = p.optString("sha256").takeIf { it.isNotBlank() }
+                            sha256 = p.optString("sha256").takeIf { it.isNotBlank() },
+                            kind = p.optString("kind", "course"),
+                            lang = p.optString("lang", "")
                         )
                     )
                 }

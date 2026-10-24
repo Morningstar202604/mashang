@@ -39,6 +39,7 @@ import com.pyneon.academy.screens.ChallengeDetailScreen
 import com.pyneon.academy.screens.ContentHubScreen
 import com.pyneon.academy.screens.HomeScreen
 import com.pyneon.academy.screens.LessonDetailScreen
+import com.pyneon.academy.screens.LanguageCenterScreen
 import com.pyneon.academy.screens.LessonsScreen
 import com.pyneon.academy.screens.MistakeScreen
 import com.pyneon.academy.screens.ProfileScreen
@@ -207,6 +208,7 @@ fun AppRoot() {
             }
             composable("profile") { ProfileScreen(
                 onOpenContentHub = { navController.navigate("contenthub") },
+                onOpenLanguageCenter = { navController.navigate("langcenter") },
                 onOpenCertificate = { navController.navigate("certificate") },
                 onOpenStreak = { navController.navigate("streak") },
                 onOpenMistakes = { navController.navigate("mistakes") },
@@ -219,6 +221,7 @@ fun AppRoot() {
                 onOpenSettings = { navController.navigate("settings") }
             ) }
             composable("contenthub") { ContentHubScreen(onBack = { navController.popBackStack() }) }
+            composable("langcenter") { LanguageCenterScreen(onBack = { navController.popBackStack() }) }
             // 「备份/恢复」入口此前只在 ProfileScreen 里 navigate("backup")，但导航图
             // 从未注册该路由 → 点击必崩（IllegalArgumentException: route backup not found）。
             composable("backup") { BackupScreen(onBack = { navController.popBackStack() }) }

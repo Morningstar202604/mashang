@@ -102,6 +102,8 @@ private fun createEditor(
         val scopeName = when (language) {
             "python" -> "source.python"
             "javascript" -> "source.js"
+            "lua" -> "source.lua"
+            "sql" -> "source.sql"
             else -> "source.$language"
         }
         val grammarSource = IGrammarSource.fromString(IGrammarSource.ContentType.XML, grammarText)
@@ -209,7 +211,9 @@ fun buildAnnotatedString(
     tokens: com.pyneon.academy.ui.theme.NeonTokens = com.pyneon.academy.ui.theme.DarkTokens
 ): AnnotatedString {
     val builder = AnnotatedString.Builder(code)
-    if (language != "python" && language != "javascript") return builder.toAnnotatedString()
+    if (language != "python" && language != "javascript" && language != "lua" && language != "sql") {
+        return builder.toAnnotatedString()
+    }
 
     val keywordStyle = SpanStyle(color = tokens.primary, fontWeight = FontWeight.Bold)
     val stringStyle = SpanStyle(color = tokens.success)
@@ -220,6 +224,8 @@ fun buildAnnotatedString(
 
     val (keywords, builtins, commentPrefix) = when (language) {
         "javascript" -> jsHighlightSets()
+        "lua" -> luaHighlightSets()
+        "sql" -> sqlHighlightSets()
         else -> pythonHighlightSets()
     }
 
@@ -277,6 +283,33 @@ private fun pythonHighlightSets(): Triple<Set<String>, Set<String>, String> = Tr
         "TypeError", "KeyError", "IndexError", "FileNotFoundError", "ImportError", "AttributeError"
     ),
     "#"
+)
+
+private fun luaHighlightSets(): Triple<Set<String>, Set<String>, String> = Triple(
+    setOf(
+        "and", "break", "do", "else", "elseif", "end", "false", "for", "function", "goto",
+        "if", "in", "local", "nil", "not", "or", "repeat", "return", "then", "true", "until", "while"
+    ),
+    setOf(
+        "print", "type", "tostring", "tonumber", "pairs", "ipairs", "next", "select",
+        "assert", "error", "pcall", "xpcall", "setmetatable", "getmetatable", "rawget",
+        "rawset", "rawequal", "rawlen", "string", "table", "math", "coroutine"
+    ),
+    "--"
+)
+
+private fun sqlHighlightSets(): Triple<Set<String>, Set<String>, String> = Triple(
+    setOf(
+        "select", "from", "where", "insert", "into", "values", "update", "set", "delete",
+        "create", "table", "drop", "alter", "join", "inner", "left", "right", "outer", "on",
+        "group", "by", "order", "having", "limit", "offset", "distinct", "as", "and", "or",
+        "not", "null", "is", "in", "between", "like", "exists", "union", "all", "case",
+        "when", "then", "else", "end", "primary", "key", "foreign", "references", "default",
+        "unique", "check", "index", "view", "with", "asc", "desc", "count", "sum", "avg",
+        "min", "max", "integer", "text", "real", "blob", "numeric", "begin", "commit", "rollback"
+    ),
+    setOf("sqlite_master", "sqlite_sequence", "rowid", "typeof", "coalesce", "ifnull", "nullif", "substr", "length", "round", "random"),
+    "--"
 )
 
 private fun jsHighlightSets(): Triple<Set<String>, Set<String>, String> = Triple(

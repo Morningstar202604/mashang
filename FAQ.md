@@ -67,8 +67,8 @@
 ```bash
 ./gradlew :app:assembleDebug          # Debug APK
 ./gradlew :app:assembleRelease        # 需 KEYSTORE_PATH 等 4 个环境变量
-python -m unittest discover -s tests  # 149 条测试
-python tests/validate_content.py      # 55 个判题项 / 201 用例
+python -m unittest discover -s tests  # 161 条测试
+python tests/validate_content.py      # 55 个 Python 判题项 / 201 用例
 ```
 
 **Q：怎么加一门新语言？**
@@ -77,7 +77,7 @@ python tests/validate_content.py      # 55 个判题项 / 201 用例
 
 **Q：为什么 CI 分 GitHub 和 GitCode 两个平台？**
 
-GitHub Actions 负责 Android 构建与签名发布（Runner 可访问 Google SDK 源）；GitCode 的托管 Runner 无法访问 `dl.google.com`，只跑引擎/内容/同源门禁，避免「看起来绿但没真构建」。
+GitHub Actions 负责 Android 构建与签名发布（Runner 可访问 Google SDK 源），也是唯一实际执行的门禁。GitCode 的代码化流水线需要仓库手动开通，push 不会自动触发；`.gitcode/workflows/ci.yml` 作为等价门禁的配置备份保留，2026-10-24 实测其历史运行全部为手动触发，且不含 Pages 同步与链接检查两步。
 
 **Q：发现 Bug / 想提需求？**
 

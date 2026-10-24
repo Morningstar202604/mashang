@@ -42,22 +42,36 @@ def _test_method_count() -> int:
 
 
 def _judge_counts():
+    """返回 (Python 项, Python 用例, JS 项, JS 用例)。
+
+    注意：Lua / SQL 课程包的判题项不计入「Python 判题项」——它们由
+    LuaJ 与 sqlite3 执行，Python 侧的 validate_content.py 不覆盖。
+    总数这两个数字仍用于断言软著说明书的汇总行。
+    """
     items = []
     for f in sorted(ASSETS.glob("lessons_*.json")) + sorted(PACKS.glob("*.json")):
         items.extend(json.loads(_read(f)))
     items.extend(json.loads(_read(ASSETS / "challenges.json")))
     py_items = py_cases = js_items = js_cases = 0
+    lua_items = lua_cases = sql_items = sql_cases = 0
     for item in items:
         tests = (item.get("exercise") or {}).get("tests") or item.get("tests") or []
         if not tests:
             continue
-        if item.get("lang", "python") == "javascript":
+        lang = item.get("lang", "python")
+        if lang == "javascript":
             js_items += 1
             js_cases += len(tests)
-        else:
+        elif lang == "lua":
+            lua_items += 1
+            lua_cases += len(tests)
+        elif lang == "sql":
+            sql_items += 1
+            sql_cases += len(tests)
+        elif lang == "python":
             py_items += 1
             py_cases += len(tests)
-    return py_items, py_cases, js_items, js_cases
+    return py_items, py_cases, js_items, js_cases, lua_items, lua_cases, sql_items, sql_cases
 
 
 def _source_scale():
@@ -84,15 +98,19 @@ class TestCountClaims(unittest.TestCase):
         )
 
     def test_softcopy_judge_counts_match_assets(self):
-        py_items, py_cases, js_items, js_cases = _judge_counts()
+        py_items, py_cases, js_items, js_cases, lua_items, lua_cases, sql_items, sql_cases = _judge_counts()
         text = _read(ROOT / "docs" / "softcopy" / "软件说明书.md")
         for snippet in (
             f"{py_items} 个 Python 判题项",
             f"{py_cases} 条 Python 用例",
-            f"{js_items} 个 JavaScript 判题项",
-            f"{js_cases} 条 JavaScript 用例",
-            f"{py_items + js_items} 个判题项",
-            f"{py_cases + js_cases} 条用例",
+            f"{js_items} 个 JavaScript",
+            f"{js_cases} 条 JavaScript",
+            f"{lua_items} 个 Lua 判题项",
+            f"{lua_cases} 条 Lua 用例",
+            f"{sql_items} 个 SQL 判题项",
+            f"{sql_cases} 条 SQL 用例",
+            f"{py_items + js_items + lua_items + sql_items} 个判题项",
+            f"{py_cases + js_cases + lua_cases + sql_cases} 条用例",
         ):
             with self.subTest(snippet=snippet):
                 self.assertIn(snippet, text, f"软著说明书缺少或写错：{snippet}")
@@ -129,6 +147,24 @@ class TestCapabilityClaims(unittest.TestCase):
                 for phrase in forbidden:
                     self.assertNotIn(phrase, head, f"{name} 声称语言包可扩展运行时，但当前无语言包下载")
                 self.assertIn("JavaScript", head, f"{name} 首屏应写明已内置 JavaScript 运行时")
+
+
+class TestCiClaims(unittest.TestCase):
+    """GitCode 的代码化流水线 push 不自动触发，文档不得再声称它承担门禁。"""
+
+    FORBIDDEN = (
+        "GitCode Actions 负责引擎",
+        "GitCode Actions runs the engine",
+        "GitCode Actions はエンジン",
+    )
+
+    def test_docs_do_not_claim_gitcode_ci_gate(self):
+        for name in ("README.md", "README.zh-CN.md", "README.ja-JP.md", "FAQ.md"):
+            with self.subTest(file=name):
+                text = _read(ROOT / name)
+                for phrase in self.FORBIDDEN:
+                    self.assertNotIn(phrase, text, f"{name} 仍声称 GitCode Actions 承担门禁：{phrase}")
+                self.assertIn("GitCode", text)
 
 
 class TestVersionClaims(unittest.TestCase):

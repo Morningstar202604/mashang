@@ -1,0 +1,233 @@
+import json
+import pathlib
+
+
+def lesson(id_, order, chapter, chapter_name, lang, title, subtitle, xp, blocks, exercise):
+    return {
+        "id": id_,
+        "order": order,
+        "chapter": chapter,
+        "chapterName": chapter_name,
+        "lang": lang,
+        "title": title,
+        "subtitle": subtitle,
+        "xp": xp,
+        "blocks": blocks,
+        "exercise": exercise,
+    }
+
+
+LUAC = "语言包 · Lua 启程"
+SQLC = "语言包 · SQL 启程"
+
+lua = [
+    lesson("lua01", 400, 31, LUAC, "lua", "第一次握手", "print() 与注释", 60, [
+        {"type": "heading", "text": "让终端开口"},
+        {"type": "text", "text": "Lua 的标准输出是 print()，多个值用逗号隔开会自动加制表符。注释用 -- 开头，长注释用 --[[ ]]。Lua 没有花括号，代码块用 then/end 包起来。"},
+        {"type": "code", "code": "print('HELLO, night city')\nprint(1 + 2, 'lua', true)\n-- 这一行是注释", "runnable": True},
+        {"type": "output", "text": "HELLO, night city\n3\tlua\ttrue"},
+        {"type": "tip", "text": "Lua 的字符串可以用单引号或双引号，两者完全等价；没有 Python 那种三引号。"},
+        {"type": "quiz", "question": "Lua 的注释符号是？", "options": ["//", "#", "--", "/* */"], "answer": 2, "explain": "Lua 单行注释是 --，多行注释是 --[[ ... ]]。"},
+    ], {
+        "title": "打印入网代号",
+        "brief": "实现 greet(name)：返回 'HELLO, ' 拼上 name 的字符串。",
+        "starterCode": "function greet(name)\n  -- 返回 'HELLO, ' 拼上 name\n\nend\n\nprint(greet('v'))",
+        "hint": "return 'HELLO, ' .. name —— Lua 字符串拼接用两个点。",
+        "tests": ["assert(greet('v') == 'HELLO, v', 'greet(\"v\") 应为 HELLO, v')", "assert(greet('') == 'HELLO, ', '空名字也要能拼接')"],
+        "stdin": [],
+        "xp": 80,
+        "solution": "function greet(name)\n  return 'HELLO, ' .. name\nend\n",
+    }),
+    lesson("lua02", 401, 31, LUAC, "lua", "变量与类型", "local、number、string、boolean", 60, [
+        {"type": "heading", "text": "四种基础类型"},
+        {"type": "text", "text": "Lua 只有 8 种类型，入门先掌握 nil / number / string / boolean。变量默认是全局的，加 local 才是局部变量——这是 Lua 最重要的习惯。"},
+        {"type": "code", "code": "local level = 66\nlocal name = 'V'\nlocal online = true\nprint(type(level), type(name), type(online), type(nil))", "runnable": True},
+        {"type": "output", "text": "number\tstring\tboolean\tnil"},
+        {"type": "table", "headers": ["类型", "说明", "例子"], "rows": [["nil", "空值", "local x = nil"], ["number", "数字（只有一种）", "3.14"], ["string", "字符串", "'abc'"], ["boolean", "布尔", "true / false"]]},
+        {"type": "warn", "text": "忘了 local 会创建全局变量，多个函数之间容易互相污染。课程里一律用 local。"},
+    ], {
+        "title": "类型报告员",
+        "brief": "实现 describe(v)：返回 v 的类型名。",
+        "starterCode": "function describe(v)\n  \nend\n\nprint(describe(1))\nprint(describe('a'))",
+        "hint": "直接 return type(v)。",
+        "tests": ["assert(describe(1) == 'number', 'describe(1) 应为 number')", "assert(describe('a') == 'string', '字符串应为 string')", "assert(describe(true) == 'boolean', '布尔应为 boolean')"],
+        "stdin": [],
+        "xp": 80,
+        "solution": 'function describe(v)\n  return type(v)\nend\n',
+    }),
+    lesson("lua03", 402, 31, LUAC, "lua", "条件与循环", "if / for / while", 70, [
+        {"type": "heading", "text": "流程控制"},
+        {"type": "text", "text": "Lua 用 if ... then ... elseif ... else ... end。数值 for 用 for i = 1, 10 do ... end；遍历表用 ipairs（数组）或 pairs（键值）。"},
+        {"type": "code", "code": "local sum = 0\nfor i = 1, 10 do\n  sum = sum + i\nend\nprint('sum', sum)\n\nlocal n = 0\nwhile n < 3 do\n  n = n + 1\nend\nprint('n', n)", "runnable": True},
+        {"type": "output", "text": "sum\t55\nn\t3"},
+        {"type": "quiz", "question": "for i = 1, 5 do 会循环几次？", "options": ["4", "5", "6", "无限"], "answer": 1, "explain": "Lua 的数值 for 包含两端，1..5 共 5 次。"},
+    ], {
+        "title": "累加器",
+        "brief": "实现 sum_to(n)：返回 1 到 n 的和（n<1 返回 0）。",
+        "starterCode": "function sum_to(n)\n  \nend\n\nprint(sum_to(10))",
+        "hint": "local s = 0 然后 for i = 1, n do s = s + i end。",
+        "tests": ["assert(sum_to(10) == 55, 'sum_to(10) 应为 55')", "assert(sum_to(1) == 1, 'sum_to(1) 应为 1')", "assert(sum_to(0) == 0, 'sum_to(0) 应为 0')", "assert(sum_to(-5) == 0, '负数应返回 0')"],
+        "stdin": [],
+        "xp": 90,
+        "solution": 'function sum_to(n)\n  if n < 1 then return 0 end\n  local s = 0\n  for i = 1, n do s = s + i end\n  return s\nend\n',
+    }),
+    lesson("lua04", 403, 31, LUAC, "lua", "表：数组与字典", "Lua 唯一的数据结构", 70, [
+        {"type": "heading", "text": "一个 table 打天下"},
+        {"type": "text", "text": "Lua 只有一种容器：table。它同时充当数组和字典。数组下标从 1 开始，#t 取长度，table.insert 追加。"},
+        {"type": "code", "code": "local t = {10, 20, 30}\nprint(#t, t[1], t[3])\ntable.insert(t, 40)\nprint(#t, t[4])\n\nlocal map = {name = 'V', level = 66}\nprint(map.name, map['level'])", "runnable": True},
+        {"type": "output", "text": "3\t10\t30\n4\t40\nV\t66"},
+        {"type": "warn", "text": "下标从 1 开始，不是 0！从 Python/JS 转过来最容易在这里越界。"},
+        {"type": "practice", "title": "遍历数组", "code": "local t = {'a', 'b', 'c'}\nfor i, v in ipairs(t) do\n  print(i, v)\nend", "output": "1\ta\n2\tb\n3\tc", "hint": "ipairs 按 1..n 顺序遍历，pairs 顺序不保证。"},
+    ], {
+        "title": "数组求和",
+        "brief": "实现 total(t)：返回表中所有数字的和。",
+        "starterCode": "function total(t)\n  \nend\n\nprint(total({1,2,3}))",
+        "hint": "local s = 0; for _, v in ipairs(t) do s = s + v end。",
+        "tests": ["assert(total({1,2,3}) == 6, 'total({1,2,3}) 应为 6')", "assert(total({}) == 0, '空表应为 0')", "assert(total({5}) == 5, '单元素应为 5')"],
+        "stdin": [],
+        "xp": 90,
+        "solution": 'function total(t)\n  local s = 0\n  for _, v in ipairs(t) do s = s + v end\n  return s\nend\n',
+    }),
+    lesson("lua05", 404, 31, LUAC, "lua", "函数与多返回值", "function 与 varargs", 80, [
+        {"type": "heading", "text": "函数是一等公民"},
+        {"type": "text", "text": "Lua 用 function 定义函数，函数可以赋给变量、作为参数传递。它可以返回多个值，接收时用逗号分解。"},
+        {"type": "code", "code": "local function divmod(a, b)\n  return math.floor(a / b), a % b\nend\n\nlocal q, r = divmod(7, 2)\nprint(q, r)\n\nlocal f = function(x) return x * 2 end\nprint(f(21))", "runnable": True},
+        {"type": "output", "text": "3\t1\n42"},
+        {"type": "tip", "text": "Lua 5.2 没有整除运算符，整除用 math.floor(a / b)；求余用 %，与 Python 语义一致。"},
+        {"type": "quiz", "question": "local q, r = divmod(7, 2) 之后 r 是多少？", "options": ["3", "1", "2", "nil"], "answer": 1, "explain": "math.floor(7/2) = 3，7 % 2 = 1，多返回值按位置赋值。"},
+    ], {
+        "title": "最小值下标",
+        "brief": "实现 argmin(t)：返回表中最小元素的下标（从 1 开始），空表返回 nil。",
+        "starterCode": "function argmin(t)\n  \nend\n\nprint(argmin({5,2,9}))",
+        "hint": "用一个变量记住 best 下标，从 1 遍历到 #t。",
+        "tests": ["assert(argmin({5,2,9}) == 2, '应返回 2')", "assert(argmin({1}) == 1, '单元素应返回 1')", "assert(argmin({}) == nil, '空表应返回 nil')", "assert(argmin({3,3,1}) == 3, '最小在末尾应返回 3')"],
+        "stdin": [],
+        "xp": 100,
+        "solution": 'function argmin(t)\n  if #t == 0 then return nil end\n  local best = 1\n  for i = 2, #t do\n    if t[i] < t[best] then best = i end\n  end\n  return best\nend\n',
+    }),
+    lesson("lua06", 405, 31, LUAC, "lua", "字符串工具箱", "string 库", 80, [
+        {"type": "heading", "text": "string 库"},
+        {"type": "text", "text": "Lua 的字符串不可变，所有操作都返回新串。常用：string.upper / lower / sub / len / format / find / gsub。也可以用冒号语法 s:upper()。"},
+        {"type": "code", "code": "local s = 'Night City'\nprint(s:upper())\nprint(string.sub(s, 1, 5))\nprint(#s)\nprint(string.format('%s-%03d', 'id', 7))\nprint(string.gsub('a-b-c', '-', '/'))", "runnable": True},
+        {"type": "output", "text": "NIGHT CITY\nNight\n10\nid-007\na/b/c\t2"},
+        {"type": "table", "headers": ["函数", "作用", "例子"], "rows": [["string.upper", "转大写", "'ab':upper() → 'AB'"], ["string.sub", "截取", "('hello',1,3) → 'hel'"], ["string.format", "格式化", "('%d', 7) → '7'"], ["string.gsub", "替换", "('a-b','-','/') → 'a/b'"]]},
+        {"type": "warn", "text": "gsub 返回两个值：替换后的字符串和替换次数。只想取第一个时用括号包起来：(s:gsub(...))。"},
+    ], {
+        "title": "首字母大写",
+        "brief": "实现 capitalize(s)：把字符串首字母转大写，其余保持不变；空串返回空串。",
+        "starterCode": "function capitalize(s)\n  \nend\n\nprint(capitalize('lua'))",
+        "hint": "string.sub(s,1,1):upper() .. string.sub(s,2)。",
+        "tests": ["assert(capitalize('lua') == 'Lua', 'capitalize(\"lua\") 应为 Lua')", "assert(capitalize('') == '', '空串应返回空串')", "assert(capitalize('A') == 'A', '单字母应保持')", "assert(capitalize('hello world') == 'Hello world', '只改首字母')"],
+        "stdin": [],
+        "xp": 100,
+        "solution": "function capitalize(s)\n  if s == '' then return '' end\n  return string.sub(s, 1, 1):upper() .. string.sub(s, 2)\nend\n",
+    }),
+]
+
+sql = [
+    lesson("sql01", 500, 32, SQLC, "sql", "第一次查询", "SELECT 与 FROM", 60, [
+        {"type": "heading", "text": "数据库开口说话"},
+        {"type": "text", "text": "SQL 是结构化查询语言：你描述想要什么，数据库负责怎么取。最小查询是 SELECT 列 FROM 表。课程用内存 SQLite，每次运行都是干净的新库。"},
+        {"type": "code", "code": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1, 'V', 66), (2, 'Judy', 42), (3, 'Jackie', 30);\n\nSELECT name, level FROM heroes;", "runnable": True},
+        {"type": "output", "text": "name\tlevel\nV\t66\nJudy\t42\nJackie\t30"},
+        {"type": "tip", "text": "字符串用单引号。SQL 关键字不区分大小写，但习惯上大写关键字、小写标识符。"},
+        {"type": "quiz", "question": "只取 heroes 表的 name 列，正确写法是？", "options": ["SELECT heroes FROM name", "SELECT name FROM heroes", "GET name FROM heroes", "SELECT * name heroes"], "answer": 1, "explain": "列在前、表在后：SELECT 列 FROM 表。"},
+    ], {
+        "title": "取一列",
+        "brief": "选出 heroes 表的 name 列，按 id 升序。",
+        "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT);\nINSERT INTO heroes VALUES (1, 'V'), (2, 'Judy');\n\n-- 在这里写查询\n",
+        "hint": "SELECT name FROM heroes ORDER BY id;",
+        "tests": ["assert columns == ['name'], columns", "assert rows == [['V'],['Judy']], rows"],
+        "stdin": [],
+        "xp": 80,
+        "solution": "CREATE TABLE heroes (id INTEGER, name TEXT);\nINSERT INTO heroes VALUES (1, 'V'), (2, 'Judy');\n\nSELECT name FROM heroes ORDER BY id;\n",
+    }),
+    lesson("sql02", 501, 32, SQLC, "sql", "过滤与排序", "WHERE / ORDER BY / LIMIT", 70, [
+        {"type": "heading", "text": "只挑想要的行"},
+        {"type": "text", "text": "WHERE 过滤行，ORDER BY 排序（ASC 升序 / DESC 降序），LIMIT 限制条数。三者常一起出现：先筛、再排、最后截断。"},
+        {"type": "code", "code": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30);\n\nSELECT name, level FROM heroes\nWHERE level >= 40\nORDER BY level DESC\nLIMIT 2;", "runnable": True},
+        {"type": "output", "text": "name\tlevel\nV\t66\nJudy\t42"},
+        {"type": "table", "headers": ["子句", "作用", "例子"], "rows": [["WHERE", "过滤", "level >= 40"], ["ORDER BY", "排序", "level DESC"], ["LIMIT", "限制条数", "LIMIT 2"]]},
+        {"type": "warn", "text": "WHERE 里比较 NULL 要用 IS NULL / IS NOT NULL，不能用 = NULL。"},
+    ], {
+        "title": "高分榜",
+        "brief": "选出 level 大于等于 30 的英雄 name，按 level 从高到低，只取前 2 名。",
+        "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30),(4,'Rogue',12);\n\n",
+        "hint": "SELECT name FROM heroes WHERE level >= 30 ORDER BY level DESC LIMIT 2;",
+        "tests": ["assert columns == ['name'], columns", "assert rows == [['V'],['Judy']], rows"],
+        "stdin": [],
+        "xp": 90,
+        "solution": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30),(4,'Rogue',12);\n\nSELECT name FROM heroes WHERE level >= 30 ORDER BY level DESC LIMIT 2;\n",
+    }),
+    lesson("sql03", 502, 32, SQLC, "sql", "聚合与分组", "COUNT / SUM / GROUP BY", 80, [
+        {"type": "heading", "text": "从行到组"},
+        {"type": "text", "text": "聚合函数把多行压成一个值：COUNT 计数、SUM 求和、AVG 平均、MIN/MAX 极值。加 GROUP BY 就按某列分组，每组各算一次。"},
+        {"type": "code", "code": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\nSELECT hero, COUNT(*) AS n, SUM(points) AS total\nFROM runs\nGROUP BY hero\nORDER BY hero;", "runnable": True},
+        {"type": "output", "text": "hero\tn\ttotal\nJudy\t1\t5\nV\t2\t30"},
+        {"type": "tip", "text": "SELECT 里非聚合的列必须出现在 GROUP BY 中，否则结果取决于数据库实现。"},
+        {"type": "quiz", "question": "COUNT(*) 统计的是？", "options": ["去重后的行数", "所有行数（含 NULL）", "非 NULL 的行数", "列数"], "answer": 1, "explain": "COUNT(*) 数行；COUNT(列) 才跳过 NULL。"},
+    ], {
+        "title": "分组统计",
+        "brief": "按 hero 分组，统计每人的总点数，列名 total，按 total 降序。",
+        "starterCode": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\n",
+        "hint": "SELECT hero, SUM(points) AS total FROM runs GROUP BY hero ORDER BY total DESC;",
+        "tests": ["assert columns == ['hero','total'], columns", "assert rows == [['V',30],['Judy',5]], rows"],
+        "stdin": [],
+        "xp": 100,
+        "solution": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\nSELECT hero, SUM(points) AS total FROM runs GROUP BY hero ORDER BY total DESC;\n",
+    }),
+    lesson("sql04", 503, 32, SQLC, "sql", "多表连接", "INNER JOIN", 80, [
+        {"type": "heading", "text": "把两张表拼起来"},
+        {"type": "text", "text": "数据通常拆在多个表里。JOIN 按关联键把行拼起来：INNER JOIN 只保留两边都匹配的行；LEFT JOIN 保留左表全部行。"},
+        {"type": "code", "code": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy'),(3,'Jackie');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\nSELECT h.name, r.points\nFROM heroes h\nJOIN runs r ON r.hero_id = h.id\nORDER BY h.name, r.points;", "runnable": True},
+        {"type": "output", "text": "name\tpoints\nJudy\t5\nV\t10\nV\t20"},
+        {"type": "warn", "text": "Jackie 没有跑步记录，INNER JOIN 后不会出现；想保留它要改用 LEFT JOIN。"},
+    ], {
+        "title": "每人总点数",
+        "brief": "用 JOIN 把 heroes 与 runs 连起来，输出 hero 名字与该人总点数（列名 name、total），按 total 降序。",
+        "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\n",
+        "hint": "SELECT h.name AS name, SUM(r.points) AS total FROM heroes h JOIN runs r ON r.hero_id = h.id GROUP BY h.name ORDER BY total DESC;",
+        "tests": ["assert columns == ['name','total'], columns", "assert rows == [['V',30],['Judy',5]], rows"],
+        "stdin": [],
+        "xp": 100,
+        "solution": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\nSELECT h.name AS name, SUM(r.points) AS total FROM heroes h JOIN runs r ON r.hero_id = h.id GROUP BY h.name ORDER BY total DESC;\n",
+    }),
+    lesson("sql05", 504, 32, SQLC, "sql", "写入与约束", "INSERT / UPDATE / DEFAULT", 90, [
+        {"type": "heading", "text": "改数据也要守规矩"},
+        {"type": "text", "text": "INSERT 增、UPDATE 改、DELETE 删。PRIMARY KEY 保证唯一，NOT NULL 拒绝空值，UNIQUE 防重复。约束是数据库替你守的底线。"},
+        {"type": "code", "code": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\nUPDATE heroes SET level = 66 WHERE name = 'V';\nSELECT id, name, level FROM heroes;", "runnable": True},
+        {"type": "output", "text": "id\tname\tlevel\n1\tV\t66"},
+        {"type": "tip", "text": "UPDATE / DELETE 一定要带 WHERE，否则全表生效——这是生产事故最常见的原因。"},
+        {"type": "quiz", "question": "INSERT INTO heroes (name) VALUES ('V'); 之后 level 是多少？", "options": ["NULL", "0", "1", "报错"], "answer": 2, "explain": "level 列有 DEFAULT 1，未指定的列取默认值。"},
+    ], {
+        "title": "注册并升级",
+        "brief": "插入 name 为 'Rogue' 的英雄（level 用默认值），再把其 level 改为 25；最后返回 name 与 level。",
+        "starterCode": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\n\n",
+        "hint": "INSERT INTO heroes (name) VALUES ('Rogue'); UPDATE heroes SET level = 25 WHERE name = 'Rogue'; SELECT name, level FROM heroes WHERE name = 'Rogue';",
+        "tests": ["assert columns == ['name','level'], columns", "assert rows == [['Rogue',25]], rows"],
+        "stdin": [],
+        "xp": 110,
+        "solution": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\n\nINSERT INTO heroes (name) VALUES ('Rogue');\nUPDATE heroes SET level = 25 WHERE name = 'Rogue';\nSELECT name, level FROM heroes WHERE name = 'Rogue';\n",
+    }),
+    lesson("sql06", 505, 32, SQLC, "sql", "子查询与空值", "Subquery / NULL / COALESCE", 90, [
+        {"type": "heading", "text": "查询套查询"},
+        {"type": "text", "text": "子查询可以出现在 WHERE 或 FROM 里。NULL 表示未知：任何与 NULL 的比较结果都是 NULL，聚合会跳过 NULL。COALESCE(x, 0) 给出兜底值。"},
+        {"type": "code", "code": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20);\n\nSELECT hero, COALESCE(SUM(points), 0) AS total\nFROM runs\nGROUP BY hero\nORDER BY hero;", "runnable": True},
+        {"type": "output", "text": "hero\ttotal\nJudy\t0\nV\t30"},
+        {"type": "table", "headers": ["写法", "含义"], "rows": [["IS NULL", "判断为空"], ["COALESCE(a,b)", "取第一个非 NULL"], ["SUM(x)", "跳过 NULL"], ["x = NULL", "永远不成立"]]},
+        {"type": "warn", "text": "COUNT(*) 含 NULL 行，COUNT(points) 跳过 NULL，两者结果可能不同。"},
+    ], {
+        "title": "平均线以上",
+        "brief": "返回 points 大于全表平均值的 hero（去重），按字母升序。",
+        "starterCode": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20),('Jackie',30),('Rogue',5);\n\n",
+        "hint": "SELECT DISTINCT hero FROM runs WHERE points > (SELECT AVG(points) FROM runs) ORDER BY hero;",
+        "tests": ["assert columns == ['hero'], columns", "assert rows == [['Jackie'],['V']], rows"],
+        "stdin": [],
+        "xp": 110,
+        "solution": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20),('Jackie',30),('Rogue',5);\n\nSELECT DISTINCT hero FROM runs WHERE points > (SELECT AVG(points) FROM runs) ORDER BY hero;\n",
+    }),
+]
+
+pathlib.Path("content_packs/lua-basics.json").write_text(json.dumps(lua, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+pathlib.Path("content_packs/sql-basics.json").write_text(json.dumps(sql, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+print("lua", len(lua), "sql", len(sql))

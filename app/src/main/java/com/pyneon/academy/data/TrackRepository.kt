@@ -79,6 +79,16 @@ object TrackRepository {
             (6..10).map { "dsa%02d".format(it) }.toSet()
         ),
         Spec(
+            "lua", "Lua 启程", "6 讲：print 到 string 库，LuaJ 运行时",
+            "编程语言", GREEN, "lua-basics", LanguageIds.LUA,
+            (1..6).map { "lua%02d".format(it) }.toSet()
+        ),
+        Spec(
+            "sql", "SQL 启程", "6 讲：SELECT 到子查询，SQLite 运行时",
+            "编程语言", CYAN, "sql-basics", LanguageIds.SQL,
+            (1..6).map { "sql%02d".format(it) }.toSet()
+        ),
+        Spec(
             "bonus-builtin", "彩蛋 · 内置函数巡礼", "1 讲：len / sorted / enumerate / zip / any / all",
             "语言扩展", PURPLE, "bonus-builtin", LanguageIds.PYTHON,
             setOf("bonus-27")

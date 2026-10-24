@@ -1,0 +1,364 @@
+[
+  {
+    "id": "sql01",
+    "order": 500,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "第一次查询",
+    "subtitle": "SELECT 与 FROM",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "数据库开口说话"
+      },
+      {
+        "type": "text",
+        "text": "SQL 是结构化查询语言：你描述想要什么，数据库负责怎么取。最小查询是 SELECT 列 FROM 表。课程用内存 SQLite，每次运行都是干净的新库。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1, 'V', 66), (2, 'Judy', 42), (3, 'Jackie', 30);\n\nSELECT name, level FROM heroes;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "name\tlevel\nV\t66\nJudy\t42\nJackie\t30"
+      },
+      {
+        "type": "tip",
+        "text": "字符串用单引号。SQL 关键字不区分大小写，但习惯上大写关键字、小写标识符。"
+      },
+      {
+        "type": "quiz",
+        "question": "只取 heroes 表的 name 列，正确写法是？",
+        "options": [
+          "SELECT heroes FROM name",
+          "SELECT name FROM heroes",
+          "GET name FROM heroes",
+          "SELECT * name heroes"
+        ],
+        "answer": 1,
+        "explain": "列在前、表在后：SELECT 列 FROM 表。"
+      }
+    ],
+    "exercise": {
+      "title": "取一列",
+      "brief": "选出 heroes 表的 name 列，按 id 升序。",
+      "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT);\nINSERT INTO heroes VALUES (1, 'V'), (2, 'Judy');\n\n-- 在这里写查询\n",
+      "hint": "SELECT name FROM heroes ORDER BY id;",
+      "tests": [
+        "assert columns == ['name'], columns",
+        "assert rows == [['V'],['Judy']], rows"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "CREATE TABLE heroes (id INTEGER, name TEXT);\nINSERT INTO heroes VALUES (1, 'V'), (2, 'Judy');\n\nSELECT name FROM heroes ORDER BY id;\n"
+    }
+  },
+  {
+    "id": "sql02",
+    "order": 501,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "过滤与排序",
+    "subtitle": "WHERE / ORDER BY / LIMIT",
+    "xp": 70,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "只挑想要的行"
+      },
+      {
+        "type": "text",
+        "text": "WHERE 过滤行，ORDER BY 排序（ASC 升序 / DESC 降序），LIMIT 限制条数。三者常一起出现：先筛、再排、最后截断。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30);\n\nSELECT name, level FROM heroes\nWHERE level >= 40\nORDER BY level DESC\nLIMIT 2;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "name\tlevel\nV\t66\nJudy\t42"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "子句",
+          "作用",
+          "例子"
+        ],
+        "rows": [
+          [
+            "WHERE",
+            "过滤",
+            "level >= 40"
+          ],
+          [
+            "ORDER BY",
+            "排序",
+            "level DESC"
+          ],
+          [
+            "LIMIT",
+            "限制条数",
+            "LIMIT 2"
+          ]
+        ]
+      },
+      {
+        "type": "warn",
+        "text": "WHERE 里比较 NULL 要用 IS NULL / IS NOT NULL，不能用 = NULL。"
+      }
+    ],
+    "exercise": {
+      "title": "高分榜",
+      "brief": "选出 level 大于等于 30 的英雄 name，按 level 从高到低，只取前 2 名。",
+      "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30),(4,'Rogue',12);\n\n",
+      "hint": "SELECT name FROM heroes WHERE level >= 30 ORDER BY level DESC LIMIT 2;",
+      "tests": [
+        "assert columns == ['name'], columns",
+        "assert rows == [['V'],['Judy']], rows"
+      ],
+      "stdin": [],
+      "xp": 90,
+      "solution": "CREATE TABLE heroes (id INTEGER, name TEXT, level INTEGER);\nINSERT INTO heroes VALUES (1,'V',66),(2,'Judy',42),(3,'Jackie',30),(4,'Rogue',12);\n\nSELECT name FROM heroes WHERE level >= 30 ORDER BY level DESC LIMIT 2;\n"
+    }
+  },
+  {
+    "id": "sql03",
+    "order": 502,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "聚合与分组",
+    "subtitle": "COUNT / SUM / GROUP BY",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "从行到组"
+      },
+      {
+        "type": "text",
+        "text": "聚合函数把多行压成一个值：COUNT 计数、SUM 求和、AVG 平均、MIN/MAX 极值。加 GROUP BY 就按某列分组，每组各算一次。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\nSELECT hero, COUNT(*) AS n, SUM(points) AS total\nFROM runs\nGROUP BY hero\nORDER BY hero;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "hero\tn\ttotal\nJudy\t1\t5\nV\t2\t30"
+      },
+      {
+        "type": "tip",
+        "text": "SELECT 里非聚合的列必须出现在 GROUP BY 中，否则结果取决于数据库实现。"
+      },
+      {
+        "type": "quiz",
+        "question": "COUNT(*) 统计的是？",
+        "options": [
+          "去重后的行数",
+          "所有行数（含 NULL）",
+          "非 NULL 的行数",
+          "列数"
+        ],
+        "answer": 1,
+        "explain": "COUNT(*) 数行；COUNT(列) 才跳过 NULL。"
+      }
+    ],
+    "exercise": {
+      "title": "分组统计",
+      "brief": "按 hero 分组，统计每人的总点数，列名 total，按 total 降序。",
+      "starterCode": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\n",
+      "hint": "SELECT hero, SUM(points) AS total FROM runs GROUP BY hero ORDER BY total DESC;",
+      "tests": [
+        "assert columns == ['hero','total'], columns",
+        "assert rows == [['V',30],['Judy',5]], rows"
+      ],
+      "stdin": [],
+      "xp": 100,
+      "solution": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('V',20),('Judy',5);\n\nSELECT hero, SUM(points) AS total FROM runs GROUP BY hero ORDER BY total DESC;\n"
+    }
+  },
+  {
+    "id": "sql04",
+    "order": 503,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "多表连接",
+    "subtitle": "INNER JOIN",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "把两张表拼起来"
+      },
+      {
+        "type": "text",
+        "text": "数据通常拆在多个表里。JOIN 按关联键把行拼起来：INNER JOIN 只保留两边都匹配的行；LEFT JOIN 保留左表全部行。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy'),(3,'Jackie');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\nSELECT h.name, r.points\nFROM heroes h\nJOIN runs r ON r.hero_id = h.id\nORDER BY h.name, r.points;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "name\tpoints\nJudy\t5\nV\t10\nV\t20"
+      },
+      {
+        "type": "warn",
+        "text": "Jackie 没有跑步记录，INNER JOIN 后不会出现；想保留它要改用 LEFT JOIN。"
+      }
+    ],
+    "exercise": {
+      "title": "每人总点数",
+      "brief": "用 JOIN 把 heroes 与 runs 连起来，输出 hero 名字与该人总点数（列名 name、total），按 total 降序。",
+      "starterCode": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\n",
+      "hint": "SELECT h.name AS name, SUM(r.points) AS total FROM heroes h JOIN runs r ON r.hero_id = h.id GROUP BY h.name ORDER BY total DESC;",
+      "tests": [
+        "assert columns == ['name','total'], columns",
+        "assert rows == [['V',30],['Judy',5]], rows"
+      ],
+      "stdin": [],
+      "xp": 100,
+      "solution": "CREATE TABLE heroes (id INTEGER, name TEXT);\nCREATE TABLE runs (hero_id INTEGER, points INTEGER);\nINSERT INTO heroes VALUES (1,'V'),(2,'Judy');\nINSERT INTO runs VALUES (1,10),(1,20),(2,5);\n\nSELECT h.name AS name, SUM(r.points) AS total FROM heroes h JOIN runs r ON r.hero_id = h.id GROUP BY h.name ORDER BY total DESC;\n"
+    }
+  },
+  {
+    "id": "sql05",
+    "order": 504,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "写入与约束",
+    "subtitle": "INSERT / UPDATE / DEFAULT",
+    "xp": 90,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "改数据也要守规矩"
+      },
+      {
+        "type": "text",
+        "text": "INSERT 增、UPDATE 改、DELETE 删。PRIMARY KEY 保证唯一，NOT NULL 拒绝空值，UNIQUE 防重复。约束是数据库替你守的底线。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\nUPDATE heroes SET level = 66 WHERE name = 'V';\nSELECT id, name, level FROM heroes;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "id\tname\tlevel\n1\tV\t66"
+      },
+      {
+        "type": "tip",
+        "text": "UPDATE / DELETE 一定要带 WHERE，否则全表生效——这是生产事故最常见的原因。"
+      },
+      {
+        "type": "quiz",
+        "question": "INSERT INTO heroes (name) VALUES ('V'); 之后 level 是多少？",
+        "options": [
+          "NULL",
+          "0",
+          "1",
+          "报错"
+        ],
+        "answer": 2,
+        "explain": "level 列有 DEFAULT 1，未指定的列取默认值。"
+      }
+    ],
+    "exercise": {
+      "title": "注册并升级",
+      "brief": "插入 name 为 'Rogue' 的英雄（level 用默认值），再把其 level 改为 25；最后返回 name 与 level。",
+      "starterCode": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\n\n",
+      "hint": "INSERT INTO heroes (name) VALUES ('Rogue'); UPDATE heroes SET level = 25 WHERE name = 'Rogue'; SELECT name, level FROM heroes WHERE name = 'Rogue';",
+      "tests": [
+        "assert columns == ['name','level'], columns",
+        "assert rows == [['Rogue',25]], rows"
+      ],
+      "stdin": [],
+      "xp": 110,
+      "solution": "CREATE TABLE heroes (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL UNIQUE,\n  level INTEGER DEFAULT 1\n);\nINSERT INTO heroes (name) VALUES ('V');\n\nINSERT INTO heroes (name) VALUES ('Rogue');\nUPDATE heroes SET level = 25 WHERE name = 'Rogue';\nSELECT name, level FROM heroes WHERE name = 'Rogue';\n"
+    }
+  },
+  {
+    "id": "sql06",
+    "order": 505,
+    "chapter": 32,
+    "chapterName": "语言包 · SQL 启程",
+    "lang": "sql",
+    "title": "子查询与空值",
+    "subtitle": "Subquery / NULL / COALESCE",
+    "xp": 90,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "查询套查询"
+      },
+      {
+        "type": "text",
+        "text": "子查询可以出现在 WHERE 或 FROM 里。NULL 表示未知：任何与 NULL 的比较结果都是 NULL，聚合会跳过 NULL。COALESCE(x, 0) 给出兜底值。"
+      },
+      {
+        "type": "code",
+        "code": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20);\n\nSELECT hero, COALESCE(SUM(points), 0) AS total\nFROM runs\nGROUP BY hero\nORDER BY hero;",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "hero\ttotal\nJudy\t0\nV\t30"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "写法",
+          "含义"
+        ],
+        "rows": [
+          [
+            "IS NULL",
+            "判断为空"
+          ],
+          [
+            "COALESCE(a,b)",
+            "取第一个非 NULL"
+          ],
+          [
+            "SUM(x)",
+            "跳过 NULL"
+          ],
+          [
+            "x = NULL",
+            "永远不成立"
+          ]
+        ]
+      },
+      {
+        "type": "warn",
+        "text": "COUNT(*) 含 NULL 行，COUNT(points) 跳过 NULL，两者结果可能不同。"
+      }
+    ],
+    "exercise": {
+      "title": "平均线以上",
+      "brief": "返回 points 大于全表平均值的 hero（去重），按字母升序。",
+      "starterCode": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20),('Jackie',30),('Rogue',5);\n\n",
+      "hint": "SELECT DISTINCT hero FROM runs WHERE points > (SELECT AVG(points) FROM runs) ORDER BY hero;",
+      "tests": [
+        "assert columns == ['hero'], columns",
+        "assert rows == [['Jackie'],['V']], rows"
+      ],
+      "stdin": [],
+      "xp": 110,
+      "solution": "CREATE TABLE runs (hero TEXT, points INTEGER);\nINSERT INTO runs VALUES ('V',10),('Judy',NULL),('V',20),('Jackie',30),('Rogue',5);\n\nSELECT DISTINCT hero FROM runs WHERE points > (SELECT AVG(points) FROM runs) ORDER BY hero;\n"
+    }
+  }
+]

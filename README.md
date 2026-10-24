@@ -4,7 +4,7 @@
 
 **Code now, master any language. Learn offline, anywhere.**
 
-A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython 3.13 and JavaScript via Rhino), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
+A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (Python, JavaScript, Lua, SQL), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
@@ -44,7 +44,7 @@ A cyberpunk-styled coding learning terminal that fits in your pocket: embedded r
 | **Will I actually learn to code?** | ✅ **Assert auto-grading** — you don't advance until test cases pass; cures "understood but can't write" |
 | **Ads? Account? Tracking?** | ✅ **Zero ads · zero account · zero data upload**, MIT-licensed — safe to recommend to students |
 | **Anything unique?** | 🔬 **Variable Snapshot panel** (whole namespace visualized after each run) · Six Tiers · Daily Quests · Mistake Book |
-| **How much content?** | 📚 **38 built-in lessons + 17 extension lessons (55 total)**, from `print` to decorators, plus 8 Arena challenges (6 Python + 2 JavaScript) |
+| **How much content?** | 📚 **38 built-in + 29 extension lessons (67 total)**: Python mainline plus 6 lessons each for JavaScript / Lua / SQL, plus 8 Arena challenges |
 
 > 🎯 **One-line pitch**: not another blank code editor — a pocket learning terminal that bundles a **CPython interpreter + grading engine + game-like progression**, fully offline.
 
@@ -214,7 +214,7 @@ A second client runs the **same course JSON and the same `runner.py`** in the br
 
 - 🏆 **Six Tiers** — Script Kiddie → Data Ghost → Network Ronin → Cyber Hacker → Street Legend → System Architect
 - ⚡ **Daily Quests / XP / Streak** — a goal every day, feedback on every run
-- 📦 **Content Hub** — course pack system: Built-in Function Tour bonus + DSA Basics/Mastery + JavaScript Kickoff language pack (17 lessons total), download and learn on demand
+- 📦 **Content Hub** — course pack system: Built-in Function Tour bonus + DSA Basics/Mastery + JavaScript / Lua / SQL Kickoff packs (29 lessons total), download and learn on demand
 - 🎓 **Graduation Certificate** — neon certification page unlocked upon completing all courses, screenshot to share
 
 ### 🧩 Engineering Quality
@@ -353,6 +353,6 @@ This repository is published under the **MIT License** — free to use, modify, 
 
 Third-party components: [Chaquopy](https://github.com/chaquo/chaquopy) (MIT), Jetpack Compose (Apache-2.0), [Rhino](https://github.com/mozilla/rhino) (MPL-2.0), [sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1).
 
-**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos). GitCode Actions runs the engine/content/web gates (its hosted runners cannot reach Google's Android SDK CDN, so Android build stays on GitHub).
+**CI/CD**: [GitHub Actions](https://github.com/badhope/mashang/actions) — tests, lint, debug/release build, APK probe, signed release (mirrored to 3 GitHub repos) — is the only pipeline that actually runs and enforces gates. `.gitcode/workflows/ci.yml` is a config backup only: GitCode's code-based pipelines must be enabled manually and are not triggered by push (all recorded runs on 2026-10-24 were manual and skipped the Pages-sync/link-check steps).
 
 📄 [Privacy Policy](PRIVACY_POLICY.md) · [Terms of Service](TERMS_OF_SERVICE.md)

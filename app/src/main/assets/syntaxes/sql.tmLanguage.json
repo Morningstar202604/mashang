@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>SQL (Mashang Lite)</string>
+	<key>scopeName</key>
+	<string>source.sql</string>
+	<key>fileTypes</key>
+	<array>
+		<string>sql</string>
+	</array>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>comment.line.double-dash.sql</string>
+			<key>match</key>
+			<string>--.*$</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>string.quoted.single.sql</string>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>constant.numeric.sql</string>
+			<key>match</key>
+			<string>\b\d+(\.\d+)?\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>keyword.other.sql</string>
+			<key>match</key>
+			<string>\b(select|from|where|insert|into|values|update|set|delete|create|table|drop|alter|join|inner|left|right|outer|on|group|by|order|having|limit|offset|distinct|as|and|or|not|null|is|in|between|like|exists|union|all|case|when|then|else|end|primary|key|foreign|references|default|unique|check|index|view|with|asc|desc|begin|commit|rollback)\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>support.function.sql</string>
+			<key>match</key>
+			<string>\b(count|sum|avg|min|max|coalesce|ifnull|nullif|substr|length|round|typeof|random)\b</string>
+		</dict>
+	</array>
+</dict>
+</plist>

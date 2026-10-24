@@ -762,7 +762,7 @@ def main():
     )
     with open(pack_path, encoding="utf-8") as f:
         lessons.extend(json.load(f))
-    for pack in ("dsa-basics.json", "dsa-mastery.json", "js-basics.json"):
+    for pack in ("dsa-basics.json", "dsa-mastery.json", "js-basics.json", "lua-basics.json", "sql-basics.json"):
         pack_path = os.path.join(os.path.dirname(__file__), "..", "content_packs", pack)
         with open(pack_path, encoding="utf-8") as f:
             lessons.extend(json.load(f))
@@ -777,7 +777,11 @@ def main():
     # 多语言：JS 课程的判题在 tests/test_js_lessons.py 里用真实 JS 引擎（node）
     # 执行；Python runner 无法执行 JS，这里只做结构检查并单独计数。
     js_lessons = [l for l in lessons if l.get("lang", "python") == "javascript"]
-    py_lessons = [l for l in lessons if l.get("lang", "python") != "javascript"]
+    lua_lessons = [l for l in lessons if l.get("lang", "python") == "lua"]
+    sql_lessons = [l for l in lessons if l.get("lang", "python") == "sql"]
+    py_lessons = [
+        l for l in lessons if l.get("lang", "python") not in ("javascript", "lua", "sql")
+    ]
     items = []
     for lesson in sorted(py_lessons, key=lambda x: x["order"]):
         ex = lesson.get("exercise")
@@ -813,8 +817,9 @@ def main():
             )
 
     print(
-        f"\n课程数={len(lessons)}（Python {len(py_lessons)} + JavaScript {len(js_lessons)}，"
-        f"JS 判题由 tests/test_js_lessons.py 用 node 执行）"
+        f"\n课程数={len(lessons)}（Python {len(py_lessons)} + JavaScript {len(js_lessons)}"
+        f" + Lua {len(lua_lessons)} + SQL {len(sql_lessons)}；"
+        f"JS / Lua / SQL 判题分别由 test_js_lessons / LuaCoursePacksTest / test_sql_lessons 执行）"
         f" 挑战数={len(challenges)}（JS {len(challenges) - len(py_challenges)} 道）"
         f" 判题项={checked} 用例总数={total_cases}"
     )

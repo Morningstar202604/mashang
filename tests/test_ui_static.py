@@ -96,6 +96,31 @@ class CopyCountTests(unittest.TestCase):
         self.assertGreaterEqual(_challenge_count(), 1, "challenges.json 至少应有 1 道题")
 
 
+class LanguageCenterTests(unittest.TestCase):
+    """语言中心契约：内置运行时列出、未实现语言无下载入口、课程包按需下载。"""
+
+    def test_language_center_lists_registered_runtimes(self):
+        text = _read(JAVA, "screens", "LanguageCenterScreen.kt")
+        self.assertIn("LanguageRegistry.all()", text, "语言中心必须列出已注册运行时")
+        self.assertIn("runtime.isAvailable()", text, "必须显示运行时可用状态")
+
+    def test_planned_languages_have_no_download_entry(self):
+        text = _read(JAVA, "screens", "LanguageCenterScreen.kt")
+        self.assertIn("LanguageIds.PLANNED", text, "未实现语言必须单独列出")
+        self.assertIn("暂不支持", text)
+        self.assertNotIn("runtime.download", text, "项目没有运行时下载机制，不得出现运行时下载调用")
+
+    def test_course_packs_show_runtime_gate(self):
+        text = _read(JAVA, "screens", "LanguageCenterScreen.kt")
+        self.assertIn("runtimeReady", text, "课程包必须校验运行时是否可用")
+        self.assertIn("缺运行时，暂不可下载", text)
+
+    def test_content_pack_carries_lang(self):
+        text = _read(JAVA, "data", "ContentCenter.kt")
+        self.assertIn("val lang: String", text, "内容包必须携带语言字段")
+        self.assertIn("optString(\"lang\"", text, "必须从 catalog 解析 lang")
+
+
 class NavigationRouteTests(unittest.TestCase):
     """所有 navigate("x") 目标必须在 NavHost 里注册，否则点击即崩。
 

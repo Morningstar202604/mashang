@@ -120,7 +120,7 @@ flowchart TB
 |---|---|---|
 | GitHub Actions（badhope 主仓） | push main / tag / PR / 手动 | Python 测试、内容校验、web 同源、lint、JVM 单测、debug+release 构建、APK 探针；tag 走签名发布 |
 | GitHub Actions `mirror-sync` | main | 推送 GitCode / Gitee / 两个 GitHub 镜像仓 |
-| GitCode Actions | push / PR | 引擎、内容、web 同源、APK 探针自测（其 Runner 无 Android SDK） |
+| GitCode Actions（手动触发，需仓库开通） | 手动 | 配置备份：引擎、内容、web 同源、APK 探针自测；未接 Pages 同步/链接检查，push 不自动触发 |
 
 发布门禁（`scripts/ci/check_release_version.py`）：tag 必须等于 `versionName`，`versionCode` 必须大于上一 tag；签名证书主体必须为 `CN=Mashang`。
 

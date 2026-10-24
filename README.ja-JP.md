@@ -4,8 +4,8 @@
 
 **今すぐコードを書こう。オフラインのまま、どこでも Python をマスター。**
 
-ポケットに入るサイバーパンク風プログラミング学習ターミナル：本物の **CPython 3.13** と **JavaScript（Rhino）** ランタイムを内蔵、
-38 講のステップアップ講座、assert 自動採点、変数可視化、6 段階ランク成長システム。
+ポケットに入るサイバーパンク風プログラミング学習ターミナル：**Python / JavaScript / Lua / SQL** の実行環境を内蔵、
+38 講のステップアップ講座＋29 講の拡張パック、assert 自動採点、変数可視化、6 段階ランク成長システム。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
@@ -337,6 +337,6 @@ Fork → ブランチ作成 → PR 提出；講座コンテンツは `tests/vali
 
 サードパーティコンポーネント：[Chaquopy](https://github.com/chaquo/chaquopy) (MIT)、Jetpack Compose (Apache-2.0)、[Rhino](https://github.com/mozilla/rhino) (MPL-2.0)、[sora-editor](https://github.com/Rosemoe/sora-editor) (LGPL-2.1)。
 
-**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）。GitCode Actions はエンジン/コンテンツ/同源ゲートを担当（ホスト Runner から Google の Android SDK 配布元へ到達できず、Android ビルドは GitHub 側）。
+**CI/CD**：[GitHub Actions](https://github.com/badhope/mashang/actions)（テスト + lint + debug/release ビルド + APK 検査 + 署名リリース、3 リポジトリへミラー同期）が唯一実際に実行されゲートを強制するパイプラインです。`.gitcode/workflows/ci.yml` は同等ゲートの設定バックアップに過ぎません：GitCode のコード化パイプラインは手動で有効化が必要で、push では自動起動しません（2026-10-24 の実測では全実行が手動トリガーで、Pages 同期/リンク検査の 2 ステップを含んでいませんでした）。
 
 📄 [プライバシーポリシー](PRIVACY_POLICY.md) · [利用規約](TERMS_OF_SERVICE.md)

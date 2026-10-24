@@ -4,6 +4,31 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-24
+
+### Added
+- **Lua 运行时**（LuaJ 3.0.1，Lua 5.2 语义，纯 JVM 354 KB）：`app/src/main/java/com/pyneon/academy/lua/LuaBridge.kt`
+  - 沙箱只装 Base/Table/String/Math/Coroutine，`io`/`os`/`luajava`/`debug`/`loadfile`/`dofile` 全部不可用
+  - 指令钩子看门狗，死循环 0.5 s 内中断；REPL 支持续行
+  - TextMate 语法 `syntaxes/lua.tmLanguage.json`；编辑/只读代码块均高亮
+- **SQL 运行时**（内嵌 CPython sqlite3，内存库）：`app/src/main/java/com/pyneon/academy/sql/SqlBridge.kt` + `app/src/main/python/sql_runner.py`
+  - `ATTACH`/`DETACH` 被 authorizer 拒绝，每次运行都是全新的 `:memory:` 库
+  - 判题用例可断言 `columns` / `rows` / `last`；TextMate 语法 `syntaxes/sql.tmLanguage.json`
+- **课程包**：`content_packs/lua-basics.json`（6 讲）、`content_packs/sql-basics.json`（6 讲），各含 6 个判题项
+- **语言中心**（`screens/LanguageCenterScreen.kt`）：分栏展示内置运行时 / 暂不支持语言 / 课程包下载状态；未内置运行时的语言不出现下载入口
+- **按需下载**：课程包未下载前不出现在课程列表；内容包携带 `kind` / `lang` 字段，缺运行时的包显示「缺运行时，暂不可下载」
+- 新增 JVM 测试 `LuaSandboxTest`（8 条）、`LuaCoursePacksTest`（2 条），Python 测试 `test_sql_lessons`（7 条）
+
+### Changed
+- 版本 0.4.1 → **0.5.0**（versionCode 16 → 17）
+- `LanguageIds.PLANNED` 移除 `sql`（已实现），保留 Java / C++ / Go / Rust
+- 首页 / 路线页 / 终端语言切换自动包含 Lua 与 SQL
+- 文档口径：测试 161 条、判题项 75 个 / 用例 262 条、源程序 64 文件 11,685 行
+- README 三语 + FAQ + ARCHITECTURE：GitCode 流水线改为「需手动开通、push 不自动触发」的事实描述
+
+### Fixed
+- 课程包下载 UI 与「语言中心」重复维护的问题：`ContentHubScreen` 收敛为 `LanguageCenterScreen` 的兼容入口
+
 ## [0.4.1] - 2026-10-24
 
 ### Fixed

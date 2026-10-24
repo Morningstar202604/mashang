@@ -82,6 +82,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProfileScreen(
     onOpenContentHub: () -> Unit = {},
+    onOpenLanguageCenter: () -> Unit = {},
     onOpenCertificate: () -> Unit = {},
     onOpenStreak: () -> Unit = {},
     onOpenMistakes: () -> Unit = {},
@@ -220,7 +221,7 @@ fun ProfileScreen(
             InfoRow("网络", "离线优先 · 联网仅拉取新课程")
             Spacer(Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                NeonButton(label = "内容中心", accent = NeonCyan, onClick = onOpenContentHub, modifier = Modifier.weight(1f))
+                NeonButton(label = "语言中心", accent = NeonCyan, onClick = onOpenLanguageCenter, modifier = Modifier.weight(1f))
                 NeonButton(label = "重置全部进度", accent = NeonMagenta, onClick = { confirmReset = true }, modifier = Modifier.weight(1f))
             }
         }

@@ -1,0 +1,385 @@
+[
+  {
+    "id": "lua01",
+    "order": 400,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "第一次握手",
+    "subtitle": "print() 与注释",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "让终端开口"
+      },
+      {
+        "type": "text",
+        "text": "Lua 的标准输出是 print()，多个值用逗号隔开会自动加制表符。注释用 -- 开头，长注释用 --[[ ]]。Lua 没有花括号，代码块用 then/end 包起来。"
+      },
+      {
+        "type": "code",
+        "code": "print('HELLO, night city')\nprint(1 + 2, 'lua', true)\n-- 这一行是注释",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "HELLO, night city\n3\tlua\ttrue"
+      },
+      {
+        "type": "tip",
+        "text": "Lua 的字符串可以用单引号或双引号，两者完全等价；没有 Python 那种三引号。"
+      },
+      {
+        "type": "quiz",
+        "question": "Lua 的注释符号是？",
+        "options": [
+          "//",
+          "#",
+          "--",
+          "/* */"
+        ],
+        "answer": 2,
+        "explain": "Lua 单行注释是 --，多行注释是 --[[ ... ]]。"
+      }
+    ],
+    "exercise": {
+      "title": "打印入网代号",
+      "brief": "实现 greet(name)：返回 'HELLO, ' 拼上 name 的字符串。",
+      "starterCode": "function greet(name)\n  -- 返回 'HELLO, ' 拼上 name\n\nend\n\nprint(greet('v'))",
+      "hint": "return 'HELLO, ' .. name —— Lua 字符串拼接用两个点。",
+      "tests": [
+        "assert(greet('v') == 'HELLO, v', 'greet(\"v\") 应为 HELLO, v')",
+        "assert(greet('') == 'HELLO, ', '空名字也要能拼接')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function greet(name)\n  return 'HELLO, ' .. name\nend\n"
+    }
+  },
+  {
+    "id": "lua02",
+    "order": 401,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "变量与类型",
+    "subtitle": "local、number、string、boolean",
+    "xp": 60,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "四种基础类型"
+      },
+      {
+        "type": "text",
+        "text": "Lua 只有 8 种类型，入门先掌握 nil / number / string / boolean。变量默认是全局的，加 local 才是局部变量——这是 Lua 最重要的习惯。"
+      },
+      {
+        "type": "code",
+        "code": "local level = 66\nlocal name = 'V'\nlocal online = true\nprint(type(level), type(name), type(online), type(nil))",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "number\tstring\tboolean\tnil"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "类型",
+          "说明",
+          "例子"
+        ],
+        "rows": [
+          [
+            "nil",
+            "空值",
+            "local x = nil"
+          ],
+          [
+            "number",
+            "数字（只有一种）",
+            "3.14"
+          ],
+          [
+            "string",
+            "字符串",
+            "'abc'"
+          ],
+          [
+            "boolean",
+            "布尔",
+            "true / false"
+          ]
+        ]
+      },
+      {
+        "type": "warn",
+        "text": "忘了 local 会创建全局变量，多个函数之间容易互相污染。课程里一律用 local。"
+      }
+    ],
+    "exercise": {
+      "title": "类型报告员",
+      "brief": "实现 describe(v)：返回 v 的类型名。",
+      "starterCode": "function describe(v)\n  \nend\n\nprint(describe(1))\nprint(describe('a'))",
+      "hint": "直接 return type(v)。",
+      "tests": [
+        "assert(describe(1) == 'number', 'describe(1) 应为 number')",
+        "assert(describe('a') == 'string', '字符串应为 string')",
+        "assert(describe(true) == 'boolean', '布尔应为 boolean')"
+      ],
+      "stdin": [],
+      "xp": 80,
+      "solution": "function describe(v)\n  return type(v)\nend\n"
+    }
+  },
+  {
+    "id": "lua03",
+    "order": 402,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "条件与循环",
+    "subtitle": "if / for / while",
+    "xp": 70,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "流程控制"
+      },
+      {
+        "type": "text",
+        "text": "Lua 用 if ... then ... elseif ... else ... end。数值 for 用 for i = 1, 10 do ... end；遍历表用 ipairs（数组）或 pairs（键值）。"
+      },
+      {
+        "type": "code",
+        "code": "local sum = 0\nfor i = 1, 10 do\n  sum = sum + i\nend\nprint('sum', sum)\n\nlocal n = 0\nwhile n < 3 do\n  n = n + 1\nend\nprint('n', n)",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "sum\t55\nn\t3"
+      },
+      {
+        "type": "quiz",
+        "question": "for i = 1, 5 do 会循环几次？",
+        "options": [
+          "4",
+          "5",
+          "6",
+          "无限"
+        ],
+        "answer": 1,
+        "explain": "Lua 的数值 for 包含两端，1..5 共 5 次。"
+      }
+    ],
+    "exercise": {
+      "title": "累加器",
+      "brief": "实现 sum_to(n)：返回 1 到 n 的和（n<1 返回 0）。",
+      "starterCode": "function sum_to(n)\n  \nend\n\nprint(sum_to(10))",
+      "hint": "local s = 0 然后 for i = 1, n do s = s + i end。",
+      "tests": [
+        "assert(sum_to(10) == 55, 'sum_to(10) 应为 55')",
+        "assert(sum_to(1) == 1, 'sum_to(1) 应为 1')",
+        "assert(sum_to(0) == 0, 'sum_to(0) 应为 0')",
+        "assert(sum_to(-5) == 0, '负数应返回 0')"
+      ],
+      "stdin": [],
+      "xp": 90,
+      "solution": "function sum_to(n)\n  if n < 1 then return 0 end\n  local s = 0\n  for i = 1, n do s = s + i end\n  return s\nend\n"
+    }
+  },
+  {
+    "id": "lua04",
+    "order": 403,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "表：数组与字典",
+    "subtitle": "Lua 唯一的数据结构",
+    "xp": 70,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "一个 table 打天下"
+      },
+      {
+        "type": "text",
+        "text": "Lua 只有一种容器：table。它同时充当数组和字典。数组下标从 1 开始，#t 取长度，table.insert 追加。"
+      },
+      {
+        "type": "code",
+        "code": "local t = {10, 20, 30}\nprint(#t, t[1], t[3])\ntable.insert(t, 40)\nprint(#t, t[4])\n\nlocal map = {name = 'V', level = 66}\nprint(map.name, map['level'])",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "3\t10\t30\n4\t40\nV\t66"
+      },
+      {
+        "type": "warn",
+        "text": "下标从 1 开始，不是 0！从 Python/JS 转过来最容易在这里越界。"
+      },
+      {
+        "type": "practice",
+        "title": "遍历数组",
+        "code": "local t = {'a', 'b', 'c'}\nfor i, v in ipairs(t) do\n  print(i, v)\nend",
+        "output": "1\ta\n2\tb\n3\tc",
+        "hint": "ipairs 按 1..n 顺序遍历，pairs 顺序不保证。"
+      }
+    ],
+    "exercise": {
+      "title": "数组求和",
+      "brief": "实现 total(t)：返回表中所有数字的和。",
+      "starterCode": "function total(t)\n  \nend\n\nprint(total({1,2,3}))",
+      "hint": "local s = 0; for _, v in ipairs(t) do s = s + v end。",
+      "tests": [
+        "assert(total({1,2,3}) == 6, 'total({1,2,3}) 应为 6')",
+        "assert(total({}) == 0, '空表应为 0')",
+        "assert(total({5}) == 5, '单元素应为 5')"
+      ],
+      "stdin": [],
+      "xp": 90,
+      "solution": "function total(t)\n  local s = 0\n  for _, v in ipairs(t) do s = s + v end\n  return s\nend\n"
+    }
+  },
+  {
+    "id": "lua05",
+    "order": 404,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "函数与多返回值",
+    "subtitle": "function 与 varargs",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "函数是一等公民"
+      },
+      {
+        "type": "text",
+        "text": "Lua 用 function 定义函数，函数可以赋给变量、作为参数传递。它可以返回多个值，接收时用逗号分解。"
+      },
+      {
+        "type": "code",
+        "code": "local function divmod(a, b)\n  return math.floor(a / b), a % b\nend\n\nlocal q, r = divmod(7, 2)\nprint(q, r)\n\nlocal f = function(x) return x * 2 end\nprint(f(21))",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "3\t1\n42"
+      },
+      {
+        "type": "tip",
+        "text": "Lua 5.2 没有整除运算符，整除用 math.floor(a / b)；求余用 %，与 Python 语义一致。"
+      },
+      {
+        "type": "quiz",
+        "question": "local q, r = divmod(7, 2) 之后 r 是多少？",
+        "options": [
+          "3",
+          "1",
+          "2",
+          "nil"
+        ],
+        "answer": 1,
+        "explain": "math.floor(7/2) = 3，7 % 2 = 1，多返回值按位置赋值。"
+      }
+    ],
+    "exercise": {
+      "title": "最小值下标",
+      "brief": "实现 argmin(t)：返回表中最小元素的下标（从 1 开始），空表返回 nil。",
+      "starterCode": "function argmin(t)\n  \nend\n\nprint(argmin({5,2,9}))",
+      "hint": "用一个变量记住 best 下标，从 1 遍历到 #t。",
+      "tests": [
+        "assert(argmin({5,2,9}) == 2, '应返回 2')",
+        "assert(argmin({1}) == 1, '单元素应返回 1')",
+        "assert(argmin({}) == nil, '空表应返回 nil')",
+        "assert(argmin({3,3,1}) == 3, '最小在末尾应返回 3')"
+      ],
+      "stdin": [],
+      "xp": 100,
+      "solution": "function argmin(t)\n  if #t == 0 then return nil end\n  local best = 1\n  for i = 2, #t do\n    if t[i] < t[best] then best = i end\n  end\n  return best\nend\n"
+    }
+  },
+  {
+    "id": "lua06",
+    "order": 405,
+    "chapter": 31,
+    "chapterName": "语言包 · Lua 启程",
+    "lang": "lua",
+    "title": "字符串工具箱",
+    "subtitle": "string 库",
+    "xp": 80,
+    "blocks": [
+      {
+        "type": "heading",
+        "text": "string 库"
+      },
+      {
+        "type": "text",
+        "text": "Lua 的字符串不可变，所有操作都返回新串。常用：string.upper / lower / sub / len / format / find / gsub。也可以用冒号语法 s:upper()。"
+      },
+      {
+        "type": "code",
+        "code": "local s = 'Night City'\nprint(s:upper())\nprint(string.sub(s, 1, 5))\nprint(#s)\nprint(string.format('%s-%03d', 'id', 7))\nprint(string.gsub('a-b-c', '-', '/'))",
+        "runnable": true
+      },
+      {
+        "type": "output",
+        "text": "NIGHT CITY\nNight\n10\nid-007\na/b/c\t2"
+      },
+      {
+        "type": "table",
+        "headers": [
+          "函数",
+          "作用",
+          "例子"
+        ],
+        "rows": [
+          [
+            "string.upper",
+            "转大写",
+            "'ab':upper() → 'AB'"
+          ],
+          [
+            "string.sub",
+            "截取",
+            "('hello',1,3) → 'hel'"
+          ],
+          [
+            "string.format",
+            "格式化",
+            "('%d', 7) → '7'"
+          ],
+          [
+            "string.gsub",
+            "替换",
+            "('a-b','-','/') → 'a/b'"
+          ]
+        ]
+      },
+      {
+        "type": "warn",
+        "text": "gsub 返回两个值：替换后的字符串和替换次数。只想取第一个时用括号包起来：(s:gsub(...))。"
+      }
+    ],
+    "exercise": {
+      "title": "首字母大写",
+      "brief": "实现 capitalize(s)：把字符串首字母转大写，其余保持不变；空串返回空串。",
+      "starterCode": "function capitalize(s)\n  \nend\n\nprint(capitalize('lua'))",
+      "hint": "string.sub(s,1,1):upper() .. string.sub(s,2)。",
+      "tests": [
+        "assert(capitalize('lua') == 'Lua', 'capitalize(\"lua\") 应为 Lua')",
+        "assert(capitalize('') == '', '空串应返回空串')",
+        "assert(capitalize('A') == 'A', '单字母应保持')",
+        "assert(capitalize('hello world') == 'Hello world', '只改首字母')"
+      ],
+      "stdin": [],
+      "xp": 100,
+      "solution": "function capitalize(s)\n  if s == '' then return '' end\n  return string.sub(s, 1, 1):upper() .. string.sub(s, 2)\nend\n"
+    }
+  }
+]

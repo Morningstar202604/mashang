@@ -14,8 +14,8 @@ android {
         applicationId = "com.pyneon.academy"
         minSdk = 24
         targetSdk = 35
-        versionCode = 16
-        versionName = "0.4.1"
+        versionCode = 17
+        versionName = "0.5.0"
         // 版本号单一来源：BuildConfig.VERSION_NAME / VERSION_CODE
         buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
         buildConfigField("int", "VERSION_CODE", "$versionCode")
@@ -120,7 +120,12 @@ dependencies {
 
     // 多语言：JavaScript 运行时后端（Rhino，纯 Java 解释模式，无 NDK；Apache-2.0）
     implementation("org.mozilla:rhino:1.7.15")
+    // 多语言：Lua 运行时后端（LuaJ 3.0.1，Lua 5.2 语义，纯 JVM 354 KB，无 NDK；MIT）
+    implementation("org.luaj:luaj-jse:3.0.1")
 
     // JVM 单元测试（纯 JVM，不需要 Android 设备）：JUnit4 + Kotlin 断言
     testImplementation("junit:junit:4.13.2")
+    // Android 单测里的 org.json 是空桩（方法全抛 "not mocked"），
+    // 课程包测试需要真实 JSON 解析，用官方 org.json 实现覆盖测试类路径。
+    testImplementation("org.json:json:20240303")
 }
