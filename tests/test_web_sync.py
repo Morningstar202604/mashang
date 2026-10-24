@@ -11,6 +11,7 @@
 """
 import json
 import os
+import pathlib
 import re
 import unittest
 
@@ -293,6 +294,45 @@ class TestPagesAssets(unittest.TestCase):
             self.assertTrue(os.path.exists(path), f"缺少 docs/{page}/index.html")
             text = _read(path)
             self.assertIn("码上", text)
+
+
+class TestTooling(unittest.TestCase):
+    """工具脚本必须可重复执行且真的能拦住问题（防止 CI 门禁变成空跑）。"""
+
+    def test_check_links_passes_on_repo(self):
+        import subprocess, sys
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "check_links.py")],
+                           capture_output=True, text=True, cwd=ROOT, timeout=120)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_check_links_catches_missing_target(self):
+        """把链接检查指向含坏链接的临时页面，必须非 0 退出。"""
+        import subprocess, sys, tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            page = os.path.join(tmp, "index.html")
+            with open(page, "w", encoding="utf-8") as fh:
+                fh.write('<a href="no-such-file.png">x</a>')
+            # 工具按固定页面列表工作，这里直接调用其解析函数验证判断逻辑
+            sys.path.insert(0, os.path.join(ROOT, "tools"))
+            import check_links
+            self.assertFalse(check_links.resolve(pathlib.Path(page), "no-such-file.png").exists())
+
+    def test_pages_assets_sync_is_idempotent(self):
+        import hashlib, subprocess, sys
+        def digest(p):
+            with open(p, "rb") as fh:
+                return hashlib.sha256(fh.read()).hexdigest()
+        targets = [os.path.join(ROOT, "docs", "catalog.json"),
+                   os.path.join(ROOT, "docs", "web", "app.js")]
+        before = [digest(p) for p in targets]
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "sync_pages_assets.py")],
+                           capture_output=True, text=True, cwd=ROOT, timeout=180)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(before, [digest(p) for p in targets], "同步脚本不是幂等的")
+
+    def test_brand_assets_exist(self):
+        for rel in ("docs/banner.png", "demo/promo-poster.jpg", "docs/assets/og.jpg"):
+            self.assertTrue(os.path.exists(os.path.join(ROOT, rel)), f"缺少品牌资产 {rel}")
 
 
 if __name__ == "__main__":

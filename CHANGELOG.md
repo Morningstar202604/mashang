@@ -17,7 +17,7 @@
 - **真实课程路线页**：`TrackRepository` 改为按实际装载内容生成（Python 主线 38 讲 / JS 6 讲 / DSA 10 讲 / 彩蛋 1 讲），未下载的包显示「可下载」并跳内容中心；删除 20 条虚构「开发中 x%」占位轨道与「建设中」页
 - **内容中心三级源**：GitHub Pages → GitHub raw → GitCode API；新增 `tools/sync_pages_assets.py` 把 catalog、课程包、网页端镜像进 `docs/` 并逐字节校验
 - **文档体系**：新增 `ARCHITECTURE.md`（架构、契约、测试布局、已知边界）、`FAQ.md`、`ROADMAP.md`；重写 `SECURITY.md`（威胁模型 / 支持版本 / 响应时限）、`CONTRIBUTING.md`（环境、验证命令、内容规范）、`CODE_OF_CONDUCT.md`（执行流程与联系人）；Issue 模板补环境字段与 `config.yml`
-- **展示资产**：全部截图按 v0.4.0 实机重拍（1080×2400，16 张）；重制 `docs/banner.png`、`demo/promo-poster.jpg`、OG 分享图；宣传片压到 3.0 MB、官网演示片压到 1.3 MB；`tools/make_brand_assets.py` 可重复生成
+- **展示资产**：全部截图按 v0.4.0 实机重拍（1080×2400，16 张；含判题通过/失败、路线、内容中心、设置、JS 课程）；重制 `docs/banner.png`、`demo/promo-poster.jpg`、OG 分享图；宣传片压到 3.0 MB、官网演示片压到 1.3 MB；`tools/make_brand_assets.py` 可重复生成
 
 ### Changed
 - 版本 0.3.8 → **0.4.0**（versionCode 14 → 15）
@@ -35,9 +35,10 @@
 - 网页端点击「下载 App」会抢走导航 active 态（选择器限定 `[data-tab]`）
 
 ### Tests
-- unittest 128 条全绿；`validate_content.py` 55 个 Python 判题项 / 201 条用例 0 失败
+- unittest 140 条全绿；`validate_content.py` 55 个 Python 判题项 / 201 条用例 0 失败
 - 新增 `test_ui_static.py::test_tracks_only_lists_real_content`（禁止占位轨道回归）、`UpdateCheckerTest`（3 条语义化版本比较）
 - 品牌资产指纹更新为 v0.4.0 重建产物；`test_web_sync` 读文件改为 `with open`（消除 ResourceWarning）
+- 新增 `TestTooling` 4 条：链接检查真实通过、坏链接判定逻辑、Pages 同步幂等、品牌资产存在
 - Playwright 真实浏览器验收：引擎在线、课程 38 讲 / 5 幕、填空判题、XSS 注入无效、REPL 状态与回显、移动端 390px 无横向溢出、深链刷新恢复
 - 模拟器验收：首页 / 课程 / 详情 / 判题通过 +140XP / 判题失败面板 / Python+JS 终端 / 角斗场 / 路线页 / 内容中心下载 / 设置检查更新
 

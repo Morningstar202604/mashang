@@ -16,7 +16,7 @@ Chaquopy **17.0.0** 与 AGP **8.13.2** / Kotlin **2.4.10** / Gradle **9.5.0**（
 ```bash
 ./gradlew :app:assembleDebug              # Debug APK → app/build/outputs/apk/debug/
 ./gradlew :app:assembleRelease            # 签名 release（需 KEYSTORE_PATH 等 4 个环境变量）
-python -m unittest discover -s tests -v   # 桌面单元测试（runner.py / repl.py / 内容 / CI 契约）
+python -m unittest discover -s tests -v   # 桌面单元测试（引擎 / 内容 / web 同源 / 工具链 / CI 契约）
 python tests/validate_content.py          # 课程 × 答案全量判题校验
 python web/gen_data.py                    # 重新生成 web/data.js + engine.js
 python tools/sync_pages_assets.py         # 同步 catalog / 课程包 / 网页端到 docs/（Pages）

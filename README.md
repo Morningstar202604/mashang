@@ -330,7 +330,7 @@ See the [How It Runs](#-how-it-runs-fully-offline) architecture diagram above fo
 
 | Gate | Command | What it proves |
 |---|---|---|
-| Python engine + content | `python -m unittest discover -s tests` | 128 desktop tests: sandbox, timeouts, judging, content schema |
+| Python engine + content | `python -m unittest discover -s tests` | 140 desktop tests: sandbox, timeouts, judging, content schema |
 | Curriculum × answers | `python tests/validate_content.py` | 55 Python lessons/packs judged end-to-end, 201 cases |
 | JS lessons | `python -m unittest discover -s tests -k test_js_lessons` | Every JS lesson code block + exercise executed with Node |
 | Web/App same-source | `python -m unittest discover -s tests -k test_web_sync` | `data.js`/`engine.js` regenerate byte-identically |

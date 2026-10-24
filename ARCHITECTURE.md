@@ -143,7 +143,13 @@ tests/
   validate_content.py         # 55 Python 判题项 × 201 用例端到端
 ```
 
-## 9. 已知边界
+## 9. 课程路线与更新检查
+
+- **课程路线页**（`TrackRepository.kt`）只列真实内容：Python 主线 38 讲（`l01..l38`）、JavaScript 启程 6 讲（`js-basics` 包）、DSA 基础/进阶各 5 讲、彩蛋 1 讲。未下载的包显示「可下载」并跳内容中心；没有任何硬编码的「开发中 x%」占位轨道。
+- **进度口径**：`LessonRepository.mainline()` 用 id 正则 `^l\d{2}$` 取内置 38 讲，避免下载的 DSA 包把「x/38」变成「x/49」。
+- **检查更新**（`utils/UpdateChecker.kt`）：只请求 GitHub Releases 的公开 latest 接口，语义化比较版本号；不自动下载、不申请安装权限。失败静默降级为「无法检查」，不影响离线学习。
+
+## 10. 已知边界
 
 - Chaquopy 仅支持 Android；iOS 需另选运行时。
 - Rhino 为 ES5 + 部分 ES6，无 `async/await`、模板字符串等现代语法。

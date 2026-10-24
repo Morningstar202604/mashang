@@ -23,7 +23,7 @@ Chaquopy **17.0.0** 与 AGP **8.13.2**、Kotlin **2.4.10**、Gradle **9.5.0** �
 ## 本地验证
 
 ```bash
-# Python 引擎 + 内容（128 条，必须全绿）
+# Python 引擎 + 内容（140 条，必须全绿）
 python -m unittest discover -s tests -v
 python tests/validate_content.py
 
