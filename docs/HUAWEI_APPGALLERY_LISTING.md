@@ -37,14 +37,14 @@
 ## 四、商店文案（可直接粘贴）
 
 **一句话简介（≤ 80 字）：**
-> 离线学编程的赛博朋克终端：内置真实语言运行时（CPython 首发），38 讲游戏化课程，变量快照可视化，零广告零数据收集。
+> 离线学编程的赛博朋克终端：内置真实语言运行时（CPython + JavaScript），38 讲游戏化课程，变量快照可视化，零广告零数据收集。
 
 **详细简介：**
 ```
-码上 把一台真正的 Python 终端装进你的口袋。
+码上 把一台真正的编程终端装进你的口袋。
 
 🔌 完全离线
-• 设备端嵌入真实 CPython 3.13，地铁、飞机、深山都能学
+• 设备端嵌入真实 CPython 3.13 与 JavaScript（Rhino）运行时，地铁、飞机、深山都能学
 • 无账号、无云依赖、无广告
 
 🎮 游戏化学习
@@ -93,6 +93,6 @@
 
 1. 注册华为开发者联盟账号并完成实名认证；
 2. 创建应用，填写上述信息并上传素材；
-3. 上传签名 APK（`gradle :app:assembleRelease`，密钥见 `keystore.properties`）；
+3. 上传签名 APK（`./gradlew :app:assembleRelease`，签名凭据经 `KEYSTORE_PATH` / `KEYSTORE_PASSWORD` / `KEY_ALIAS` / `KEY_PASSWORD` 环境变量注入）；
 4. 提交审核，按驳回意见修正；
 5. 审核通过后发布至 AppGallery。

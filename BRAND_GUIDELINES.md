@@ -8,7 +8,7 @@
 - **Japanese**: マシャン
 
 > 品牌重塑说明（2026-10-19）：产品由「码上Python」升级为「码上 / Mashang」多语言编程学习终端，
-> 命名不再绑定单一语言；Python 语言包为首个内置语言，后续按语言包接入 JavaScript 等。
+> 命名不再绑定单一语言；当前版本内置 CPython 3.13 与 JavaScript（Rhino）两个真实运行时。
 
 ### Taglines
 

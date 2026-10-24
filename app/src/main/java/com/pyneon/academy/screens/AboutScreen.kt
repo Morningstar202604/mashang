@@ -73,7 +73,8 @@ fun AboutScreen(onBack: () -> Unit) {
 
         SectionHeader("技术致谢", accent = NeonGreen)
         Text(
-            "· CPython 3.13 — 设备端嵌入的 Python 运行时（首发语言包）\n" +
+            "· CPython 3.13 — 设备端嵌入的 Python 运行时\n" +
+                "· Mozilla Rhino 1.7.15 — 设备端嵌入的 JavaScript 运行时\n" +
                 "· Chaquopy — Android 上的 Python 集成\n" +
                 "· Jetpack Compose / AndroidX — UI 与架构\n" +
                 "· 课程设计与码上视觉系统由开发团队原创",

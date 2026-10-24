@@ -4,7 +4,7 @@
 
 **码上，就是马上。Learn Python instantly — on your phone, fully offline.**
 
-一台装进口袋的赛博朋克编程学习终端：内嵌真实语言运行时（CPython 3.13 首发，语言包扩展更多），
+一台装进口袋的赛博朋克编程学习终端：内嵌真实语言运行时（CPython 3.13 + JavaScript/Rhino），
 38 讲内置课程 + 17 讲扩展包、assert 自动判题、变量可视化、六段位成长体系。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
@@ -329,7 +329,7 @@ DataStore 进度存档 │ Navigation 单Activity五Tab │ 自研语法高亮�
 
 | 门禁 | 命令 | 证明什么 |
 |---|---|---|
-| Python 引擎 + 内容 | `python -m unittest discover -s tests` | 140 条桌面测试：沙箱、超时、判题、内容结构 |
+| Python 引擎 + 内容 | `python -m unittest discover -s tests` | 149 条桌面测试：沙箱、超时、判题、内容结构、文档口径 |
 | 课程 × 参考答案 | `python tests/validate_content.py` | 55 个 Python 判题项、201 条用例端到端跑通 |
 | JS 课程 | `python -m unittest discover -s tests -k test_js_lessons` | 每个 JS 代码块与练习用 Node 真实执行 |
 | 网页/App 同源 | `python -m unittest discover -s tests -k test_web_sync` | `data.js` / `engine.js` 可重现、逐字节一致 |

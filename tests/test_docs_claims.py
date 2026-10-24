@@ -1,0 +1,152 @@
+"""发布口径回归：文档里的数字与能力声明必须等于仓库事实。
+
+背景（2026-10-24）：v0.4.0 发布后复核发现 FAQ 写 128 条测试、软著说明书写
+119 条 / 200 用例 / 「仅内置 Python」，Release body 写 136 条，而实际是
+140 条 / 201 用例 / Python+JavaScript 双运行时。本文件把「文档自述」变成
+可执行门禁：数字从仓库现算，声明从代码读，任何漂移直接失败。
+
+被锁定的文件：
+  - FAQ.md
+  - docs/softcopy/软件说明书.md
+  - README.md / README.zh-CN.md / README.ja-JP.md
+  - app/src/main/java/com/pyneon/academy/lang/LanguageRuntime.kt
+  - app/src/main/java/com/pyneon/academy/screens/{AboutScreen,PrivacyPolicyScreen}.kt
+  - web/app.js / web/index.html（版本串）
+"""
+
+import ast
+import json
+import re
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+TESTS = ROOT / "tests"
+ASSETS = ROOT / "app" / "src" / "main" / "assets"
+PACKS = ROOT / "content_packs"
+JAVA = ROOT / "app" / "src" / "main" / "java" / "com" / "pyneon" / "academy"
+
+
+def _read(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+
+def _test_method_count() -> int:
+    total = 0
+    for f in sorted(TESTS.glob("test_*.py")):
+        tree = ast.parse(_read(f))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name.startswith("test_"):
+                total += 1
+    return total
+
+
+def _judge_counts():
+    items = []
+    for f in sorted(ASSETS.glob("lessons_*.json")) + sorted(PACKS.glob("*.json")):
+        items.extend(json.loads(_read(f)))
+    items.extend(json.loads(_read(ASSETS / "challenges.json")))
+    py_items = py_cases = js_items = js_cases = 0
+    for item in items:
+        tests = (item.get("exercise") or {}).get("tests") or item.get("tests") or []
+        if not tests:
+            continue
+        if item.get("lang", "python") == "javascript":
+            js_items += 1
+            js_cases += len(tests)
+        else:
+            py_items += 1
+            py_cases += len(tests)
+    return py_items, py_cases, js_items, js_cases
+
+
+def _source_scale():
+    kt = list((ROOT / "app" / "src" / "main" / "java").rglob("*.kt"))
+    py = list((ROOT / "app" / "src" / "main" / "python").rglob("*.py"))
+
+    def lines(files):
+        return sum(len(_read(f).splitlines()) for f in files)
+
+    return len(kt), len(py), lines(kt), lines(py)
+
+
+class TestCountClaims(unittest.TestCase):
+    def test_faq_test_count_matches_suite(self):
+        count = _test_method_count()
+        text = _read(ROOT / "FAQ.md")
+        self.assertIn(f"{count} 条测试", text, f"FAQ 的测试条数与实际 {count} 不一致")
+
+    def test_softcopy_test_count_matches_suite(self):
+        count = _test_method_count()
+        text = _read(ROOT / "docs" / "softcopy" / "软件说明书.md")
+        self.assertIn(
+            f"| 合计 | **{count}** |", text, f"软著说明书合计应为 {count} 条"
+        )
+
+    def test_softcopy_judge_counts_match_assets(self):
+        py_items, py_cases, js_items, js_cases = _judge_counts()
+        text = _read(ROOT / "docs" / "softcopy" / "软件说明书.md")
+        for snippet in (
+            f"{py_items} 个 Python 判题项",
+            f"{py_cases} 条 Python 用例",
+            f"{js_items} 个 JavaScript 判题项",
+            f"{js_cases} 条 JavaScript 用例",
+            f"{py_items + js_items} 个判题项",
+            f"{py_cases + js_cases} 条用例",
+        ):
+            with self.subTest(snippet=snippet):
+                self.assertIn(snippet, text, f"软著说明书缺少或写错：{snippet}")
+
+    def test_softcopy_source_scale_matches_repo(self):
+        kt_files, py_files, kt_lines, py_lines = _source_scale()
+        text = _read(ROOT / "docs" / "softcopy" / "软件说明书.md")
+        expect = f"{kt_files + py_files} 个源文件、{kt_lines + py_lines:,} 行（Kotlin {kt_files} 个 + Python {py_files} 个）"
+        self.assertIn(expect, text, f"软著说明书的源程序规模应更新为：{expect}")
+
+
+class TestCapabilityClaims(unittest.TestCase):
+    def test_softcopy_limitation_is_current(self):
+        text = _read(ROOT / "docs" / "softcopy" / "软件说明书.md")
+        self.assertNotIn("JavaScript 等后端尚未实现", text, "JavaScript 运行时已内置，局限性表述过期")
+        self.assertNotIn("当前仅内置 Python 运行时", text, "已内置 Python + JavaScript 两个运行时")
+
+    def test_runtime_fallback_has_no_download_promise(self):
+        text = _read(JAVA / "lang" / "LanguageRuntime.kt")
+        self.assertNotIn("可在「语言包」中下载", text, "项目没有语言包下载功能，不得承诺下载")
+        self.assertIn("未内置于当前版本", text, "回退提示应说明运行时未内置")
+
+    def test_about_and_privacy_do_not_claim_first_language_pack(self):
+        for name in ("AboutScreen.kt", "PrivacyPolicyScreen.kt"):
+            with self.subTest(file=name):
+                text = _read(JAVA / "screens" / name)
+                self.assertNotIn("首发语言包", text, "「首发语言包」暗示后续语言包可下载，与实际不符")
+
+    def test_readmes_name_shipped_runtimes(self):
+        forbidden = ("语言包扩展更多", "more via language packs", "言語パックで拡張")
+        for name in ("README.md", "README.zh-CN.md", "README.ja-JP.md"):
+            with self.subTest(file=name):
+                head = "\n".join(_read(ROOT / name).splitlines()[:12])
+                for phrase in forbidden:
+                    self.assertNotIn(phrase, head, f"{name} 声称语言包可扩展运行时，但当前无语言包下载")
+                self.assertIn("JavaScript", head, f"{name} 首屏应写明已内置 JavaScript 运行时")
+
+
+class TestVersionClaims(unittest.TestCase):
+    def test_web_version_matches_gradle(self):
+        gradle = _read(ROOT / "app" / "build.gradle.kts")
+        version = re.search(r'versionName\s*=\s*"([^"]+)"', gradle).group(1)
+        app_js = _read(ROOT / "web" / "app.js")
+        self.assertIn(f'APP_VERSION = "{version}"', app_js, "web/app.js 版本串与 versionName 不一致")
+        index = _read(ROOT / "web" / "index.html")
+        self.assertIn(f'id="foot-version">v{version}<', index, "web/index.html 页脚版本与 versionName 不一致")
+        for copy in ("docs/web/app.js", "docs/web/index.html"):
+            with self.subTest(copy=copy):
+                self.assertEqual(
+                    _read(ROOT / "web" / Path(copy).name),
+                    _read(ROOT / copy),
+                    f"{copy} 与 web/ 源文件不一致，需运行 tools/sync_pages_assets.py",
+                )
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

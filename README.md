@@ -4,7 +4,7 @@
 
 **Code now, master any language. Learn offline, anywhere.**
 
-A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython first, more via language packs), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
+A cyberpunk-styled coding learning terminal that fits in your pocket: embedded real language runtimes (CPython 3.13 and JavaScript via Rhino), 38-lesson gamified curriculum, auto-grading with assert, variable visualization, and six-tier progression system.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00E5FF.svg)](LICENSE)
@@ -330,7 +330,7 @@ See the [How It Runs](#-how-it-runs-fully-offline) architecture diagram above fo
 
 | Gate | Command | What it proves |
 |---|---|---|
-| Python engine + content | `python -m unittest discover -s tests` | 140 desktop tests: sandbox, timeouts, judging, content schema |
+| Python engine + content | `python -m unittest discover -s tests` | 149 desktop tests: sandbox, timeouts, judging, content schema, docs claims |
 | Curriculum × answers | `python tests/validate_content.py` | 55 Python lessons/packs judged end-to-end, 201 cases |
 | JS lessons | `python -m unittest discover -s tests -k test_js_lessons` | Every JS lesson code block + exercise executed with Node |
 | Web/App same-source | `python -m unittest discover -s tests -k test_web_sync` | `data.js`/`engine.js` regenerate byte-identically |

@@ -4,7 +4,7 @@
 
 **今すぐコードを書こう。オフラインのまま、どこでも Python をマスター。**
 
-ポケットに入るサイバーパンク風プログラミング学習ターミナル：本物の **CPython 3.13** インタープリターを内蔵（言語パックで拡張）、
+ポケットに入るサイバーパンク風プログラミング学習ターミナル：本物の **CPython 3.13** と **JavaScript（Rhino）** ランタイムを内蔵、
 38 講のステップアップ講座、assert 自動採点、変数可視化、6 段階ランク成長システム。
 
 [![CI](https://img.shields.io/github/actions/workflow/status/badhope/mashang/ci.yml?branch=main&label=CI)](https://github.com/badhope/mashang/actions)

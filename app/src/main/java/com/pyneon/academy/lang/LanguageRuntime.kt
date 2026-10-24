@@ -15,7 +15,10 @@ object LanguageIds {
     /** 内置默认语言：任何回落路径都指向它 */
     const val DEFAULT = PYTHON
 
-    /** 已规划但尚未实现的语言（用于 UI 展示"建设中"，不可注册为可用运行时） */
+    /**
+     * 已规划但尚未实现的语言：仅用于课程内容校验与显示名映射，
+     * 不得据此向用户承诺"可下载语言包"——当前版本没有运行时下载机制。
+     */
     val PLANNED: List<String> = listOf("java", "cpp", "go", "rust", "sql")
 
     /**
@@ -126,7 +129,7 @@ class UnsupportedRuntime(override val id: String) : LanguageRuntime {
         stdout = "",
         stderr = "",
         errorType = "LanguageNotBundled",
-        errorMessage = "「$displayName」运行时未内置于当前版本，可在「语言包」中下载后重试。",
+        errorMessage = "「$displayName」运行时未内置于当前版本，暂不可执行。",
         traceback = null,
         durationMs = 0L,
         variables = emptyList(),
