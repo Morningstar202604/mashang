@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+- 路线页 / `TrackRepository` / `LessonRepository` 的「内容中心」术语统一为「语言中心」（含未下载提示「需在语言中心下载」）
+- `ARCHITECTURE.md` 新增工具清单：`gen_language_packs` / `update_catalog` / `sync_pages_assets` / `check_links` / `ci_apk_probe`
+
 ## [0.5.0] - 2026-10-24
 
 ### Added
@@ -27,8 +31,7 @@
 - README 三语 + FAQ + ARCHITECTURE：GitCode 流水线改为「需手动开通、push 不自动触发」的事实描述
 
 ### Fixed
-- 课程包下载 UI 与「语言中心」重复维护的问题：`ContentHubScreen` 收敛为 12 行转发入口（原 177 行旧 UI 已删除）；帮助中心/隐私政策/README/路线页/TrackRepository 的「内容中心」文案全部更名为「语言中心」
-- `ARCHITECTURE.md` 新增工具清单（`gen_language_packs` / `update_catalog` / `sync_pages_assets` / `check_links` / `ci_apk_probe`）
+- 课程包下载 UI 与「语言中心」重复维护的问题：`ContentHubScreen` 收敛为 12 行转发入口（原 177 行旧 UI 已删除）；帮助中心/隐私政策/README 的「内容中心」文案同步更名
 
 ## [0.4.1] - 2026-10-24
 
